@@ -1,0 +1,10 @@
+/vendor/
+/node_modules/
+/.tooling/
+/.phpunit.cache/
+/.wp-test/
+/.build/
+/dist/
+*.zip
+*.log
+.DS_Store

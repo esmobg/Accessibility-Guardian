@@ -1,0 +1,374 @@
+# Copyright (C) 2026 Accessibility Guardian
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Accessibility Guardian 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/accessibility-guardian\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-04T11:05:41+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: accessibility-guardian\n"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: accessibility-guardian.php
+#: src/Admin/AdminMenu.php:79
+#: templates/dashboard.php:45
+msgid "Accessibility Guardian"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: accessibility-guardian.php
+msgid "https://example.com/accessibility-guardian"
+msgstr ""
+
+#. Description of the plugin
+#: accessibility-guardian.php
+msgid "Automated WCAG 2.2 AA accessibility auditor for WordPress. Scans posts, pages, custom post types, products and terms with axe-core and reports issues with remediation guidance."
+msgstr ""
+
+#. Author URI of the plugin
+#: accessibility-guardian.php
+msgid "https://example.com"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:80
+msgid "Accessibility"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:90
+#: src/Admin/AdminMenu.php:91
+msgid "Dashboard"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:99
+#: src/Admin/AdminMenu.php:100
+msgid "Run Scan"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:108
+#: src/Admin/AdminMenu.php:109
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:202
+msgid "You are not allowed to manage these settings."
+msgstr ""
+
+#: src/Admin/AdminMenu.php:224
+msgid "Settings saved."
+msgstr ""
+
+#: src/Admin/AdminMenu.php:234
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: src/Admin/AssetManager.php:71
+msgid "Preparing scan…"
+msgstr ""
+
+#: src/Admin/AssetManager.php:72
+msgid "Scanning"
+msgstr ""
+
+#: src/Admin/AssetManager.php:73
+msgid "Queued URLs"
+msgstr ""
+
+#: src/Admin/AssetManager.php:74
+msgid "issues"
+msgstr ""
+
+#: src/Admin/AssetManager.php:75
+msgid "could not be scanned"
+msgstr ""
+
+#: src/Admin/AssetManager.php:76
+msgid "Scan complete"
+msgstr ""
+
+#: src/Admin/AssetManager.php:77
+#: templates/dashboard.php:189
+msgid "Score"
+msgstr ""
+
+#: src/Admin/AssetManager.php:78
+msgid "Cancelling after current page…"
+msgstr ""
+
+#: src/Admin/AssetManager.php:79
+msgid "Could not start scan."
+msgstr ""
+
+#: src/Admin/AssetManager.php:80
+msgid "Scan could not be finalized."
+msgstr ""
+
+#: src/Export/ExportController.php:60
+msgid "You are not allowed to export reports."
+msgstr ""
+
+#: src/Export/ExportController.php:71
+#: src/Scan/ScanController.php:208
+msgid "Scan not found."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:45
+msgid "Best practice"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:48
+msgid "Review this element against WCAG 2.2 guidelines and apply the recommended remediation."
+msgstr ""
+
+#. translators: %s: rule description.
+#: src/Scan/ResultNormalizer.php:99
+#, php-format
+msgid "Needs manual review: %s"
+msgstr ""
+
+#: src/Scan/ScanController.php:103
+msgid "No scannable URLs were found."
+msgstr ""
+
+#: src/Scan/ScanController.php:112
+msgid "Unable to create a scan record."
+msgstr ""
+
+#: src/Scan/ScanController.php:142
+msgid "Invalid scan payload."
+msgstr ""
+
+#: src/Scan/ScanController.php:148
+msgid "Malformed scan payload."
+msgstr ""
+
+#: src/Scan/ScanController.php:173
+msgid "Invalid scan id."
+msgstr ""
+
+#: src/Scan/ScanController.php:226
+msgid "You are not allowed to run scans."
+msgstr ""
+
+#: src/Scan/ScoreCalculator.php:80
+msgid "Excellent"
+msgstr ""
+
+#: src/Scan/ScoreCalculator.php:87
+msgid "Good"
+msgstr ""
+
+#: src/Scan/ScoreCalculator.php:94
+msgid "Needs Improvement"
+msgstr ""
+
+#: src/Scan/ScoreCalculator.php:100
+msgid "Poor"
+msgstr ""
+
+#: src/Scan/UrlProvider.php:31
+msgid "Home page"
+msgstr ""
+
+#. translators: 1: taxonomy name, 2: term name.
+#: src/Scan/UrlProvider.php:175
+#, php-format
+msgid "%1$s: %2$s"
+msgstr ""
+
+#: templates/dashboard.php:50
+msgid "No scans yet. Run your first accessibility scan to see results here."
+msgstr ""
+
+#: templates/dashboard.php:52
+msgid "Run your first scan"
+msgstr ""
+
+#: templates/dashboard.php:58
+msgid "Run new scan"
+msgstr ""
+
+#: templates/dashboard.php:61
+msgid "Export:"
+msgstr ""
+
+#. translators: %d: score.
+#: templates/dashboard.php:70
+#, php-format
+msgid "Accessibility score %d out of 100"
+msgstr ""
+
+#: templates/dashboard.php:79
+msgid "Pages scanned"
+msgstr ""
+
+#: templates/dashboard.php:83
+#: templates/dashboard.php:190
+msgid "Errors"
+msgstr ""
+
+#: templates/dashboard.php:87
+#: templates/dashboard.php:191
+msgid "Warnings"
+msgstr ""
+
+#: templates/dashboard.php:91
+msgid "Passed checks"
+msgstr ""
+
+#: templates/dashboard.php:98
+msgid "Issues by severity"
+msgstr ""
+
+#: templates/dashboard.php:102
+msgid "Critical"
+msgstr ""
+
+#: templates/dashboard.php:103
+msgid "Major"
+msgstr ""
+
+#: templates/dashboard.php:104
+msgid "Minor"
+msgstr ""
+
+#: templates/dashboard.php:105
+msgid "Warning"
+msgstr ""
+
+#: templates/dashboard.php:124
+msgid "WCAG category distribution"
+msgstr ""
+
+#: templates/dashboard.php:126
+#: templates/dashboard.php:155
+msgid "No issues recorded."
+msgstr ""
+
+#: templates/dashboard.php:148
+msgid "Progress over time"
+msgstr ""
+
+#: templates/dashboard.php:153
+msgid "Most common problems"
+msgstr ""
+
+#: templates/dashboard.php:160
+msgid "Rule"
+msgstr ""
+
+#: templates/dashboard.php:161
+msgid "WCAG"
+msgstr ""
+
+#: templates/dashboard.php:162
+msgid "Severity"
+msgstr ""
+
+#: templates/dashboard.php:163
+msgid "Count"
+msgstr ""
+
+#: templates/dashboard.php:182
+msgid "Recent scans"
+msgstr ""
+
+#: templates/dashboard.php:186
+msgid "Date"
+msgstr ""
+
+#: templates/dashboard.php:187
+msgid "Type"
+msgstr ""
+
+#: templates/dashboard.php:188
+msgid "Pages"
+msgstr ""
+
+#: templates/dashboard.php:192
+msgid "Status"
+msgstr ""
+
+#: templates/scan.php:17
+msgid "Run Accessibility Scan"
+msgstr ""
+
+#: templates/scan.php:21
+msgid "Scanning runs in your browser using axe-core against the rendered front-end of each page. Keep this tab open until the scan completes."
+msgstr ""
+
+#. translators: %s: post title.
+#: templates/scan.php:30
+#, php-format
+msgid "Single page scan: %s"
+msgstr ""
+
+#: templates/scan.php:37
+msgid "Start single page scan"
+msgstr ""
+
+#: templates/scan.php:42
+msgid "Start full site scan"
+msgstr ""
+
+#: templates/scan.php:47
+msgid "Cancel"
+msgstr ""
+
+#: templates/scan.php:63
+msgid "Accessibility scan sandbox"
+msgstr ""
+
+#: templates/settings.php:25
+msgid "Accessibility Guardian Settings"
+msgstr ""
+
+#: templates/settings.php:34
+msgid "Content to scan"
+msgstr ""
+
+#: templates/settings.php:37
+msgid "Post types to include"
+msgstr ""
+
+#: templates/settings.php:48
+msgid "Choose which public post types are included in full-site scans."
+msgstr ""
+
+#: templates/settings.php:52
+msgid "Term archives"
+msgstr ""
+
+#: templates/settings.php:56
+msgid "Include category and tag archive pages"
+msgstr ""
+
+#: templates/settings.php:61
+msgid "Batch size"
+msgstr ""
+
+#: templates/settings.php:65
+msgid "Number of pages processed before progress is reported. Lower values reduce memory use."
+msgstr ""
+
+#: templates/settings.php:69
+msgid "WCAG level"
+msgstr ""
+
+#: templates/settings.php:72
+msgid "A"
+msgstr ""
+
+#: templates/settings.php:73
+msgid "AA (recommended)"
+msgstr ""
+
+#: templates/settings.php:80
+msgid "Save settings"
+msgstr ""
