@@ -51,6 +51,85 @@ final class RuleCatalog {
 	}
 
 	/**
+	 * Catalog of available one-click automatic fixes.
+	 *
+	 * Each entry: key => [ label, description ]. The key is also the settings
+	 * flag stored under ag_settings['fixes'].
+	 *
+	 * @return array<string, array{label:string,description:string}>
+	 */
+	public function fixes(): array {
+		return array(
+			'add_html_lang'           => array(
+				'label'       => __( 'Add missing language attribute', 'accessibility-guardian' ),
+				'description' => __( 'Sets a lang attribute on the <html> element when one is missing (WCAG 3.1.1).', 'accessibility-guardian' ),
+			),
+			'add_skip_link'           => array(
+				'label'       => __( 'Add a skip-to-content link', 'accessibility-guardian' ),
+				'description' => __( 'Inserts a keyboard skip link at the top of every page (WCAG 2.4.1).', 'accessibility-guardian' ),
+			),
+			'add_focus_outline'       => array(
+				'label'       => __( 'Add a visible focus outline', 'accessibility-guardian' ),
+				'description' => __( 'Ensures focused links and controls show a clear outline (WCAG 2.4.7).', 'accessibility-guardian' ),
+			),
+			'underline_links'         => array(
+				'label'       => __( 'Underline links in content', 'accessibility-guardian' ),
+				'description' => __( 'Underlines in-content links so they are not distinguished by color alone (WCAG 1.4.1).', 'accessibility-guardian' ),
+			),
+			'new_window_warning'      => array(
+				'label'       => __( 'Warn about links opening new windows', 'accessibility-guardian' ),
+				'description' => __( 'Appends a hidden "(opens in a new window)" notice to target="_blank" links (WCAG 3.2.5).', 'accessibility-guardian' ),
+			),
+			'fix_viewport'            => array(
+				'label'       => __( 'Allow zooming (fix viewport)', 'accessibility-guardian' ),
+				'description' => __( 'Removes user-scalable=no and maximum-scale limits so users can zoom (WCAG 1.4.4).', 'accessibility-guardian' ),
+			),
+			'remove_positive_tabindex' => array(
+				'label'       => __( 'Remove positive tabindex values', 'accessibility-guardian' ),
+				'description' => __( 'Resets tabindex values greater than 0 to keep a natural focus order (WCAG 2.4.3).', 'accessibility-guardian' ),
+			),
+			'label_search_form'       => array(
+				'label'       => __( 'Add labels to search forms', 'accessibility-guardian' ),
+				'description' => __( 'Adds an accessible label to the default search form field (WCAG 3.3.2).', 'accessibility-guardian' ),
+			),
+			'remove_title_attr'       => array(
+				'label'       => __( 'Remove redundant title attributes', 'accessibility-guardian' ),
+				'description' => __( 'Strips title attributes from links and inputs that already have visible text.', 'accessibility-guardian' ),
+			),
+		);
+	}
+
+	/**
+	 * Resolve which automatic fix (if any) can address a given rule.
+	 *
+	 * @param string $rule_id Rule identifier.
+	 * @return array{key:string,label:string}|null
+	 */
+	public function auto_fix_for( string $rule_id ): ?array {
+		$map = array(
+			'html-has-lang'         => 'add_html_lang',
+			'html-lang-valid'       => 'add_html_lang',
+			'bypass'                => 'add_skip_link',
+			'link-in-text-block'    => 'underline_links',
+			'ag-new-window-warning' => 'new_window_warning',
+			'meta-viewport'         => 'fix_viewport',
+			'tabindex'              => 'remove_positive_tabindex',
+		);
+
+		if ( ! isset( $map[ $rule_id ] ) ) {
+			return null;
+		}
+
+		$key   = $map[ $rule_id ];
+		$fixes = $this->fixes();
+
+		return array(
+			'key'   => $key,
+			'label' => $fixes[ $key ]['label'] ?? $key,
+		);
+	}
+
+	/**
 	 * Map an axe impact level to a plugin severity bucket.
 	 *
 	 * @param string $impact axe impact level.

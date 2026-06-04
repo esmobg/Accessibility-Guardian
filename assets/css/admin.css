@@ -375,6 +375,212 @@
 	font-size: 0.85em;
 }
 
+/* Automatic fixes settings. */
+.ag-fixes {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 0.75em;
+	margin: 1em 0;
+}
+
+.ag-fix-option {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-areas: "check label" "check desc";
+	gap: 0 0.5em;
+	padding: 0.85em 1em;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+}
+
+.ag-fix-option input {
+	grid-area: check;
+	margin-top: 0.2em;
+}
+
+.ag-fix-option__label {
+	grid-area: label;
+	font-weight: 600;
+}
+
+.ag-fix-option__desc {
+	grid-area: desc;
+	color: #50575e;
+	font-size: 0.9em;
+}
+
+/* Severity tabs. */
+.ag-sev-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	margin: 1em 0 1.5em;
+	padding: 0;
+	list-style: none;
+}
+
+.ag-sev-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.4em 0.9em;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 999px;
+	text-decoration: none;
+	color: #1d2327;
+	font-weight: 600;
+}
+
+.ag-sev-tab.is-active {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
+.ag-sev-tab__count {
+	display: inline-block;
+	min-width: 1.6em;
+	padding: 0 0.4em;
+	text-align: center;
+	background: rgba(0, 0, 0, 0.08);
+	border-radius: 999px;
+	font-size: 0.85em;
+}
+
+.ag-sev-tab.is-active .ag-sev-tab__count {
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.ag-sev-tab--critical .ag-sev-tab__count {
+	background: rgba(192, 57, 43, 0.15);
+	color: var(--ag-critical);
+}
+
+/* Issue cards. */
+.ag-issues {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.ag-issue {
+	padding: 1em 1.25em;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left-width: 5px;
+	border-radius: 6px;
+}
+
+.ag-issue--critical {
+	border-left-color: var(--ag-critical);
+}
+
+.ag-issue--major {
+	border-left-color: var(--ag-major);
+}
+
+.ag-issue--minor {
+	border-left-color: var(--ag-minor);
+}
+
+.ag-issue--warning {
+	border-left-color: var(--ag-warning);
+}
+
+.ag-issue__head {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.6em;
+	margin-bottom: 0.5em;
+}
+
+.ag-issue__wcag {
+	color: #50575e;
+	font-size: 0.9em;
+}
+
+.ag-issue__message {
+	margin: 0.25em 0 0.75em;
+	font-size: 1.02em;
+}
+
+.ag-issue__meta {
+	margin: 0.25em 0;
+	font-size: 0.9em;
+	word-break: break-word;
+}
+
+.ag-issue__snippet {
+	max-width: 100%;
+	overflow-x: auto;
+	margin: 0.5em 0;
+	padding: 0.75em;
+	background: #2b2d42;
+	color: #f8f8f2;
+	border-radius: 6px;
+	font-size: 0.85em;
+}
+
+.ag-issue__snippet code {
+	background: transparent;
+	color: inherit;
+}
+
+.ag-issue__fix {
+	margin: 0.75em 0;
+	padding: 0.65em 0.85em;
+	background: #f0f6fc;
+	border-radius: 6px;
+}
+
+.ag-issue__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1em;
+	margin-top: 0.5em;
+}
+
+.ag-autofix-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	padding: 0.25em 0.7em;
+	background: #edfaef;
+	border: 1px solid #27ae60;
+	border-radius: 999px;
+	color: #27632a;
+	font-size: 0.9em;
+}
+
+.ag-autofix-badge .dashicons {
+	font-size: 1.1em;
+	width: auto;
+	height: auto;
+}
+
+.ag-pagination {
+	margin-top: 1.5em;
+}
+
+.ag-pagination .page-numbers {
+	display: inline-block;
+	padding: 0.3em 0.7em;
+	margin: 0 0.15em;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	text-decoration: none;
+}
+
+.ag-pagination .page-numbers.current {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.ag-bars__fill,
 	.ag-progress__bar {

@@ -4,8 +4,9 @@
  *
  * @package AccessibilityGuardian
  *
- * @var array<string,mixed>          $settings
- * @var array<string,\WP_Post_Type>  $post_types
+ * @var array<string,mixed>                                       $settings
+ * @var array<string,\WP_Post_Type>                               $post_types
+ * @var array<string,array{label:string,description:string}>      $fix_catalog
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,6 +17,7 @@ $ag_selected_types = isset( $settings['include_post_types'] ) && is_array( $sett
 $ag_include_terms  = ! empty( $settings['include_terms'] );
 $ag_batch_size     = isset( $settings['batch_size'] ) ? (int) $settings['batch_size'] : 5;
 $ag_wcag_level     = isset( $settings['wcag_level'] ) ? (string) $settings['wcag_level'] : 'aa';
+$ag_enabled_fixes  = isset( $settings['fixes'] ) && is_array( $settings['fixes'] ) ? $settings['fixes'] : array();
 
 settings_errors( 'ag_settings' );
 ?>
@@ -76,6 +78,22 @@ settings_errors( 'ag_settings' );
 				</tr>
 			</tbody>
 		</table>
+
+		<h2><?php esc_html_e( 'Automatic fixes', 'accessibility-guardian' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Enable safe, site-wide remediations applied automatically on the front end. Each fix is optional; test your site after enabling.', 'accessibility-guardian' ); ?>
+		</p>
+		<fieldset class="ag-fixes">
+			<legend class="screen-reader-text"><?php esc_html_e( 'Automatic fixes', 'accessibility-guardian' ); ?></legend>
+			<?php foreach ( $fix_catalog as $ag_fix_key => $ag_fix ) : ?>
+				<label class="ag-fix-option">
+					<input type="checkbox" name="fixes[]" value="<?php echo esc_attr( $ag_fix_key ); ?>"
+						<?php checked( ! empty( $ag_enabled_fixes[ $ag_fix_key ] ) ); ?> />
+					<span class="ag-fix-option__label"><?php echo esc_html( $ag_fix['label'] ); ?></span>
+					<span class="ag-fix-option__desc"><?php echo esc_html( $ag_fix['description'] ); ?></span>
+				</label>
+			<?php endforeach; ?>
+		</fieldset>
 
 		<?php submit_button( __( 'Save settings', 'accessibility-guardian' ), 'primary', 'ag_settings_submit' ); ?>
 	</form>

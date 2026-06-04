@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-04T11:05:41+00:00\n"
+"POT-Creation-Date: 2026-06-04T12:24:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: accessibility-guardian\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #. Author of the plugin
 #: accessibility-guardian.php
-#: src/Admin/AdminMenu.php:79
+#: src/Admin/AdminMenu.php:92
 #: templates/dashboard.php:45
 msgid "Accessibility Guardian"
 msgstr ""
@@ -37,34 +37,39 @@ msgstr ""
 msgid "https://example.com"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:80
+#: src/Admin/AdminMenu.php:93
 msgid "Accessibility"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:90
-#: src/Admin/AdminMenu.php:91
+#: src/Admin/AdminMenu.php:103
+#: src/Admin/AdminMenu.php:104
 msgid "Dashboard"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:99
-#: src/Admin/AdminMenu.php:100
+#: src/Admin/AdminMenu.php:112
+#: src/Admin/AdminMenu.php:113
 msgid "Run Scan"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:108
-#: src/Admin/AdminMenu.php:109
+#: src/Admin/AdminMenu.php:121
+#: src/Admin/AdminMenu.php:122
+msgid "Issues"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:130
+#: src/Admin/AdminMenu.php:131
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:202
+#: src/Admin/AdminMenu.php:266
 msgid "You are not allowed to manage these settings."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:224
+#: src/Admin/AdminMenu.php:298
 msgid "Settings saved."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:234
+#: src/Admin/AdminMenu.php:308
 msgid "You do not have permission to access this page."
 msgstr ""
 
@@ -118,12 +123,96 @@ msgstr ""
 msgid "Scan not found."
 msgstr ""
 
+#: src/Fixes/AutoFixer.php:114
+msgid "(opens in a new window)"
+msgstr ""
+
+#: src/Fixes/AutoFixer.php:144
+msgid "Skip to content"
+msgstr ""
+
+#: src/Fixes/AutoFixer.php:160
+msgid "Search"
+msgstr ""
+
 #: src/Rules/RuleCatalog.php:45
 msgid "Best practice"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:48
 msgid "Review this element against WCAG 2.2 guidelines and apply the recommended remediation."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:64
+msgid "Add missing language attribute"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:65
+msgid "Sets a lang attribute on the <html> element when one is missing (WCAG 3.1.1)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:68
+msgid "Add a skip-to-content link"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:69
+msgid "Inserts a keyboard skip link at the top of every page (WCAG 2.4.1)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:72
+msgid "Add a visible focus outline"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:73
+msgid "Ensures focused links and controls show a clear outline (WCAG 2.4.7)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:76
+msgid "Underline links in content"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:77
+msgid "Underlines in-content links so they are not distinguished by color alone (WCAG 1.4.1)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:80
+msgid "Warn about links opening new windows"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:81
+msgid "Appends a hidden \"(opens in a new window)\" notice to target=\"_blank\" links (WCAG 3.2.5)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:84
+msgid "Allow zooming (fix viewport)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:85
+msgid "Removes user-scalable=no and maximum-scale limits so users can zoom (WCAG 1.4.4)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:88
+msgid "Remove positive tabindex values"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:89
+msgid "Resets tabindex values greater than 0 to keep a natural focus order (WCAG 2.4.3)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:92
+msgid "Add labels to search forms"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:93
+msgid "Adds an accessible label to the default search form field (WCAG 3.3.2)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:96
+msgid "Remove redundant title attributes"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:97
+msgid "Strips title attributes from links and inputs that already have visible text."
 msgstr ""
 
 #. translators: %s: rule description.
@@ -227,18 +316,22 @@ msgid "Issues by severity"
 msgstr ""
 
 #: templates/dashboard.php:102
+#: templates/issues.php:21
 msgid "Critical"
 msgstr ""
 
 #: templates/dashboard.php:103
+#: templates/issues.php:22
 msgid "Major"
 msgstr ""
 
 #: templates/dashboard.php:104
+#: templates/issues.php:23
 msgid "Minor"
 msgstr ""
 
 #: templates/dashboard.php:105
+#: templates/issues.php:24
 msgid "Warning"
 msgstr ""
 
@@ -295,6 +388,60 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: templates/issues.php:32
+msgid "Accessibility Issues"
+msgstr ""
+
+#: templates/issues.php:37
+msgid "No scans yet. Run a scan to see categorized issues here."
+msgstr ""
+
+#: templates/issues.php:44
+msgid "All"
+msgstr ""
+
+#: templates/issues.php:60
+msgid "No issues in this category. Great work!"
+msgstr ""
+
+#: templates/issues.php:80
+msgid "Page:"
+msgstr ""
+
+#: templates/issues.php:89
+msgid "Element:"
+msgstr ""
+
+#: templates/issues.php:99
+msgid "Recommended fix:"
+msgstr ""
+
+#. translators: %s: auto-fix option name.
+#: templates/issues.php:110
+#, php-format
+msgid "Auto-fix available: %s"
+msgstr ""
+
+#: templates/issues.php:114
+msgid "Enable"
+msgstr ""
+
+#: templates/issues.php:119
+msgid "Documentation"
+msgstr ""
+
+#: templates/issues.php:138
+msgid "&laquo; Previous"
+msgstr ""
+
+#: templates/issues.php:139
+msgid "Next &raquo;"
+msgstr ""
+
+#: templates/issues.php:144
+msgid "Issues pagination"
+msgstr ""
+
 #: templates/scan.php:17
 msgid "Run Accessibility Scan"
 msgstr ""
@@ -325,50 +472,59 @@ msgstr ""
 msgid "Accessibility scan sandbox"
 msgstr ""
 
-#: templates/settings.php:25
+#: templates/settings.php:27
 msgid "Accessibility Guardian Settings"
 msgstr ""
 
-#: templates/settings.php:34
+#: templates/settings.php:36
 msgid "Content to scan"
 msgstr ""
 
-#: templates/settings.php:37
+#: templates/settings.php:39
 msgid "Post types to include"
 msgstr ""
 
-#: templates/settings.php:48
+#: templates/settings.php:50
 msgid "Choose which public post types are included in full-site scans."
 msgstr ""
 
-#: templates/settings.php:52
+#: templates/settings.php:54
 msgid "Term archives"
 msgstr ""
 
-#: templates/settings.php:56
+#: templates/settings.php:58
 msgid "Include category and tag archive pages"
 msgstr ""
 
-#: templates/settings.php:61
+#: templates/settings.php:63
 msgid "Batch size"
 msgstr ""
 
-#: templates/settings.php:65
+#: templates/settings.php:67
 msgid "Number of pages processed before progress is reported. Lower values reduce memory use."
 msgstr ""
 
-#: templates/settings.php:69
+#: templates/settings.php:71
 msgid "WCAG level"
 msgstr ""
 
-#: templates/settings.php:72
+#: templates/settings.php:74
 msgid "A"
 msgstr ""
 
-#: templates/settings.php:73
+#: templates/settings.php:75
 msgid "AA (recommended)"
 msgstr ""
 
-#: templates/settings.php:80
+#: templates/settings.php:82
+#: templates/settings.php:87
+msgid "Automatic fixes"
+msgstr ""
+
+#: templates/settings.php:84
+msgid "Enable safe, site-wide remediations applied automatically on the front end. Each fix is optional; test your site after enabling."
+msgstr ""
+
+#: templates/settings.php:98
 msgid "Save settings"
 msgstr ""

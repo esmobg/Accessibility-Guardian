@@ -1,0 +1,54 @@
+/* Accessibility Guardian - front-end automatic fixes. */
+
+/* Skip link (visible on focus). */
+.ag-skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 100000;
+}
+
+.ag-skip-link:focus {
+	left: 8px;
+	top: 8px;
+	width: auto;
+	height: auto;
+	padding: 0.6em 1em;
+	background: #fff;
+	color: #111;
+	border: 2px solid #2271b1;
+	border-radius: 4px;
+	font-size: 1rem;
+	text-decoration: underline;
+}
+
+/* Visible focus outline fix. */
+.ag-fix-focus-outline a:focus,
+.ag-fix-focus-outline button:focus,
+.ag-fix-focus-outline input:focus,
+.ag-fix-focus-outline select:focus,
+.ag-fix-focus-outline textarea:focus,
+.ag-fix-focus-outline [tabindex]:focus {
+	outline: 3px solid #2271b1 !important;
+	outline-offset: 2px !important;
+}
+
+/* Underline in-content links fix. */
+.ag-fix-underline-links .entry-content a,
+.ag-fix-underline-links .wp-block-post-content a,
+.ag-fix-underline-links main a {
+	text-decoration: underline;
+}
+
+/* Screen-reader-only helper, in case the theme lacks one. */
+.ag-new-window-note {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

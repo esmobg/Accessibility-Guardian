@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace AccessibilityGuardian\Admin;
 
+use AccessibilityGuardian\Rules\RuleCatalog;
 use AccessibilityGuardian\Scan\ScoreCalculator;
 use AccessibilityGuardian\Storage\IssueRepository;
 use AccessibilityGuardian\Storage\ScanRepository;
@@ -31,6 +32,11 @@ final class AdminMenu {
 	public const SLUG_SCAN = 'accessibility-guardian-scan';
 
 	/**
+	 * Issues page slug.
+	 */
+	public const SLUG_ISSUES = 'accessibility-guardian-issues';
+
+	/**
 	 * Settings page slug.
 	 */
 	public const SLUG_SETTINGS = 'accessibility-guardian-settings';
@@ -51,16 +57,23 @@ final class AdminMenu {
 	private ScoreCalculator $score;
 
 	/**
+	 * Rule metadata catalog.
+	 */
+	private RuleCatalog $catalog;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param ScanRepository  $scans  Scan repository.
-	 * @param IssueRepository $issues Issue repository.
-	 * @param ScoreCalculator $score  Score calculator.
+	 * @param ScanRepository  $scans   Scan repository.
+	 * @param IssueRepository $issues  Issue repository.
+	 * @param ScoreCalculator $score   Score calculator.
+	 * @param RuleCatalog     $catalog Rule metadata catalog.
 	 */
-	public function __construct( ScanRepository $scans, IssueRepository $issues, ScoreCalculator $score ) {
-		$this->scans  = $scans;
-		$this->issues = $issues;
-		$this->score  = $score;
+	public function __construct( ScanRepository $scans, IssueRepository $issues, ScoreCalculator $score, RuleCatalog $catalog ) {
+		$this->scans   = $scans;
+		$this->issues  = $issues;
+		$this->score   = $score;
+		$this->catalog = $catalog;
 	}
 
 	/**
@@ -101,6 +114,15 @@ final class AdminMenu {
 			'manage_options',
 			self::SLUG_SCAN,
 			array( $this, 'render_scan' )
+		);
+
+		add_submenu_page(
+			self::SLUG_DASHBOARD,
+			__( 'Issues', 'accessibility-guardian' ),
+			__( 'Issues', 'accessibility-guardian' ),
+			'manage_options',
+			self::SLUG_ISSUES,
+			array( $this, 'render_issues' )
 		);
 
 		add_submenu_page(
@@ -172,6 +194,47 @@ final class AdminMenu {
 	}
 
 	/**
+	 * Render the issues listing page, categorized by severity.
+	 */
+	public function render_issues(): void {
+		$this->guard();
+
+		// Read-only filters for display; no state change.
+		$scan_id  = isset( $_GET['scan_id'] ) ? absint( wp_unslash( (string) $_GET['scan_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$severity = isset( $_GET['severity'] ) ? sanitize_key( wp_unslash( (string) $_GET['severity'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$paged    = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( (string) $_GET['paged'] ) ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( 0 === $scan_id ) {
+			$latest  = $this->scans->latest();
+			$scan_id = null !== $latest ? (int) $latest['id'] : 0;
+		}
+
+		$valid_sev = array( 'critical', 'major', 'minor', 'warning' );
+		if ( '' !== $severity && ! in_array( $severity, $valid_sev, true ) ) {
+			$severity = '';
+		}
+
+		$per_page        = 25;
+		$severity_counts = $scan_id > 0 ? $this->issues->severity_counts( $scan_id ) : array();
+		$issues          = $scan_id > 0 ? $this->issues->for_scan( $scan_id, $per_page, $paged, $severity ) : array();
+
+		$this->render(
+			'issues',
+			array(
+				'scan_id'         => $scan_id,
+				'severity'        => $severity,
+				'paged'           => $paged,
+				'per_page'        => $per_page,
+				'severity_counts' => $severity_counts,
+				'issues'          => $issues,
+				'catalog'         => $this->catalog,
+				'base_url'        => admin_url( 'admin.php?page=' . self::SLUG_ISSUES ),
+				'settings_url'    => admin_url( 'admin.php?page=' . self::SLUG_SETTINGS ),
+			)
+		);
+	}
+
+	/**
 	 * Render the settings page.
 	 */
 	public function render_settings(): void {
@@ -184,8 +247,9 @@ final class AdminMenu {
 		$this->render(
 			'settings',
 			array(
-				'settings'   => $settings,
-				'post_types' => $post_types,
+				'settings'    => $settings,
+				'post_types'  => $post_types,
+				'fix_catalog' => $this->catalog->fixes(),
 			)
 		);
 	}
@@ -209,11 +273,21 @@ final class AdminMenu {
 			$post_types = array_map( 'sanitize_key', wp_unslash( $_POST['include_post_types'] ) );
 		}
 
+		$fixes     = array();
+		$available = array_keys( $this->catalog->fixes() );
+		$submitted = isset( $_POST['fixes'] ) && is_array( $_POST['fixes'] )
+			? array_map( 'sanitize_key', wp_unslash( $_POST['fixes'] ) )
+			: array();
+		foreach ( $available as $fix_key ) {
+			$fixes[ $fix_key ] = in_array( $fix_key, $submitted, true );
+		}
+
 		$settings = array(
 			'include_post_types' => $post_types,
 			'include_terms'      => ! empty( $_POST['include_terms'] ),
 			'batch_size'         => isset( $_POST['batch_size'] ) ? max( 1, absint( wp_unslash( (string) $_POST['batch_size'] ) ) ) : 5,
 			'wcag_level'         => isset( $_POST['wcag_level'] ) ? sanitize_key( wp_unslash( (string) $_POST['wcag_level'] ) ) : 'aa',
+			'fixes'              => $fixes,
 		);
 
 		update_option( 'ag_settings', $settings );

@@ -13,6 +13,7 @@ use AccessibilityGuardian\Activation\Installer;
 use AccessibilityGuardian\Admin\AdminMenu;
 use AccessibilityGuardian\Admin\AssetManager;
 use AccessibilityGuardian\Export\ExportController;
+use AccessibilityGuardian\Fixes\AutoFixer;
 use AccessibilityGuardian\Rules\RuleCatalog;
 use AccessibilityGuardian\Scan\ResultNormalizer;
 use AccessibilityGuardian\Scan\ScanController;
@@ -84,6 +85,7 @@ final class Plugin {
 		$this->service( AssetManager::class )->register();
 		$this->service( ScanController::class )->register();
 		$this->service( ExportController::class )->register();
+		$this->service( AutoFixer::class )->register();
 	}
 
 	/**
@@ -132,7 +134,7 @@ final class Plugin {
 			UrlProvider::class      => $url_provider,
 			ResultNormalizer::class => $normalizer,
 			AssetManager::class     => new AssetManager(),
-			AdminMenu::class        => new AdminMenu( $scan_repository, $issue_repository, $score_calculator ),
+			AdminMenu::class        => new AdminMenu( $scan_repository, $issue_repository, $score_calculator, $rule_catalog ),
 			ScanController::class   => new ScanController(
 				$url_provider,
 				$scan_repository,
@@ -141,6 +143,7 @@ final class Plugin {
 				$score_calculator
 			),
 			ExportController::class => new ExportController( $issue_repository, $scan_repository ),
+			AutoFixer::class        => new AutoFixer(),
 		);
 	}
 }
