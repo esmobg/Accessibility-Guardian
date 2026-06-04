@@ -1,72 +1,129 @@
 # Accessibility Guardian for WordPress
 
-Automated WCAG 2.2 Level AA accessibility auditor that runs entirely inside the
-WordPress dashboard. It scans posts, pages, custom post types, WooCommerce
-products and term archives using [axe-core](https://github.com/dequelabs/axe-core)
-and reports issues with severity ratings, WCAG references and remediation
-guidance.
+Automated **WCAG 2.2 Level AA** accessibility auditor that runs entirely inside the WordPress dashboard. It scans your posts, pages, custom post types, WooCommerce products and term archives with [axe-core](https://github.com/dequelabs/axe-core) and reports issues with severity ratings, WCAG references and remediation guidance — no external services, no Node.js, no headless browser.
 
-This is the Phase 1 MVP.
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-21759b)
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)
+![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green)
+
+---
+
+## Why it's different
+
+Most accessibility checkers either inject a front-end toolbar or require a server-side runtime (Node/Chromium) that typical WordPress hosts don't allow. Accessibility Guardian runs the real **axe-core** engine in the administrator's browser against a hidden, **same-origin iframe** of each page. That means it evaluates the *fully rendered* DOM — computed color contrast, ARIA, headings, landmarks, form labelling — while needing nothing more than standard WordPress hosting.
+
+## Features
+
+- **Scan modes** — single-page scan or full-site scan across posts, pages, public custom post types, WooCommerce products and term archives.
+- **Real rendered-DOM analysis** — axe-core 4.10 plus supplemental custom checks:
+  - generic link text ("click here", "read more", …)
+  - placeholder used instead of a real label
+  - links opening a new window without warning
+  - linked PDF detection
+- **Rich issue records** — every finding includes a rule id, WCAG reference, severity, category, HTML snippet, DOM path, a suggested fix and a documentation link.
+- **Accessibility score (0–100)** with Excellent / Good / Needs Improvement / Poor bands.
+- **Dashboard** — score circle, summary cards, issues by severity, WCAG category distribution, a progress-over-time trend and the most common problems.
+- **Exports** — download any scan as CSV or JSON.
+- **Privacy-friendly** — everything runs on your own site and browser; nothing is sent to third parties.
 
 ## How it works
 
-Scanning runs in the administrator's browser. Each queued URL is loaded into a
-hidden, same-origin iframe in `wp-admin`; axe-core (plus a handful of
-supplemental custom rules) is injected and executed against the fully rendered
-DOM. Results are streamed back to the server, normalized into a canonical issue
-schema, stored in custom tables and scored.
-
-Because the engine uses the real rendered DOM, it can evaluate computed color
-contrast, ARIA, headings, landmarks and form labelling without any server-side
-runtime (no Node.js or headless Chromium required).
-
-```
-Admin clicks Scan -> UrlProvider builds the queue -> scanner.js iterates URLs
--> axe.run() in iframe -> AJAX save -> ResultNormalizer -> IssueRepository
--> ScoreCalculator -> Dashboard
+```mermaid
+flowchart LR
+  admin[Admin clicks Scan] --> start["AJAX ag_start_scan"]
+  start --> urls[UrlProvider enumerates URLs]
+  urls --> queue[Return scan_id + URL queue]
+  queue --> loop[scanner.js iterates queue]
+  loop --> iframe[Load URL in hidden iframe]
+  iframe --> run["Inject + run axe.run()"]
+  run --> save["AJAX ag_save_results"]
+  save --> norm[ResultNormalizer maps to issue schema]
+  norm --> store[IssueRepository stores issues]
+  store --> loop
+  loop --> done[All URLs done]
+  done --> score[ScoreCalculator updates score + history]
+  score --> dash[Dashboard]
 ```
 
 ## Requirements
 
-- PHP 8.2+
-- WordPress 6.8+
+| | |
+| --- | --- |
+| PHP | 8.2+ |
+| WordPress | 6.8+ |
+
+> The in-browser scanner needs pages to be embeddable in a same-origin iframe, so it will not work if the site sends `X-Frame-Options: DENY` (most sites don't).
 
 ## Installation
 
-1. Copy this directory into `wp-content/plugins/accessibility-guardian`.
-2. Activate **Accessibility Guardian** from the Plugins screen.
-3. Open the **Accessibility** menu in the admin sidebar.
+**From the packaged zip**
 
-The plugin ships with a fallback PSR-4 autoloader, so `composer install` is only
-needed for development (PHPUnit).
+1. In wp-admin go to **Plugins → Add New → Upload Plugin**.
+2. Upload `accessibility-guardian-1.0.0.zip` and click **Install Now**, then **Activate**.
+
+**Manually**
+
+1. Copy the `accessibility-guardian` folder into `wp-content/plugins/`.
+2. Activate **Accessibility Guardian** from the Plugins screen.
+
+The plugin ships with a fallback PSR-4 autoloader, so `composer install` is only needed for development.
 
 ## Usage
 
-- **Run Scan**: start a full-site scan or a single-page scan. Keep the tab open
-  until the scan completes.
-- **Dashboard**: accessibility score, summary cards, issues by severity, WCAG
-  category distribution, progress over time, most common problems and recent
-  scans. Export the latest scan as CSV or JSON.
-- **Settings**: choose which post types to include, whether to scan term
-  archives, the batch size and the target WCAG level.
+1. Open the **Accessibility** menu in the admin sidebar.
+2. Go to **Run Scan** and start a single-page or full-site scan. Keep the tab open until it finishes.
+3. Review results on the **Dashboard** and export them as CSV or JSON.
+4. Configure which post types and term archives to include under **Settings**.
 
 ## Scoring
 
-Starts at 100 and deducts per issue: critical `-10`, major `-5`, minor `-2`,
-warning `-1`, clamped to 0-100.
+Starts at 100 and deducts per issue, then clamps to 0–100:
+
+| Severity | Penalty |
+| --- | --- |
+| Critical | −10 |
+| Major | −5 |
+| Minor | −2 |
+| Warning | −1 |
 
 | Band | Score |
 | --- | --- |
-| Excellent | 95-100 |
-| Good | 80-94 |
-| Needs Improvement | 60-79 |
+| Excellent | 95–100 |
+| Good | 80–94 |
+| Needs Improvement | 60–79 |
 | Poor | < 60 |
+
+## Project structure
+
+```
+accessibility-guardian/
+├── accessibility-guardian.php   # Plugin bootstrap (header, constants, autoloader)
+├── uninstall.php                # Drops tables + options on delete
+├── src/
+│   ├── Plugin.php               # Service container / hook wiring
+│   ├── Activation/Installer.php # dbDelta schema
+│   ├── Admin/                   # AdminMenu, AssetManager
+│   ├── Scan/                    # UrlProvider, ScanController, ResultNormalizer, ScoreCalculator
+│   ├── Rules/RuleCatalog.php    # axe rule → WCAG metadata mapping
+│   ├── Storage/                 # ScanRepository, IssueRepository
+│   └── Export/                  # CsvExporter, JsonExporter, ExportController
+├── assets/
+│   ├── js/axe.min.js            # Bundled axe-core 4.10 (MPL-2.0)
+│   ├── js/scanner.js            # Hidden-iframe scan orchestrator
+│   ├── js/custom-rules.js       # Supplemental checks
+│   ├── js/dashboard.js          # Trend sparkline
+│   └── css/admin.css
+├── templates/                   # dashboard / scan / settings views
+├── languages/                   # Translation template (.pot)
+└── tests/phpunit/               # Unit tests
+```
 
 ## Database tables
 
-- `{prefix}ag_scans` - one row per scan (type, status, totals, score)
-- `{prefix}ag_issues` - one row per detected issue
-- `{prefix}ag_history` - score history for the trend chart
+- `{prefix}ag_scans` — one row per scan (type, status, totals, score)
+- `{prefix}ag_issues` — one row per detected issue
+- `{prefix}ag_history` — score history for the trend chart
 
 Settings are stored in the `ag_settings` option.
 
@@ -74,19 +131,15 @@ Settings are stored in the `ag_settings` option.
 
 ```bash
 composer install
-composer test
+composer test          # PHPUnit
 ```
 
-The PHPUnit suite (`tests/phpunit/`) runs the pure-logic classes
-(`ScoreCalculator`, `ResultNormalizer`, `UrlProvider`) with lightweight
-WordPress function stubs, so no WordPress install is required to run it.
+The PHPUnit suite (`tests/phpunit/`) covers the pure-logic classes (`ScoreCalculator`, `ResultNormalizer`, `UrlProvider`) using lightweight WordPress function stubs, so no WordPress install is required to run it.
 
-## Roadmap (not in this MVP)
+## Roadmap
 
-REST API, AI-assisted fixes, scheduled background scans, one-click automatic
-fixes, the front-end highlighter overlay, HTML/PDF reports and page-builder
-specific handling are planned for later phases.
+Planned for later phases: REST API, AI-assisted fixes, scheduled background scans, one-click automatic fixes, a front-end issue highlighter, HTML/PDF reports and page-builder-specific handling.
 
 ## License
 
-GPL-2.0-or-later. Bundles axe-core (Mozilla Public License 2.0).
+[GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html). Bundles axe-core under the Mozilla Public License 2.0.
