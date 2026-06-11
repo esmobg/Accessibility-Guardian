@@ -188,16 +188,19 @@ final class ResultNormalizer {
 	}
 
 	/**
-	 * Truncate a string to a maximum length.
+	 * Truncate a string to a maximum character length without splitting
+	 * multibyte characters (which would produce invalid UTF-8 that strict
+	 * MySQL modes reject, silently dropping the whole issue row).
 	 *
 	 * @param string $value  Source string.
-	 * @param int    $length Maximum length.
+	 * @param int    $length Maximum length in characters.
 	 */
 	private function truncate( string $value, int $length ): string {
-		if ( strlen( $value ) <= $length ) {
+		// WordPress core polyfills mb_substr(), so it is always available.
+		if ( mb_strlen( $value, 'UTF-8' ) <= $length ) {
 			return $value;
 		}
 
-		return substr( $value, 0, $length ) . '...';
+		return mb_substr( $value, 0, $length, 'UTF-8' ) . '...';
 	}
 }

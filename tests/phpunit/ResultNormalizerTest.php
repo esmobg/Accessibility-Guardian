@@ -107,6 +107,36 @@ final class ResultNormalizerTest extends TestCase {
 		$this->assertSame( 'major', $issues[0]['severity'] );
 	}
 
+	public function test_long_multibyte_snippet_is_truncated_to_valid_utf8(): void {
+		// 3000 Cyrillic characters = 6000 bytes; must be cut on a character
+		// boundary so MySQL strict mode does not reject the row.
+		$snippet = '<p>' . str_repeat( 'я', 3000 ) . '</p>';
+
+		$payload = array(
+			'url'        => 'https://example.com/',
+			'violations' => array(
+				array(
+					'id'     => 'image-alt',
+					'impact' => 'critical',
+					'help'   => 'Help',
+					'nodes'  => array(
+						array(
+							'html'   => $snippet,
+							'target' => array( 'p' ),
+						),
+					),
+				),
+			),
+		);
+
+		$issues = $this->normalizer->normalize( $payload );
+		$stored = $issues[0]['html_snippet'];
+
+		$this->assertSame( 2003, mb_strlen( $stored, 'UTF-8' ) ); // 2000 chars + '...'.
+		$this->assertTrue( (bool) mb_check_encoding( $stored, 'UTF-8' ) );
+		$this->assertStringEndsWith( 'я...', $stored );
+	}
+
 	public function test_severity_counts_aggregate_correctly(): void {
 		$issues = array(
 			array( 'severity' => 'critical' ),

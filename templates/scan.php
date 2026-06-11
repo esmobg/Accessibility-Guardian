@@ -53,9 +53,48 @@ defined( 'ABSPATH' ) || exit;
 			<span id="ag-progress-message" class="ag-progress__message"></span>
 			<span id="ag-progress-count" class="ag-progress__count">0 / 0</span>
 		</div>
-		<div class="ag-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+		<div id="ag-progress-track" class="ag-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+			aria-label="<?php esc_attr_e( 'Scan progress', 'accessibility-guardian' ); ?>">
 			<div id="ag-progress-bar" class="ag-progress__bar" style="width: 0;"></div>
 		</div>
+	</div>
+
+	<div id="ag-scan-result" class="ag-result" hidden tabindex="-1" aria-live="polite">
+		<div class="ag-result__head">
+			<span id="ag-result-badge" class="ag-result__badge">
+				<strong id="ag-result-score" class="ag-result__score">0%</strong>
+				<span id="ag-result-band" class="ag-result__band"></span>
+			</span>
+			<h2 class="ag-result__title"><?php esc_html_e( 'Scan finished', 'accessibility-guardian' ); ?></h2>
+		</div>
+
+		<ul class="ag-result__counts">
+			<li class="ag-result__count ag-result__count--critical">
+				<span class="ag-result__num" id="ag-result-critical">0</span>
+				<?php esc_html_e( 'Critical', 'accessibility-guardian' ); ?>
+			</li>
+			<li class="ag-result__count ag-result__count--major">
+				<span class="ag-result__num" id="ag-result-major">0</span>
+				<?php esc_html_e( 'Major', 'accessibility-guardian' ); ?>
+			</li>
+			<li class="ag-result__count ag-result__count--minor">
+				<span class="ag-result__num" id="ag-result-minor">0</span>
+				<?php esc_html_e( 'Minor', 'accessibility-guardian' ); ?>
+			</li>
+			<li class="ag-result__count ag-result__count--warning">
+				<span class="ag-result__num" id="ag-result-warning">0</span>
+				<?php esc_html_e( 'Warnings', 'accessibility-guardian' ); ?>
+			</li>
+		</ul>
+
+		<p class="ag-result__actions">
+			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=accessibility-guardian-issues' ) ); ?>">
+				<?php esc_html_e( 'Review issues', 'accessibility-guardian' ); ?>
+			</a>
+			<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=accessibility-guardian' ) ); ?>">
+				<?php esc_html_e( 'Open dashboard', 'accessibility-guardian' ); ?>
+			</a>
+		</p>
 	</div>
 
 	<ul id="ag-scan-log" class="ag-log" aria-live="polite"></ul>

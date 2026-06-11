@@ -105,16 +105,20 @@ $ag_export_base = wp_nonce_url(
 						'warning'  => __( 'Warning', 'accessibility-guardian' ),
 					);
 					foreach ( $ag_severity_labels as $ag_key => $ag_label ) :
-						$ag_value   = (int) ( $severity_counts[ $ag_key ] ?? 0 );
-						$ag_percent = $ag_severity_total > 0 ? round( ( $ag_value / $ag_severity_total ) * 100 ) : 0;
+						$ag_value      = (int) ( $severity_counts[ $ag_key ] ?? 0 );
+						$ag_percent    = $ag_severity_total > 0 ? round( ( $ag_value / $ag_severity_total ) * 100 ) : 0;
+						$ag_issues_url = admin_url( 'admin.php?page=accessibility-guardian-issues&severity=' . $ag_key );
 						?>
 						<li class="ag-bars__row">
-							<span class="ag-bars__label"><?php echo esc_html( $ag_label ); ?></span>
-							<span class="ag-bars__track">
-								<span class="ag-bars__fill ag-bars__fill--<?php echo esc_attr( $ag_key ); ?>"
-									style="width: <?php echo esc_attr( (string) $ag_percent ); ?>%;"></span>
-							</span>
-							<span class="ag-bars__value"><?php echo esc_html( (string) $ag_value ); ?></span>
+							<a class="ag-bars__link" href="<?php echo esc_url( $ag_issues_url ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: count, 2: severity label. */ __( 'View %1$d %2$s issues', 'accessibility-guardian' ), $ag_value, $ag_label ) ); ?>">
+								<span class="ag-bars__label"><?php echo esc_html( $ag_label ); ?></span>
+								<span class="ag-bars__track">
+									<span class="ag-bars__fill ag-bars__fill--<?php echo esc_attr( $ag_key ); ?>"
+										style="width: <?php echo esc_attr( (string) $ag_percent ); ?>%;"></span>
+								</span>
+								<span class="ag-bars__value"><?php echo esc_html( (string) $ag_value ); ?></span>
+							</a>
 						</li>
 					<?php endforeach; ?>
 				</ul>

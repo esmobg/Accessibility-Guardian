@@ -131,6 +131,31 @@ final class ScanRepository {
 	}
 
 	/**
+	 * Mark scans stuck in "running" for too long as failed.
+	 *
+	 * A scan only progresses while the admin keeps the Run Scan tab open, so
+	 * a closed tab would otherwise leave the row "running" forever.
+	 *
+	 * @param int $max_age_seconds Age after which a running scan is stale.
+	 * @return int Number of scans marked failed.
+	 */
+	public function fail_stale( int $max_age_seconds = 3600 ): int {
+		global $wpdb;
+
+		$cutoff = gmdate( 'Y-m-d H:i:s', (int) current_time( 'timestamp' ) - $max_age_seconds );
+
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$this->table} SET status = 'failed', finished_at = %s WHERE status = 'running' AND started_at < %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				current_time( 'mysql' ),
+				$cutoff
+			)
+		);
+
+		return is_numeric( $updated ) ? (int) $updated : 0;
+	}
+
+	/**
 	 * Fetch a single scan row.
 	 *
 	 * @param int $scan_id Scan id.

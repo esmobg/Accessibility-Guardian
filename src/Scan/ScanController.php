@@ -88,6 +88,9 @@ final class ScanController {
 	public function handle_start(): void {
 		$this->guard();
 
+		// Recover from scans abandoned mid-run (e.g. the admin closed the tab).
+		$this->scans->fail_stale();
+
 		$scan_type = isset( $_POST['scan_type'] ) ? sanitize_key( wp_unslash( (string) $_POST['scan_type'] ) ) : 'full';
 		$post_id   = isset( $_POST['post_id'] ) ? absint( wp_unslash( (string) $_POST['post_id'] ) ) : 0;
 
@@ -142,6 +145,12 @@ final class ScanController {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan payload.', 'accessibility-guardian' ) ), 400 );
 		}
 
+		$scan = $this->scans->find( $scan_id );
+
+		if ( null === $scan || 'running' !== $scan['status'] ) {
+			wp_send_json_error( array( 'message' => __( 'Scan is not running.', 'accessibility-guardian' ) ), 409 );
+		}
+
 		$payload = json_decode( $raw, true );
 
 		if ( ! is_array( $payload ) ) {
@@ -169,7 +178,7 @@ final class ScanController {
 		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( (string) $_POST['scan_id'] ) ) : 0;
 		$passes  = isset( $_POST['passes'] ) ? absint( wp_unslash( (string) $_POST['passes'] ) ) : 0;
 
-		if ( 0 === $scan_id ) {
+		if ( 0 === $scan_id || null === $this->scans->find( $scan_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan id.', 'accessibility-guardian' ) ), 400 );
 		}
 

@@ -19,7 +19,7 @@ final class Installer {
 	/**
 	 * Current schema version. Bump to trigger dbDelta migrations.
 	 */
-	private const DB_VERSION = '1.0.0';
+	private const DB_VERSION = '1.0.1';
 
 	/**
 	 * Option key that stores the installed schema version.
@@ -69,7 +69,7 @@ final class Installer {
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			scan_type VARCHAR(20) NOT NULL DEFAULT 'single',
 			status VARCHAR(20) NOT NULL DEFAULT 'running',
-			started_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			started_at DATETIME NULL DEFAULT NULL,
 			finished_at DATETIME NULL DEFAULT NULL,
 			total_urls INT(11) NOT NULL DEFAULT 0,
 			scanned_urls INT(11) NOT NULL DEFAULT 0,
@@ -98,7 +98,7 @@ final class Installer {
 			fix_suggestion TEXT NOT NULL,
 			doc_link TEXT NOT NULL,
 			status VARCHAR(20) NOT NULL DEFAULT 'open',
-			created_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			created_at DATETIME NULL DEFAULT NULL,
 			PRIMARY KEY  (id),
 			KEY scan_id (scan_id),
 			KEY severity (severity),
@@ -113,7 +113,7 @@ final class Installer {
 			errors INT(11) NOT NULL DEFAULT 0,
 			warnings INT(11) NOT NULL DEFAULT 0,
 			passes INT(11) NOT NULL DEFAULT 0,
-			created_at DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			created_at DATETIME NULL DEFAULT NULL,
 			PRIMARY KEY  (id),
 			KEY created_at (created_at)
 		) {$charset_collate};";
