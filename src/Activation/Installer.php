@@ -19,17 +19,18 @@ final class Installer {
 	/**
 	 * Current schema version. Bump to trigger dbDelta migrations.
 	 */
-	private const DB_VERSION = '1.0.1';
+	private const DB_VERSION = '1.1.0';
 
 	/**
 	 * Option key that stores the installed schema version.
 	 */
-	private const DB_VERSION_OPTION = 'ag_db_version';
+	private const DB_VERSION_OPTION = 'accg_db_version';
 
 	/**
 	 * Run on plugin activation.
 	 */
 	public static function activate(): void {
+		self::maybe_migrate_legacy();
 		self::install_tables();
 		self::seed_default_settings();
 	}
@@ -45,8 +46,42 @@ final class Installer {
 	 * Ensure the schema is up to date. Safe to call repeatedly.
 	 */
 	public static function maybe_upgrade(): void {
+		self::maybe_migrate_legacy();
+
 		if ( get_option( self::DB_VERSION_OPTION ) !== self::DB_VERSION ) {
 			self::install_tables();
+		}
+	}
+
+	/**
+	 * Rename 1.0 ag_* tables/options to accg_* when they still exist.
+	 */
+	private static function maybe_migrate_legacy(): void {
+		global $wpdb;
+
+		$pairs = array(
+			$wpdb->prefix . 'ag_scans'   => $wpdb->prefix . 'accg_scans',
+			$wpdb->prefix . 'ag_issues'  => $wpdb->prefix . 'accg_issues',
+			$wpdb->prefix . 'ag_history' => $wpdb->prefix . 'accg_history',
+		);
+
+		foreach ( $pairs as $old => $new ) {
+			$old_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$new_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $new ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
+			if ( $old_exists && ! $new_exists ) {
+				$wpdb->query( "RENAME TABLE {$old} TO {$new}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange
+			}
+		}
+
+		$legacy_settings = get_option( 'ag_settings', false );
+		if ( false !== $legacy_settings && false === get_option( 'accg_settings', false ) ) {
+			add_option( 'accg_settings', $legacy_settings );
+		}
+
+		$legacy_version = get_option( 'ag_db_version', false );
+		if ( false !== $legacy_version && false === get_option( self::DB_VERSION_OPTION, false ) ) {
+			add_option( self::DB_VERSION_OPTION, $legacy_version );
 		}
 	}
 
@@ -59,9 +94,9 @@ final class Installer {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$scans           = $wpdb->prefix . 'ag_scans';
-		$issues          = $wpdb->prefix . 'ag_issues';
-		$history         = $wpdb->prefix . 'ag_history';
+		$scans           = $wpdb->prefix . 'accg_scans';
+		$issues          = $wpdb->prefix . 'accg_issues';
+		$history         = $wpdb->prefix . 'accg_history';
 
 		$schema = array();
 
@@ -129,9 +164,9 @@ final class Installer {
 	 * Store default settings if none exist yet.
 	 */
 	private static function seed_default_settings(): void {
-		if ( false === get_option( 'ag_settings' ) ) {
+		if ( false === get_option( 'accg_settings' ) ) {
 			add_option(
-				'ag_settings',
+				'accg_settings',
 				array(
 					'include_post_types' => array( 'post', 'page' ),
 					'include_terms'      => false,

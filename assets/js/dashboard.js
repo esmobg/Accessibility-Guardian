@@ -20,8 +20,10 @@
 			return;
 		}
 
+		var i18n = window.accgDashboard && window.accgDashboard.i18n ? window.accgDashboard.i18n : {};
+
 		if ( ! points || points.length === 0 ) {
-			container.textContent = container.getAttribute( 'data-empty' ) || 'No history yet.';
+			container.textContent = i18n.noHistory || container.getAttribute( 'data-empty' ) || 'No history yet.';
 			return;
 		}
 
@@ -44,7 +46,8 @@
 		svg.setAttribute( 'role', 'img' );
 
 		var last = points[ points.length - 1 ];
-		svg.setAttribute( 'aria-label', 'Latest accessibility score ' + last.score + ' out of 100' );
+		var scoreLabel = i18n.scoreLabel || 'Latest accessibility score %d out of 100';
+		svg.setAttribute( 'aria-label', scoreLabel.replace( '%d', String( last.score ) ) );
 
 		var polyline = document.createElementNS( svgNs, 'polyline' );
 		polyline.setAttribute( 'points', coords.join( ' ' ) );

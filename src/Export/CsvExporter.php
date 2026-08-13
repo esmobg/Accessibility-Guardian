@@ -43,6 +43,7 @@ final class CsvExporter {
 	 * @return string CSV content.
 	 */
 	public function build( array $issues ): string {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- In-memory CSV buffer, not a disk file.
 		$stream = fopen( 'php://temp', 'r+' );
 
 		fputcsv( $stream, self::COLUMNS );
@@ -57,6 +58,7 @@ final class CsvExporter {
 
 		rewind( $stream );
 		$content = (string) stream_get_contents( $stream );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Matching php://temp handle from fopen above.
 		fclose( $stream );
 
 		return $content;

@@ -95,7 +95,7 @@ final class Plugin {
 		load_plugin_textdomain(
 			'accessibility-guardian',
 			false,
-			dirname( AG_PLUGIN_BASENAME ) . '/languages'
+			dirname( ACCG_PLUGIN_BASENAME ) . '/languages'
 		);
 	}
 
@@ -108,7 +108,9 @@ final class Plugin {
 	 */
 	public function service( string $id ): object {
 		if ( ! isset( $this->services[ $id ] ) ) {
-			throw new \RuntimeException( sprintf( 'Service "%s" is not registered.', $id ) );
+			throw new \RuntimeException(
+				esc_html( sprintf( 'Service "%s" is not registered.', $id ) )
+			);
 		}
 
 		/** @var T */

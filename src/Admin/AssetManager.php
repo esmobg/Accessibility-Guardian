@@ -36,39 +36,64 @@ final class AssetManager {
 		}
 
 		wp_enqueue_style(
-			'ag-admin',
-			AG_PLUGIN_URL . 'assets/css/admin.css',
+			'accg-admin',
+			ACCG_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			AG_VERSION
-		);
-
-		// axe-core is injected into the scan iframe by URL, so it is not
-		// enqueued on the parent admin page.
-		wp_enqueue_script(
-			'ag-custom-rules',
-			AG_PLUGIN_URL . 'assets/js/custom-rules.js',
-			array(),
-			AG_VERSION,
-			true
+			ACCG_VERSION
 		);
 
 		wp_enqueue_script(
-			'ag-scanner',
-			AG_PLUGIN_URL . 'assets/js/scanner.js',
-			array( 'ag-custom-rules' ),
-			AG_VERSION,
+			'accg-custom-rules',
+			ACCG_PLUGIN_URL . 'assets/js/custom-rules.js',
+			array(),
+			ACCG_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'ag-scanner',
-			'agScanner',
+			'accg-custom-rules',
+			'accgCustomRulesI18n',
+			array(
+				'genericLinkHelp'      => __( 'Links must use descriptive text', 'accessibility-guardian' ),
+				'genericLinkSummary'   => __( 'Link text does not describe its destination.', 'accessibility-guardian' ),
+				'placeholderHelp'      => __( 'Placeholder is not a substitute for a label', 'accessibility-guardian' ),
+				'placeholderSummary'   => __( 'Field relies on placeholder text instead of a persistent label.', 'accessibility-guardian' ),
+				'newWindowHelp'        => __( 'Warn users when links open new windows', 'accessibility-guardian' ),
+				'newWindowSummary'     => __( 'Link opens in a new window without warning the user.', 'accessibility-guardian' ),
+				'pdfHelp'              => __( 'Verify accessibility of linked PDF documents', 'accessibility-guardian' ),
+				'pdfSummary'           => __( 'Linked PDF detected; verify it is tagged and accessible.', 'accessibility-guardian' ),
+			)
+		);
+
+		wp_enqueue_script(
+			'accg-scanner',
+			ACCG_PLUGIN_URL . 'assets/js/scanner.js',
+			array( 'accg-custom-rules' ),
+			ACCG_VERSION,
+			true
+		);
+
+		$settings   = (array) get_option( 'accg_settings', array() );
+		$wcag_level = isset( $settings['wcag_level'] ) ? sanitize_key( (string) $settings['wcag_level'] ) : 'aa';
+		if ( ! in_array( $wcag_level, array( 'a', 'aa' ), true ) ) {
+			$wcag_level = 'aa';
+		}
+
+		$tags = array( 'wcag2a', 'wcag21a' );
+		if ( 'aa' === $wcag_level ) {
+			$tags = array_merge( $tags, array( 'wcag2aa', 'wcag21aa', 'wcag22aa' ) );
+		}
+
+		wp_localize_script(
+			'accg-scanner',
+			'accgScanner',
 			array(
 				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
 				'nonce'        => wp_create_nonce( ScanController::NONCE_ACTION ),
-				'axeUrl'       => AG_PLUGIN_URL . 'assets/js/axe.min.js',
+				'axeUrl'       => ACCG_PLUGIN_URL . 'assets/js/axe.min.js',
 				'dashboardUrl' => admin_url( 'admin.php?page=accessibility-guardian' ),
 				'issuesUrl'    => admin_url( 'admin.php?page=accessibility-guardian-issues' ),
+				'wcagTags'     => $tags,
 				'i18n'         => array(
 					'preparing'    => __( 'Preparing scan…', 'accessibility-guardian' ),
 					'scanning'     => __( 'Scanning', 'accessibility-guardian' ),
@@ -89,11 +114,23 @@ final class AssetManager {
 		);
 
 		wp_enqueue_script(
-			'ag-dashboard',
-			AG_PLUGIN_URL . 'assets/js/dashboard.js',
+			'accg-dashboard',
+			ACCG_PLUGIN_URL . 'assets/js/dashboard.js',
 			array(),
-			AG_VERSION,
+			ACCG_VERSION,
 			true
+		);
+
+		wp_localize_script(
+			'accg-dashboard',
+			'accgDashboard',
+			array(
+				'i18n' => array(
+					'noHistory'  => __( 'No history yet.', 'accessibility-guardian' ),
+					/* translators: %d: accessibility score. */
+					'scoreLabel' => __( 'Latest accessibility score %d out of 100', 'accessibility-guardian' ),
+				),
+			)
 		);
 	}
 

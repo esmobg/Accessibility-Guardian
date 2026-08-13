@@ -28,7 +28,7 @@ final class AutoFixer {
 	 * Constructor: read the enabled fixes from settings.
 	 */
 	public function __construct() {
-		$settings    = (array) get_option( 'ag_settings', array() );
+		$settings    = (array) get_option( 'accg_settings', array() );
 		$raw         = isset( $settings['fixes'] ) && is_array( $settings['fixes'] ) ? $settings['fixes'] : array();
 		$this->fixes = array_map( static fn ( $v ): bool => (bool) $v, $raw );
 	}
@@ -84,23 +84,23 @@ final class AutoFixer {
 	 */
 	public function enqueue_assets(): void {
 		wp_enqueue_style(
-			'ag-frontend-fixes',
-			AG_PLUGIN_URL . 'assets/css/frontend-fixes.css',
+			'accg-frontend-fixes',
+			ACCG_PLUGIN_URL . 'assets/css/frontend-fixes.css',
 			array(),
-			AG_VERSION
+			ACCG_VERSION
 		);
 
 		wp_enqueue_script(
-			'ag-frontend-fixes',
-			AG_PLUGIN_URL . 'assets/js/frontend-fixes.js',
+			'accg-frontend-fixes',
+			ACCG_PLUGIN_URL . 'assets/js/frontend-fixes.js',
 			array(),
-			AG_VERSION,
+			ACCG_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'ag-frontend-fixes',
-			'agFixes',
+			'accg-frontend-fixes',
+			'accgFixes',
 			array(
 				'flags' => array(
 					'ensureHtmlLang'        => $this->on( 'add_html_lang' ),
@@ -139,8 +139,14 @@ final class AutoFixer {
 	 * Output a skip-to-content link at the top of the page.
 	 */
 	public function render_skip_link(): void {
+		$target = apply_filters( 'accg_skip_link_target', '#content' );
+		if ( ! is_string( $target ) || '' === $target ) {
+			$target = '#content';
+		}
+
 		printf(
-			'<a class="ag-skip-link screen-reader-text" href="#content">%s</a>',
+			'<a class="ag-skip-link screen-reader-text" href="%s">%s</a>',
+			esc_url( $target ),
 			esc_html__( 'Skip to content', 'accessibility-guardian' )
 		);
 	}

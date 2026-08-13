@@ -22,7 +22,7 @@ final class ScanController {
 	/**
 	 * Nonce action used by every scan AJAX request.
 	 */
-	public const NONCE_ACTION = 'ag_scan';
+	public const NONCE_ACTION = 'accg_scan';
 
 	/**
 	 * URL provider.
@@ -76,10 +76,10 @@ final class ScanController {
 	 * Register AJAX hooks.
 	 */
 	public function register(): void {
-		add_action( 'wp_ajax_ag_start_scan', array( $this, 'handle_start' ) );
-		add_action( 'wp_ajax_ag_save_results', array( $this, 'handle_save' ) );
-		add_action( 'wp_ajax_ag_finish_scan', array( $this, 'handle_finish' ) );
-		add_action( 'wp_ajax_ag_scan_status', array( $this, 'handle_status' ) );
+		add_action( 'wp_ajax_accg_start_scan', array( $this, 'handle_start' ) );
+		add_action( 'wp_ajax_accg_save_results', array( $this, 'handle_save' ) );
+		add_action( 'wp_ajax_accg_finish_scan', array( $this, 'handle_finish' ) );
+		add_action( 'wp_ajax_accg_scan_status', array( $this, 'handle_status' ) );
 	}
 
 	/**
@@ -98,7 +98,7 @@ final class ScanController {
 			$queue = $this->url_provider->get_single_post_urls( $post_id );
 		} else {
 			$scan_type = 'full';
-			$queue     = $this->url_provider->get_full_site_urls();
+			$queue     = $this->url_provider->get_full_site_urls( UrlProvider::resolve_url_limit() );
 		}
 
 		if ( empty( $queue ) ) {
@@ -139,10 +139,14 @@ final class ScanController {
 		$this->guard();
 
 		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( (string) $_POST['scan_id'] ) ) : 0;
-		$raw     = isset( $_POST['payload'] ) ? wp_unslash( (string) $_POST['payload'] ) : '';
+		$raw     = isset( $_POST['payload'] ) ? wp_unslash( (string) $_POST['payload'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload is decoded and type-checked below.
 
 		if ( 0 === $scan_id || '' === $raw ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan payload.', 'accessibility-guardian' ) ), 400 );
+		}
+
+		if ( strlen( $raw ) > 524288 ) {
+			wp_send_json_error( array( 'message' => __( 'Scan payload is too large.', 'accessibility-guardian' ) ), 413 );
 		}
 
 		$scan = $this->scans->find( $scan_id );
@@ -178,8 +182,29 @@ final class ScanController {
 		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( (string) $_POST['scan_id'] ) ) : 0;
 		$passes  = isset( $_POST['passes'] ) ? absint( wp_unslash( (string) $_POST['passes'] ) ) : 0;
 
-		if ( 0 === $scan_id || null === $this->scans->find( $scan_id ) ) {
+		$scan = $this->scans->find( $scan_id );
+		if ( 0 === $scan_id || null === $scan ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan id.', 'accessibility-guardian' ) ), 400 );
+		}
+
+		if ( 'complete' === $scan['status'] ) {
+			wp_send_json_success(
+				array(
+					'score'  => (int) $scan['score'],
+					'band'   => $this->score->band( (int) $scan['score'] ),
+					'totals' => array(
+						'score'    => (int) $scan['score'],
+						'errors'   => (int) $scan['errors'],
+						'warnings' => (int) $scan['warnings'],
+						'passes'   => (int) $scan['passes'],
+					),
+					'counts' => $this->issues->severity_counts( $scan_id ),
+				)
+			);
+		}
+
+		if ( 'running' !== $scan['status'] ) {
+			wp_send_json_error( array( 'message' => __( 'Scan is not running.', 'accessibility-guardian' ) ), 409 );
 		}
 
 		$counts = $this->issues->severity_counts( $scan_id );

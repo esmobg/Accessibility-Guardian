@@ -11,15 +11,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$ag_selected_types = isset( $settings['include_post_types'] ) && is_array( $settings['include_post_types'] )
+$accg_selected_types = isset( $settings['include_post_types'] ) && is_array( $settings['include_post_types'] )
 	? array_map( 'strval', $settings['include_post_types'] )
 	: array();
-$ag_include_terms  = ! empty( $settings['include_terms'] );
-$ag_batch_size     = isset( $settings['batch_size'] ) ? (int) $settings['batch_size'] : 5;
-$ag_wcag_level     = isset( $settings['wcag_level'] ) ? (string) $settings['wcag_level'] : 'aa';
-$ag_enabled_fixes  = isset( $settings['fixes'] ) && is_array( $settings['fixes'] ) ? $settings['fixes'] : array();
+$accg_include_terms  = ! empty( $settings['include_terms'] );
+$accg_batch_size     = isset( $settings['batch_size'] ) ? (int) $settings['batch_size'] : 5;
+$accg_wcag_level     = isset( $settings['wcag_level'] ) ? (string) $settings['wcag_level'] : 'aa';
+$accg_enabled_fixes  = isset( $settings['fixes'] ) && is_array( $settings['fixes'] ) ? $settings['fixes'] : array();
 
-settings_errors( 'ag_settings' );
+settings_errors( 'accg_settings' );
 ?>
 <div class="wrap ag-wrap">
 	<h1 class="ag-title">
@@ -28,7 +28,7 @@ settings_errors( 'ag_settings' );
 	</h1>
 
 	<form method="post" action="">
-		<?php wp_nonce_field( 'ag_save_settings' ); ?>
+		<?php wp_nonce_field( 'accg_save_settings' ); ?>
 
 		<table class="form-table" role="presentation">
 			<tbody>
@@ -37,13 +37,13 @@ settings_errors( 'ag_settings' );
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text"><?php esc_html_e( 'Post types to include', 'accessibility-guardian' ); ?></legend>
-							<?php foreach ( $post_types as $ag_type ) : ?>
+							<?php foreach ( $post_types as $accg_type ) : ?>
 								<label class="ag-checkbox">
 									<input type="checkbox" name="include_post_types[]"
-										value="<?php echo esc_attr( $ag_type->name ); ?>"
-										<?php checked( in_array( $ag_type->name, $ag_selected_types, true ) ); ?> />
-									<?php echo esc_html( $ag_type->labels->name ); ?>
-									<code><?php echo esc_html( $ag_type->name ); ?></code>
+										value="<?php echo esc_attr( $accg_type->name ); ?>"
+										<?php checked( in_array( $accg_type->name, $accg_selected_types, true ) ); ?> />
+									<?php echo esc_html( $accg_type->labels->name ); ?>
+									<code><?php echo esc_html( $accg_type->name ); ?></code>
 								</label>
 							<?php endforeach; ?>
 						</fieldset>
@@ -54,7 +54,7 @@ settings_errors( 'ag_settings' );
 					<th scope="row"><?php esc_html_e( 'Term archives', 'accessibility-guardian' ); ?></th>
 					<td>
 						<label class="ag-checkbox">
-							<input type="checkbox" name="include_terms" value="1" <?php checked( $ag_include_terms ); ?> />
+							<input type="checkbox" name="include_terms" value="1" <?php checked( $accg_include_terms ); ?> />
 							<?php esc_html_e( 'Include category and tag archive pages', 'accessibility-guardian' ); ?>
 						</label>
 					</td>
@@ -63,16 +63,16 @@ settings_errors( 'ag_settings' );
 					<th scope="row"><label for="ag-batch-size"><?php esc_html_e( 'Batch size', 'accessibility-guardian' ); ?></label></th>
 					<td>
 						<input type="number" min="1" max="50" id="ag-batch-size" name="batch_size"
-							value="<?php echo esc_attr( (string) $ag_batch_size ); ?>" class="small-text" />
-						<p class="description"><?php esc_html_e( 'Number of pages processed before progress is reported. Lower values reduce memory use.', 'accessibility-guardian' ); ?></p>
+							value="<?php echo esc_attr( (string) $accg_batch_size ); ?>" class="small-text" />
+						<p class="description"><?php esc_html_e( 'Reserved for future server-side batching. The current in-browser scanner always processes one page at a time.', 'accessibility-guardian' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><label for="ag-wcag-level"><?php esc_html_e( 'WCAG level', 'accessibility-guardian' ); ?></label></th>
 					<td>
 						<select id="ag-wcag-level" name="wcag_level">
-							<option value="a" <?php selected( $ag_wcag_level, 'a' ); ?>><?php esc_html_e( 'A', 'accessibility-guardian' ); ?></option>
-							<option value="aa" <?php selected( $ag_wcag_level, 'aa' ); ?>><?php esc_html_e( 'AA (recommended)', 'accessibility-guardian' ); ?></option>
+							<option value="a" <?php selected( $accg_wcag_level, 'a' ); ?>><?php esc_html_e( 'A', 'accessibility-guardian' ); ?></option>
+							<option value="aa" <?php selected( $accg_wcag_level, 'aa' ); ?>><?php esc_html_e( 'AA (recommended)', 'accessibility-guardian' ); ?></option>
 						</select>
 					</td>
 				</tr>
@@ -85,16 +85,16 @@ settings_errors( 'ag_settings' );
 		</p>
 		<fieldset class="ag-fixes">
 			<legend class="screen-reader-text"><?php esc_html_e( 'Automatic fixes', 'accessibility-guardian' ); ?></legend>
-			<?php foreach ( $fix_catalog as $ag_fix_key => $ag_fix ) : ?>
+			<?php foreach ( $fix_catalog as $accg_fix_key => $accg_fix ) : ?>
 				<label class="ag-fix-option">
-					<input type="checkbox" name="fixes[]" value="<?php echo esc_attr( $ag_fix_key ); ?>"
-						<?php checked( ! empty( $ag_enabled_fixes[ $ag_fix_key ] ) ); ?> />
-					<span class="ag-fix-option__label"><?php echo esc_html( $ag_fix['label'] ); ?></span>
-					<span class="ag-fix-option__desc"><?php echo esc_html( $ag_fix['description'] ); ?></span>
+					<input type="checkbox" name="fixes[]" value="<?php echo esc_attr( $accg_fix_key ); ?>"
+						<?php checked( ! empty( $accg_enabled_fixes[ $accg_fix_key ] ) ); ?> />
+					<span class="ag-fix-option__label"><?php echo esc_html( $accg_fix['label'] ); ?></span>
+					<span class="ag-fix-option__desc"><?php echo esc_html( $accg_fix['description'] ); ?></span>
 				</label>
 			<?php endforeach; ?>
 		</fieldset>
 
-		<?php submit_button( __( 'Save settings', 'accessibility-guardian' ), 'primary', 'ag_settings_submit' ); ?>
+		<?php submit_button( __( 'Save settings', 'accessibility-guardian' ), 'primary', 'accg_settings_submit' ); ?>
 	</form>
 </div>

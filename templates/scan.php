@@ -19,6 +19,14 @@ defined( 'ABSPATH' ) || exit;
 
 	<p class="ag-intro">
 		<?php esc_html_e( 'Scanning runs in your browser using axe-core against the rendered front-end of each page. Keep this tab open until the scan completes.', 'accessibility-guardian' ); ?>
+		<?php
+		echo ' ';
+		printf(
+			/* translators: %d: maximum URLs in a full-site scan. */
+			esc_html__( 'A full-site scan includes at most %d URLs (filter: accg_scan_url_limit).', 'accessibility-guardian' ),
+			(int) \AccessibilityGuardian\Scan\UrlProvider::resolve_url_limit()
+		);
+		?>
 	</p>
 
 	<div class="ag-scan-controls">

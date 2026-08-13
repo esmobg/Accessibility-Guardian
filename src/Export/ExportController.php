@@ -49,7 +49,7 @@ final class ExportController {
 	 * Register the admin-post hook.
 	 */
 	public function register(): void {
-		add_action( 'admin_post_ag_export', array( $this, 'handle' ) );
+		add_action( 'admin_post_accg_export', array( $this, 'handle' ) );
 	}
 
 	/**
@@ -60,7 +60,7 @@ final class ExportController {
 			wp_die( esc_html__( 'You are not allowed to export reports.', 'accessibility-guardian' ), '', array( 'response' => 403 ) );
 		}
 
-		check_admin_referer( 'ag_export' );
+		check_admin_referer( 'accg_export' );
 
 		$scan_id = isset( $_GET['scan_id'] ) ? absint( wp_unslash( (string) $_GET['scan_id'] ) ) : 0;
 		$format  = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( (string) $_GET['format'] ) ) : 'csv';

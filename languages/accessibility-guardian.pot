@@ -1,30 +1,30 @@
-# Copyright (C) 2026 Accessibility Guardian
+# Copyright (C) 2026 esmobg
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Accessibility Guardian 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/acessability check\n"
+"Project-Id-Version: Accessibility Guardian 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/accessibility-guardian\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-11T11:40:37+00:00\n"
+"POT-Creation-Date: 2026-08-13T11:15:26+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: accessibility-guardian\n"
 
 #. Plugin Name of the plugin
-#. Author of the plugin
 #: accessibility-guardian.php
 #: src/Admin/AdminMenu.php:92
+#: src/Admin/AdminMenu.php:93
 #: templates/dashboard.php:45
 msgid "Accessibility Guardian"
 msgstr ""
 
 #. Plugin URI of the plugin
 #: accessibility-guardian.php
-msgid "https://example.com/accessibility-guardian"
+msgid "https://github.com/esmobg/accessibility-guardian"
 msgstr ""
 
 #. Description of the plugin
@@ -32,13 +32,18 @@ msgstr ""
 msgid "Automated WCAG 2.2 AA accessibility auditor for WordPress. Scans posts, pages, custom post types, products and terms with axe-core and reports issues with remediation guidance."
 msgstr ""
 
-#. Author URI of the plugin
+#. Author of the plugin
 #: accessibility-guardian.php
-msgid "https://example.com"
+msgid "esmobg"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:93
-msgid "Accessibility"
+#. Author URI of the plugin
+#: accessibility-guardian.php
+msgid "https://profiles.wordpress.org/esmobg/"
+msgstr ""
+
+#: accessibility-guardian.php:30
+msgid "Accessibility Guardian requires PHP 8.0 or later."
 msgstr ""
 
 #: src/Admin/AdminMenu.php:103
@@ -61,73 +66,116 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:266
+#: src/Admin/AdminMenu.php:272
 msgid "You are not allowed to manage these settings."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:298
+#: src/Admin/AdminMenu.php:308
 msgid "Settings saved."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:308
+#: src/Admin/AdminMenu.php:321
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: src/Admin/AssetManager.php:73
+#: src/Admin/AssetManager.php:57
+msgid "Links must use descriptive text"
+msgstr ""
+
+#: src/Admin/AssetManager.php:58
+msgid "Link text does not describe its destination."
+msgstr ""
+
+#: src/Admin/AssetManager.php:59
+msgid "Placeholder is not a substitute for a label"
+msgstr ""
+
+#: src/Admin/AssetManager.php:60
+msgid "Field relies on placeholder text instead of a persistent label."
+msgstr ""
+
+#: src/Admin/AssetManager.php:61
+msgid "Warn users when links open new windows"
+msgstr ""
+
+#: src/Admin/AssetManager.php:62
+msgid "Link opens in a new window without warning the user."
+msgstr ""
+
+#: src/Admin/AssetManager.php:63
+msgid "Verify accessibility of linked PDF documents"
+msgstr ""
+
+#: src/Admin/AssetManager.php:64
+msgid "Linked PDF detected; verify it is tagged and accessible."
+msgstr ""
+
+#: src/Admin/AssetManager.php:98
 msgid "Preparing scan…"
 msgstr ""
 
-#: src/Admin/AssetManager.php:74
+#: src/Admin/AssetManager.php:99
 msgid "Scanning"
 msgstr ""
 
-#: src/Admin/AssetManager.php:75
+#: src/Admin/AssetManager.php:100
 msgid "Queued URLs"
 msgstr ""
 
-#: src/Admin/AssetManager.php:76
+#: src/Admin/AssetManager.php:101
 msgid "issues"
 msgstr ""
 
-#: src/Admin/AssetManager.php:77
+#: src/Admin/AssetManager.php:102
 msgid "could not be scanned"
 msgstr ""
 
-#: src/Admin/AssetManager.php:78
+#: src/Admin/AssetManager.php:103
 msgid "results could not be saved"
 msgstr ""
 
-#: src/Admin/AssetManager.php:79
+#: src/Admin/AssetManager.php:104
 msgid "Scan complete"
 msgstr ""
 
-#: src/Admin/AssetManager.php:80
-#: templates/dashboard.php:193
+#: src/Admin/AssetManager.php:105
+#: templates/dashboard.php:195
 msgid "Score"
 msgstr ""
 
-#: src/Admin/AssetManager.php:81
+#: src/Admin/AssetManager.php:106
 msgid "Cancelling after current page…"
 msgstr ""
 
-#: src/Admin/AssetManager.php:82
+#: src/Admin/AssetManager.php:107
 msgid "Scan cancelled"
 msgstr ""
 
-#: src/Admin/AssetManager.php:83
+#: src/Admin/AssetManager.php:108
 msgid "Could not start scan. Please reload the page and try again."
 msgstr ""
 
-#: src/Admin/AssetManager.php:84
+#: src/Admin/AssetManager.php:109
 msgid "Scan could not be finalized."
 msgstr ""
 
-#: src/Admin/AssetManager.php:85
+#: src/Admin/AssetManager.php:110
 msgid "Connection problem while talking to the server."
 msgstr ""
 
-#: src/Admin/AssetManager.php:86
+#: src/Admin/AssetManager.php:111
 msgid "pages could not be scanned"
+msgstr ""
+
+#: src/Admin/AssetManager.php:129
+#: templates/dashboard.php:155
+msgid "No history yet."
+msgstr ""
+
+#. translators: %d: accessibility score.
+#: src/Admin/AssetManager.php:131
+#, php-format
+msgid "Latest accessibility score %d out of 100"
 msgstr ""
 
 #: src/Export/ExportController.php:60
@@ -135,7 +183,7 @@ msgid "You are not allowed to export reports."
 msgstr ""
 
 #: src/Export/ExportController.php:71
-#: src/Scan/ScanController.php:217
+#: src/Scan/ScanController.php:242
 msgid "Scan not found."
 msgstr ""
 
@@ -143,11 +191,11 @@ msgstr ""
 msgid "(opens in a new window)"
 msgstr ""
 
-#: src/Fixes/AutoFixer.php:144
+#: src/Fixes/AutoFixer.php:150
 msgid "Skip to content"
 msgstr ""
 
-#: src/Fixes/AutoFixer.php:160
+#: src/Fixes/AutoFixer.php:166
 msgid "Search"
 msgstr ""
 
@@ -231,6 +279,344 @@ msgstr ""
 msgid "Strips title attributes from links and inputs that already have visible text."
 msgstr ""
 
+#: src/Rules/RuleCatalog.php:161
+#: src/Rules/RuleCatalog.php:168
+#: src/Rules/RuleCatalog.php:175
+#: src/Rules/RuleCatalog.php:182
+#: src/Rules/RuleCatalog.php:189
+#: src/Rules/RuleCatalog.php:196
+#: src/Rules/RuleCatalog.php:584
+msgid "1.1.1 Non-text Content"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:164
+msgid "Add a meaningful alt attribute describing the image purpose. Use alt=\"\" for purely decorative images."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:171
+msgid "Add an alt attribute to the image input describing the button action."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:178
+msgid "Remove redundant text that duplicates adjacent visible text or the alt value."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:185
+msgid "Provide an accessible name for the SVG via <title>, aria-label, or role=\"img\" with a label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:192
+msgid "Provide alternative text for the <object> element."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:199
+msgid "Add alt text to each <area> within an image map."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:205
+msgid "1.4.3 Contrast (Minimum)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:208
+msgid "Increase the contrast ratio between text and background to at least 4.5:1 (3:1 for large text)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:214
+#: src/Rules/RuleCatalog.php:221
+#: src/Rules/RuleCatalog.php:228
+#: src/Rules/RuleCatalog.php:318
+#: src/Rules/RuleCatalog.php:325
+#: src/Rules/RuleCatalog.php:413
+#: src/Rules/RuleCatalog.php:420
+#: src/Rules/RuleCatalog.php:427
+#: src/Rules/RuleCatalog.php:434
+#: src/Rules/RuleCatalog.php:441
+#: src/Rules/RuleCatalog.php:480
+#: src/Rules/RuleCatalog.php:487
+#: src/Rules/RuleCatalog.php:494
+#: src/Rules/RuleCatalog.php:501
+msgid "1.3.1 Info and Relationships"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:217
+msgid "Provide discernible text inside the heading, or remove the empty heading element."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:224
+msgid "Do not skip heading levels. Use a logical, sequential heading hierarchy."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:231
+msgid "Add a single descriptive <h1> that identifies the main content of the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:237
+#: src/Rules/RuleCatalog.php:251
+#: src/Rules/RuleCatalog.php:563
+msgid "2.4.4 Link Purpose (In Context)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:240
+msgid "Provide descriptive link text or an accessible name (aria-label) that conveys the link purpose."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:244
+msgid "1.4.1 Use of Color"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:247
+msgid "Distinguish links from surrounding text using more than color (for example, an underline)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:254
+msgid "Links with identical names should point to the same destination, or be given distinct accessible names."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:260
+#: src/Rules/RuleCatalog.php:267
+#: src/Rules/RuleCatalog.php:274
+#: src/Rules/RuleCatalog.php:570
+msgid "3.3.2 Labels or Instructions"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:263
+msgid "Associate a visible <label> with the form control using for/id, or add an aria-label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:270
+msgid "Provide a real label; do not rely solely on the title attribute."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:277
+msgid "Ensure each form field is associated with a single label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:281
+msgid "1.3.5 Identify Input Purpose"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:284
+msgid "Use a valid autocomplete token appropriate for the input purpose."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:288
+#: src/Rules/RuleCatalog.php:297
+#: src/Rules/RuleCatalog.php:304
+#: src/Rules/RuleCatalog.php:311
+#: src/Rules/RuleCatalog.php:332
+#: src/Rules/RuleCatalog.php:339
+#: src/Rules/RuleCatalog.php:346
+#: src/Rules/RuleCatalog.php:353
+#: src/Rules/RuleCatalog.php:360
+#: src/Rules/RuleCatalog.php:367
+#: src/Rules/RuleCatalog.php:374
+#: src/Rules/RuleCatalog.php:381
+#: src/Rules/RuleCatalog.php:510
+#: src/Rules/RuleCatalog.php:517
+#: src/Rules/RuleCatalog.php:540
+msgid "4.1.2 Name, Role, Value"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:291
+msgid "Give the select element an accessible name via a label or aria-label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:300
+msgid "Remove ARIA attributes that are not allowed for the element role."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:307
+msgid "Use an ARIA role that is allowed for this element."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:314
+msgid "Add the ARIA attributes required by this role."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:321
+msgid "Ensure the role contains its required child roles."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:328
+msgid "Ensure the role is contained within its required parent role."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:335
+msgid "Use a valid ARIA role value."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:342
+msgid "Correct the misspelled or invalid ARIA attribute name."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:349
+msgid "Provide a valid value for the ARIA attribute."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:356
+msgid "Do not set aria-hidden=\"true\" on the document <body>."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:363
+msgid "Do not place focusable elements inside aria-hidden=\"true\" containers."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:370
+msgid "Provide an accessible name for the ARIA command (button, link, menuitem)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:377
+msgid "Provide an accessible name for the ARIA input field."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:384
+msgid "Provide an accessible name for the ARIA toggle field."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:390
+#: src/Rules/RuleCatalog.php:397
+#: src/Rules/RuleCatalog.php:404
+msgid "4.1.1 Parsing"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:393
+msgid "Ensure id values referenced by ARIA are unique within the document."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:400
+msgid "Ensure id values on active elements are unique within the document."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:407
+msgid "Ensure every id attribute is unique within the document."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:416
+msgid "Ensure the headers attribute references valid header cell ids in the same table."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:423
+msgid "Ensure each <th> is associated with data cells, or use a layout that does not rely on it."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:430
+msgid "Use a valid scope value (row, col, rowgroup, colgroup) on header cells."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:437
+msgid "Ensure the table caption and summary do not duplicate each other."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:444
+msgid "Provide text content for table header cells."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:450
+#: src/Rules/RuleCatalog.php:457
+#: src/Rules/RuleCatalog.php:464
+msgid "3.1.1 Language of Page"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:453
+msgid "Add a lang attribute to the <html> element identifying the page language."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:460
+msgid "Use a valid BCP 47 language code in the lang attribute."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:467
+msgid "Ensure lang and xml:lang attributes agree."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:471
+msgid "3.1.2 Language of Parts"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:474
+msgid "Use a valid language code on inline lang attributes."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:483
+msgid "Wrap page content in landmark regions (main, nav, header, footer)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:490
+msgid "Provide exactly one <main> landmark on the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:497
+msgid "Avoid more than one main landmark on the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:504
+msgid "Give landmarks of the same type unique accessible names."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:513
+msgid "Provide discernible text or an aria-label for the button."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:520
+msgid "Do not nest interactive controls inside other interactive controls."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:526
+msgid "2.4.2 Page Titled"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:529
+msgid "Provide a non-empty, descriptive <title> for the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:533
+msgid "2.4.1 Bypass Blocks"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:536
+msgid "Provide a skip link or landmarks so keyboard users can bypass repeated content."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:543
+msgid "Provide a descriptive title attribute for each <iframe>."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:547
+msgid "1.4.4 Resize Text"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:550
+msgid "Remove user-scalable=no and maximum-scale limits so users can zoom the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:554
+msgid "2.4.3 Focus Order"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:557
+msgid "Avoid positive tabindex values; rely on natural DOM order for focus."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:566
+msgid "Replace generic link text such as \"click here\" or \"read more\" with text that describes the destination."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:573
+msgid "Do not rely on placeholder text as the only label. Add a persistent visible label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:577
+msgid "3.2.5 Change on Request"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:580
+msgid "Warn users when a link opens in a new window, for example by appending \"(opens in new window)\" to the link text."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:587
+msgid "Linked PDF detected. Verify the PDF is tagged and accessible; automated checks cannot validate PDF contents."
+msgstr ""
+
 #. translators: %s: rule description.
 #: src/Scan/ResultNormalizer.php:99
 #, php-format
@@ -249,19 +635,24 @@ msgstr ""
 msgid "Invalid scan payload."
 msgstr ""
 
-#: src/Scan/ScanController.php:151
+#: src/Scan/ScanController.php:149
+msgid "Scan payload is too large."
+msgstr ""
+
+#: src/Scan/ScanController.php:155
+#: src/Scan/ScanController.php:207
 msgid "Scan is not running."
 msgstr ""
 
-#: src/Scan/ScanController.php:157
+#: src/Scan/ScanController.php:161
 msgid "Malformed scan payload."
 msgstr ""
 
-#: src/Scan/ScanController.php:182
+#: src/Scan/ScanController.php:187
 msgid "Invalid scan id."
 msgstr ""
 
-#: src/Scan/ScanController.php:235
+#: src/Scan/ScanController.php:260
 msgid "You are not allowed to run scans."
 msgstr ""
 
@@ -318,12 +709,12 @@ msgid "Pages scanned"
 msgstr ""
 
 #: templates/dashboard.php:83
-#: templates/dashboard.php:194
+#: templates/dashboard.php:196
 msgid "Errors"
 msgstr ""
 
 #: templates/dashboard.php:87
-#: templates/dashboard.php:195
+#: templates/dashboard.php:197
 #: templates/scan.php:86
 msgid "Warnings"
 msgstr ""
@@ -370,7 +761,7 @@ msgid "WCAG category distribution"
 msgstr ""
 
 #: templates/dashboard.php:130
-#: templates/dashboard.php:159
+#: templates/dashboard.php:161
 msgid "No issues recorded."
 msgstr ""
 
@@ -378,43 +769,43 @@ msgstr ""
 msgid "Progress over time"
 msgstr ""
 
-#: templates/dashboard.php:157
+#: templates/dashboard.php:159
 msgid "Most common problems"
 msgstr ""
 
-#: templates/dashboard.php:164
+#: templates/dashboard.php:166
 msgid "Rule"
 msgstr ""
 
-#: templates/dashboard.php:165
+#: templates/dashboard.php:167
 msgid "WCAG"
 msgstr ""
 
-#: templates/dashboard.php:166
+#: templates/dashboard.php:168
 msgid "Severity"
 msgstr ""
 
-#: templates/dashboard.php:167
+#: templates/dashboard.php:169
 msgid "Count"
 msgstr ""
 
-#: templates/dashboard.php:186
+#: templates/dashboard.php:188
 msgid "Recent scans"
 msgstr ""
 
-#: templates/dashboard.php:190
+#: templates/dashboard.php:192
 msgid "Date"
 msgstr ""
 
-#: templates/dashboard.php:191
+#: templates/dashboard.php:193
 msgid "Type"
 msgstr ""
 
-#: templates/dashboard.php:192
+#: templates/dashboard.php:194
 msgid "Pages"
 msgstr ""
 
-#: templates/dashboard.php:196
+#: templates/dashboard.php:198
 msgid "Status"
 msgstr ""
 

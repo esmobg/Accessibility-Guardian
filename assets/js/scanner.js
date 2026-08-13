@@ -8,7 +8,7 @@
 ( function () {
 	'use strict';
 
-	var settings = window.agScanner || {};
+	var settings = window.accgScanner || {};
 	var ajaxUrl = settings.ajaxUrl;
 	var nonce = settings.nonce;
 	var i18n = settings.i18n || {};
@@ -92,11 +92,11 @@
 
 		var options = {
 			resultTypes: [ 'violations', 'incomplete', 'passes' ],
-			runOnly: { type: 'tag', values: [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice' ] }
+			runOnly: { type: 'tag', values: settings.wcagTags && settings.wcagTags.length ? settings.wcagTags : [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice' ] }
 		};
 
 		return axe.run( frameDocument, options ).then( function ( results ) {
-			var custom = window.agCustomRules ? window.agCustomRules.run( frameDocument ) : { violations: [] };
+			var custom = window.accgCustomRules ? window.accgCustomRules.run( frameDocument ) : { violations: [] };
 
 			return {
 				violations: results.violations.concat( custom.violations || [] ),
@@ -204,7 +204,7 @@
 					incomplete: compactResult( results.incomplete )
 				};
 
-				return post( 'ag_save_results', {
+				return post( 'accg_save_results', {
 					scan_id: state.scanId,
 					payload: JSON.stringify( payload )
 				} ).then( function ( res ) {
@@ -230,7 +230,7 @@
 	}
 
 	function finish() {
-		post( 'ag_finish_scan', {
+		post( 'accg_finish_scan', {
 			scan_id: state.scanId,
 			passes: state.passes
 		} ).then( function ( res ) {
@@ -322,7 +322,7 @@
 		toggleControls( true );
 		setProgress( 0, 1, t( 'preparing', 'Preparing scan…' ) );
 
-		post( 'ag_start_scan', { scan_type: scanType, post_id: postId || 0 } )
+		post( 'accg_start_scan', { scan_type: scanType, post_id: postId || 0 } )
 			.then( function ( res ) {
 				if ( ! res || ! res.success || ! res.data || ! res.data.queue ) {
 					throw new Error( ( res && res.data && res.data.message ) || '' );

@@ -17,12 +17,32 @@ defined( 'ABSPATH' ) || exit;
 final class UrlProvider {
 
 	/**
+	 * Default full-site URL cap when no filter is applied.
+	 */
+	public const DEFAULT_URL_LIMIT = 1000;
+
+	/**
+	 * Resolve the full-site URL cap (filterable, hard-capped).
+	 *
+	 * @param int $requested Preferred limit; 0 uses DEFAULT_URL_LIMIT.
+	 */
+	public static function resolve_url_limit( int $requested = 0 ): int {
+		$default = $requested > 0 ? $requested : self::DEFAULT_URL_LIMIT;
+		$limit   = (int) apply_filters( 'accg_scan_url_limit', $default );
+
+		return max( 1, min( 10000, $limit ) );
+	}
+
+	/**
 	 * Build the list of URLs for a full-site scan.
 	 *
 	 * @param int $limit Maximum number of URLs to return (safety cap).
 	 * @return array<int, array{url:string,post_id:int,label:string}>
 	 */
-	public function get_full_site_urls( int $limit = 500 ): array {
+	public function get_full_site_urls( int $limit = 0 ): array {
+		if ( $limit < 1 ) {
+			$limit = self::resolve_url_limit();
+		}
 		$urls = array();
 
 		$urls[] = array(
@@ -76,7 +96,7 @@ final class UrlProvider {
 	 * @return array<int, string>
 	 */
 	public function scannable_post_types(): array {
-		$settings   = (array) get_option( 'ag_settings', array() );
+		$settings   = (array) get_option( 'accg_settings', array() );
 		$configured = isset( $settings['include_post_types'] ) && is_array( $settings['include_post_types'] )
 			? array_map( 'strval', $settings['include_post_types'] )
 			: array();
@@ -186,7 +206,7 @@ final class UrlProvider {
 	 * Whether term archives should be included, per settings.
 	 */
 	private function include_terms(): bool {
-		$settings = (array) get_option( 'ag_settings', array() );
+		$settings = (array) get_option( 'accg_settings', array() );
 
 		return ! empty( $settings['include_terms'] );
 	}

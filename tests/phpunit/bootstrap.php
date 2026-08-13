@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );
 }
 
-if ( ! defined( 'AG_VERSION' ) ) {
-	define( 'AG_VERSION', 'test' );
+if ( ! defined( 'ACCG_VERSION' ) ) {
+	define( 'ACCG_VERSION', 'test' );
 }
 
 // PSR-4 autoloader for the plugin source.
@@ -74,6 +74,18 @@ if ( ! function_exists( 'sanitize_text_field' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sanitize_textarea_field' ) ) {
+	function sanitize_textarea_field( string $value ): string {
+		return trim( wp_strip_all_tags( $value ) );
+	}
+}
+
+if ( ! function_exists( 'wp_kses_post' ) ) {
+	function wp_kses_post( string $value ): string {
+		return $value;
+	}
+}
+
 if ( ! function_exists( 'wp_strip_all_tags' ) ) {
 	function wp_strip_all_tags( string $value ): string {
 		return trim( (string) preg_replace( '/<[^>]*>/', '', $value ) );
@@ -96,5 +108,57 @@ if ( ! function_exists( 'get_post_types' ) ) {
 			$types[ $type ] = $type;
 		}
 		return $types;
+	}
+}
+
+if ( ! function_exists( 'apply_filters' ) ) {
+	function apply_filters( string $hook, $value ) {
+		return $value;
+	}
+}
+
+if ( ! function_exists( 'home_url' ) ) {
+	function home_url( string $path = '/' ): string {
+		return 'https://example.test' . $path;
+	}
+}
+
+if ( ! function_exists( 'get_permalink' ) ) {
+	function get_permalink( int $post_id ) {
+		return 'https://example.test/?p=' . $post_id;
+	}
+}
+
+if ( ! function_exists( 'get_the_title' ) ) {
+	function get_the_title( int $post_id ): string {
+		return 'Post ' . $post_id;
+	}
+}
+
+if ( ! function_exists( 'get_taxonomies' ) ) {
+	function get_taxonomies( array $args = array(), string $output = 'names' ): array {
+		return array();
+	}
+}
+
+if ( ! function_exists( 'is_wp_error' ) ) {
+	function is_wp_error( $thing ): bool {
+		return false;
+	}
+}
+
+if ( ! class_exists( 'WP_Query' ) ) {
+	class WP_Query {
+		/** @var array<int, int> */
+		public $posts = array();
+
+		/**
+		 * @param array<string, mixed> $args Query args.
+		 */
+		public function __construct( array $args = array() ) {
+			$limit = isset( $args['posts_per_page'] ) ? (int) $args['posts_per_page'] : 0;
+			$ids   = $GLOBALS['ag_test_post_ids'] ?? array( 11, 12, 13, 14, 15 );
+			$this->posts = $limit > 0 ? array_slice( $ids, 0, $limit ) : $ids;
+		}
 	}
 }

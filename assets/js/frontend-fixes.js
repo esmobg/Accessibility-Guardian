@@ -7,7 +7,7 @@
 ( function () {
 	'use strict';
 
-	var config = window.agFixes || {};
+	var config = window.accgFixes || {};
 	var flags = config.flags || {};
 	var i18n = config.i18n || {};
 

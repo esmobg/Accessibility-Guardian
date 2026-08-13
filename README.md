@@ -2,9 +2,9 @@
 
 Automated **WCAG 2.2 Level AA** accessibility auditor that runs entirely inside the WordPress dashboard. It scans your posts, pages, custom post types, WooCommerce products and term archives with [axe-core](https://github.com/dequelabs/axe-core) and reports issues with severity ratings, WCAG references and remediation guidance — no external services, no Node.js, no headless browser.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![WordPress](https://img.shields.io/badge/WordPress-6.8%2B-21759b)
-![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![WordPress](https://img.shields.io/badge/WordPress-6.4%2B-21759b)
+![PHP](https://img.shields.io/badge/PHP-8.0%2B-777bb4)
 ![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green)
 
 ---
@@ -31,13 +31,13 @@ Most accessibility checkers either inject a front-end toolbar or require a serve
 
 ```mermaid
 flowchart LR
-  admin[Admin clicks Scan] --> start["AJAX ag_start_scan"]
+  admin[Admin clicks Scan] --> start["AJAX accg_start_scan"]
   start --> urls[UrlProvider enumerates URLs]
   urls --> queue[Return scan_id + URL queue]
   queue --> loop[scanner.js iterates queue]
   loop --> iframe[Load URL in hidden iframe]
   iframe --> run["Inject + run axe.run()"]
-  run --> save["AJAX ag_save_results"]
+  run --> save["AJAX accg_save_results"]
   save --> norm[ResultNormalizer maps to issue schema]
   norm --> store[IssueRepository stores issues]
   store --> loop
@@ -50,8 +50,8 @@ flowchart LR
 
 | | |
 | --- | --- |
-| PHP | 8.2+ |
-| WordPress | 6.8+ |
+| PHP | 8.0+ |
+| WordPress | 6.4+ |
 
 > The in-browser scanner needs pages to be embeddable in a same-origin iframe, so it will not work if the site sends `X-Frame-Options: DENY` (most sites don't).
 
@@ -60,7 +60,7 @@ flowchart LR
 **From the packaged zip**
 
 1. In wp-admin go to **Plugins → Add New → Upload Plugin**.
-2. Upload `accessibility-guardian-1.0.0.zip` and click **Install Now**, then **Activate**.
+2. Upload `accessibility-guardian-1.1.0.zip` and click **Install Now**, then **Activate**.
 
 **Manually**
 
@@ -71,7 +71,7 @@ The plugin ships with a fallback PSR-4 autoloader, so `composer install` is only
 
 ## Usage
 
-1. Open the **Accessibility** menu in the admin sidebar.
+1. Open the **Accessibility Guardian** menu in the admin sidebar.
 2. Go to **Run Scan** and start a single-page or full-site scan. Keep the tab open until it finishes.
 3. Review results on the **Dashboard** and export them as CSV or JSON.
 4. Configure which post types and term archives to include under **Settings**.
@@ -109,7 +109,8 @@ accessibility-guardian/
 │   ├── Storage/                 # ScanRepository, IssueRepository
 │   └── Export/                  # CsvExporter, JsonExporter, ExportController
 ├── assets/
-│   ├── js/axe.min.js            # Bundled axe-core 4.10 (MPL-2.0)
+│   ├── js/axe.js                # Unminified axe-core 4.10.2 (MPL-2.0)
+│   ├── js/axe.min.js            # Bundled axe-core 4.10.2 runtime
 │   ├── js/scanner.js            # Hidden-iframe scan orchestrator
 │   ├── js/custom-rules.js       # Supplemental checks
 │   ├── js/dashboard.js          # Trend sparkline
@@ -121,11 +122,11 @@ accessibility-guardian/
 
 ## Database tables
 
-- `{prefix}ag_scans` — one row per scan (type, status, totals, score)
-- `{prefix}ag_issues` — one row per detected issue
-- `{prefix}ag_history` — score history for the trend chart
+- `{prefix}accg_scans` — one row per scan (type, status, totals, score)
+- `{prefix}accg_issues` — one row per detected issue
+- `{prefix}accg_history` — score history for the trend chart
 
-Settings are stored in the `ag_settings` option.
+Settings are stored in the `accg_settings` option.
 
 ## Development
 

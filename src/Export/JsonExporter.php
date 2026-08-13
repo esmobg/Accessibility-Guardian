@@ -26,7 +26,7 @@ final class JsonExporter {
 	public function build( array $scan, array $issues ): string {
 		$payload = array(
 			'generator' => 'Accessibility Guardian',
-			'version'   => AG_VERSION,
+			'version'   => ACCG_VERSION,
 			'generated' => gmdate( 'c' ),
 			'scan'      => array(
 				'id'           => (int) ( $scan['id'] ?? 0 ),

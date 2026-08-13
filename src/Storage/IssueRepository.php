@@ -12,7 +12,7 @@ namespace AccessibilityGuardian\Storage;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Reads and writes issue rows in the ag_issues table.
+ * Reads and writes issue rows in the accg_issues table.
  */
 final class IssueRepository {
 
@@ -26,7 +26,7 @@ final class IssueRepository {
 	 */
 	public function __construct() {
 		global $wpdb;
-		$this->table = $wpdb->prefix . 'ag_issues';
+		$this->table = $wpdb->prefix . 'accg_issues';
 	}
 
 	/**
@@ -47,18 +47,18 @@ final class IssueRepository {
 				$this->table,
 				array(
 					'scan_id'        => $scan_id,
-					'url'            => (string) ( $issue['url'] ?? '' ),
+					'url'            => esc_url_raw( (string) ( $issue['url'] ?? '' ) ),
 					'post_id'        => (int) ( $issue['post_id'] ?? 0 ),
-					'rule_id'        => (string) ( $issue['rule_id'] ?? '' ),
-					'wcag_ref'       => (string) ( $issue['wcag_ref'] ?? '' ),
-					'severity'       => (string) ( $issue['severity'] ?? 'minor' ),
-					'category'       => (string) ( $issue['category'] ?? '' ),
-					'impact'         => (string) ( $issue['impact'] ?? '' ),
-					'message'        => (string) ( $issue['message'] ?? '' ),
-					'html_snippet'   => (string) ( $issue['html_snippet'] ?? '' ),
-					'dom_path'       => (string) ( $issue['dom_path'] ?? '' ),
-					'fix_suggestion' => (string) ( $issue['fix_suggestion'] ?? '' ),
-					'doc_link'       => (string) ( $issue['doc_link'] ?? '' ),
+					'rule_id'        => sanitize_key( (string) ( $issue['rule_id'] ?? '' ) ),
+					'wcag_ref'       => sanitize_text_field( (string) ( $issue['wcag_ref'] ?? '' ) ),
+					'severity'       => sanitize_key( (string) ( $issue['severity'] ?? 'minor' ) ),
+					'category'       => sanitize_key( (string) ( $issue['category'] ?? '' ) ),
+					'impact'         => sanitize_text_field( (string) ( $issue['impact'] ?? '' ) ),
+					'message'        => sanitize_textarea_field( (string) ( $issue['message'] ?? '' ) ),
+					'html_snippet'   => wp_kses_post( (string) ( $issue['html_snippet'] ?? '' ) ),
+					'dom_path'       => sanitize_text_field( (string) ( $issue['dom_path'] ?? '' ) ),
+					'fix_suggestion' => sanitize_textarea_field( (string) ( $issue['fix_suggestion'] ?? '' ) ),
+					'doc_link'       => esc_url_raw( (string) ( $issue['doc_link'] ?? '' ) ),
 					'status'         => (string) ( $issue['status'] ?? 'open' ),
 					'created_at'     => $now,
 				),

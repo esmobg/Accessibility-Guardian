@@ -12,7 +12,7 @@ namespace AccessibilityGuardian\Storage;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Reads and writes scan rows in the ag_scans table.
+ * Reads and writes scan rows in the accg_scans table.
  */
 final class ScanRepository {
 
@@ -26,7 +26,7 @@ final class ScanRepository {
 	 */
 	public function __construct() {
 		global $wpdb;
-		$this->table = $wpdb->prefix . 'ag_scans';
+		$this->table = $wpdb->prefix . 'accg_scans';
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class ScanRepository {
 			array( '%d' )
 		);
 
-		$history = $wpdb->prefix . 'ag_history';
+		$history = $wpdb->prefix . 'accg_history';
 		$wpdb->insert(
 			$history,
 			array(
@@ -214,7 +214,7 @@ final class ScanRepository {
 	public function history( int $limit = 30 ): array {
 		global $wpdb;
 
-		$history = $wpdb->prefix . 'ag_history';
+		$history = $wpdb->prefix . 'accg_history';
 		$rows    = $wpdb->get_results(
 			$wpdb->prepare( "SELECT * FROM {$history} ORDER BY id DESC LIMIT %d", $limit ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A

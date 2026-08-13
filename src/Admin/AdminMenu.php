@@ -90,7 +90,7 @@ final class AdminMenu {
 	public function add_menu(): void {
 		add_menu_page(
 			__( 'Accessibility Guardian', 'accessibility-guardian' ),
-			__( 'Accessibility', 'accessibility-guardian' ),
+			__( 'Accessibility Guardian', 'accessibility-guardian' ),
 			'manage_options',
 			self::SLUG_DASHBOARD,
 			array( $this, 'render_dashboard' ),
@@ -240,7 +240,13 @@ final class AdminMenu {
 	public function render_settings(): void {
 		$this->guard();
 
-		$settings   = (array) get_option( 'ag_settings', array() );
+		$notice = get_transient( 'accg_settings_notice' );
+		if ( is_string( $notice ) && '' !== $notice ) {
+			delete_transient( 'accg_settings_notice' );
+			add_settings_error( 'accg_settings', 'accg_settings_saved', $notice, 'updated' );
+		}
+
+		$settings   = (array) get_option( 'accg_settings', array() );
 		$post_types = get_post_types( array( 'public' => true ), 'objects' );
 		unset( $post_types['attachment'] );
 
@@ -258,7 +264,7 @@ final class AdminMenu {
 	 * Persist settings when the settings form is submitted.
 	 */
 	public function maybe_save_settings(): void {
-		if ( ! isset( $_POST['ag_settings_submit'] ) ) {
+		if ( ! isset( $_POST['accg_settings_submit'] ) ) {
 			return;
 		}
 
@@ -266,7 +272,7 @@ final class AdminMenu {
 			wp_die( esc_html__( 'You are not allowed to manage these settings.', 'accessibility-guardian' ) );
 		}
 
-		check_admin_referer( 'ag_save_settings' );
+		check_admin_referer( 'accg_save_settings' );
 
 		$post_types = array();
 		if ( isset( $_POST['include_post_types'] ) && is_array( $_POST['include_post_types'] ) ) {
@@ -282,22 +288,29 @@ final class AdminMenu {
 			$fixes[ $fix_key ] = in_array( $fix_key, $submitted, true );
 		}
 
+		$wcag_level = isset( $_POST['wcag_level'] ) ? sanitize_key( wp_unslash( (string) $_POST['wcag_level'] ) ) : 'aa';
+		if ( ! in_array( $wcag_level, array( 'a', 'aa' ), true ) ) {
+			$wcag_level = 'aa';
+		}
+
 		$settings = array(
 			'include_post_types' => $post_types,
 			'include_terms'      => ! empty( $_POST['include_terms'] ),
-			'batch_size'         => isset( $_POST['batch_size'] ) ? max( 1, absint( wp_unslash( (string) $_POST['batch_size'] ) ) ) : 5,
-			'wcag_level'         => isset( $_POST['wcag_level'] ) ? sanitize_key( wp_unslash( (string) $_POST['wcag_level'] ) ) : 'aa',
+			'batch_size'         => isset( $_POST['batch_size'] ) ? min( 50, max( 1, absint( wp_unslash( (string) $_POST['batch_size'] ) ) ) ) : 5,
+			'wcag_level'         => $wcag_level,
 			'fixes'              => $fixes,
 		);
 
-		update_option( 'ag_settings', $settings );
+		update_option( 'accg_settings', $settings );
 
-		add_settings_error(
-			'ag_settings',
-			'ag_settings_saved',
+		set_transient(
+			'accg_settings_notice',
 			__( 'Settings saved.', 'accessibility-guardian' ),
-			'updated'
+			30
 		);
+
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SLUG_SETTINGS ) );
+		exit;
 	}
 
 	/**
@@ -316,7 +329,7 @@ final class AdminMenu {
 	 * @param array<string, mixed> $context  Variables exposed to the template.
 	 */
 	private function render( string $template, array $context ): void {
-		$file = AG_PLUGIN_DIR . 'templates/' . $template . '.php';
+		$file = ACCG_PLUGIN_DIR . 'templates/' . $template . '.php';
 
 		if ( ! is_readable( $file ) ) {
 			return;
