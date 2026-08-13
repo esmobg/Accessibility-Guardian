@@ -11,6 +11,11 @@ namespace AccessibilityGuardian\Storage;
 
 defined( 'ABSPATH' ) || exit;
 
+// Custom accg_issues table; identifiers are $wpdb->prefix plus a hardcoded suffix.
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
 /**
  * Reads and writes issue rows in the accg_issues table.
  */

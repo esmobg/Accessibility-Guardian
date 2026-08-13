@@ -1,7 +1,9 @@
 .git
 .github
 .gitignore
+.cursor
 .wp-test
+docs
 .phpunit.cache
 .build
 .distignore

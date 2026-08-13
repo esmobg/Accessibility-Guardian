@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Accessibility Guardian
- * Plugin URI:        https://github.com/esmobg/accessibility-guardian
+ * Plugin URI:        https://github.com/esmobg/Accessibility-Guardian
  * Description:       Automated WCAG 2.2 AA accessibility auditor for WordPress. Scans posts, pages, custom post types, products and terms with axe-core and reports issues with remediation guidance.
  * Version:           1.1.0
  * Requires at least: 6.4

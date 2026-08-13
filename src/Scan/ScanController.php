@@ -14,6 +14,10 @@ use AccessibilityGuardian\Storage\ScanRepository;
 
 defined( 'ABSPATH' ) || exit;
 
+// Nonce is verified in guard() via check_ajax_referer( 'accg_scan' ) before any request read.
+// phpcs:disable WordPress.Security.NonceVerification.Missing
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 /**
  * Handles start/save/finish/status AJAX requests for scans.
  */

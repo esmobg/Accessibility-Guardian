@@ -11,6 +11,12 @@ namespace AccessibilityGuardian\Storage;
 
 defined( 'ABSPATH' ) || exit;
 
+// Custom accg_scans / accg_history tables; identifiers are $wpdb->prefix plus a hardcoded suffix.
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching
+// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter
+
 /**
  * Reads and writes scan rows in the accg_scans table.
  */

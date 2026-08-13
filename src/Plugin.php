@@ -78,7 +78,6 @@ final class Plugin {
 
 		$this->register_services();
 
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_init', array( Installer::class, 'maybe_upgrade' ) );
 
 		$this->service( AdminMenu::class )->register();
@@ -86,17 +85,6 @@ final class Plugin {
 		$this->service( ScanController::class )->register();
 		$this->service( ExportController::class )->register();
 		$this->service( AutoFixer::class )->register();
-	}
-
-	/**
-	 * Load the plugin translations.
-	 */
-	public function load_textdomain(): void {
-		load_plugin_textdomain(
-			'accessibility-guardian',
-			false,
-			dirname( ACCG_PLUGIN_BASENAME ) . '/languages'
-		);
 	}
 
 	/**
