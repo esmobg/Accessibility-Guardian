@@ -50,6 +50,35 @@ final class ScoreCalculator {
 	}
 
 	/**
+	 * Calculate the site score as the average of per-page scores.
+	 *
+	 * Each URL with stored issues is scored with calculate(). Successfully scanned
+	 * URLs with no issue rows count as MAX_SCORE (100).
+	 *
+	 * @param array<string, array<string, int>> $counts_by_url Severity counts keyed by URL.
+	 * @param int                                 $scanned_urls Number of URLs successfully scanned.
+	 * @return int Score clamped between 0 and 100.
+	 */
+	public function calculate_site_score( array $counts_by_url, int $scanned_urls ): int {
+		if ( $scanned_urls < 1 ) {
+			return self::MAX_SCORE;
+		}
+
+		$sum = 0;
+
+		foreach ( $counts_by_url as $counts ) {
+			$sum += $this->calculate( $counts );
+		}
+
+		$clean_pages = max( 0, $scanned_urls - count( $counts_by_url ) );
+		$sum        += $clean_pages * self::MAX_SCORE;
+
+		$score = (int) round( $sum / $scanned_urls );
+
+		return (int) max( 0, min( self::MAX_SCORE, $score ) );
+	}
+
+	/**
 	 * Number of "error" issues (critical + major) from counts.
 	 *
 	 * @param array<string, int> $counts Counts keyed by severity.

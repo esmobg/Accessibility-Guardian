@@ -73,6 +73,9 @@ $accg_export_base = wp_nonce_url(
 					<span class="ag-score__max">/100</span>
 				</div>
 				<p class="ag-score__band"><?php echo esc_html( $band['label'] ); ?></p>
+				<?php if ( $accg_total > 1 ) : ?>
+					<p class="ag-score__note ag-muted"><?php esc_html_e( 'Site score is the average across scanned pages.', 'accessibility-guardian' ); ?></p>
+				<?php endif; ?>
 			</div>
 
 			<div class="ag-card">

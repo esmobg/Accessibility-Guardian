@@ -237,7 +237,7 @@
 			if ( res && res.success ) {
 				var doneLabel = state.cancelled ? t( 'cancelled', 'Scan cancelled' ) : t( 'complete', 'Scan complete' );
 				setProgress( state.index, state.queue.length, doneLabel );
-				logLine( t( 'score', 'Score' ) + ': ' + res.data.score + '% (' + res.data.band.label + ')', 'ok' );
+				logLine( t( 'score', 'Score' ) + ': ' + res.data.score + '/100 (' + res.data.band.label + ')', 'ok' );
 
 				if ( state.failures > 0 ) {
 					logLine( state.failures + ' ' + t( 'pagesFailed', 'pages could not be scanned' ), 'warn' );
@@ -271,7 +271,7 @@
 			}
 		};
 
-		fill( 'ag-result-score', data.score + '%' );
+		fill( 'ag-result-score', data.score + '/100' );
 		fill( 'ag-result-band', data.band && data.band.label ? data.band.label : '' );
 		fill( 'ag-result-critical', counts.critical || 0 );
 		fill( 'ag-result-major', counts.major || 0 );

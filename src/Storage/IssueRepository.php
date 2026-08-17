@@ -112,6 +112,48 @@ final class IssueRepository {
 	}
 
 	/**
+	 * Count issues for a scan grouped by URL and severity.
+	 *
+	 * @param int $scan_id Scan id.
+	 * @return array<string, array<string, int>>
+	 */
+	public function severity_counts_by_url( int $scan_id ): array {
+		global $wpdb;
+
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT url, severity, COUNT(*) AS total FROM {$this->table} WHERE scan_id = %d GROUP BY url, severity",
+				$scan_id
+			),
+			ARRAY_A
+		);
+
+		$by_url = array();
+
+		if ( is_array( $rows ) ) {
+			foreach ( $rows as $row ) {
+				$url = (string) $row['url'];
+
+				if ( ! isset( $by_url[ $url ] ) ) {
+					$by_url[ $url ] = array(
+						'critical' => 0,
+						'major'    => 0,
+						'minor'    => 0,
+						'warning'  => 0,
+					);
+				}
+
+				$severity = (string) $row['severity'];
+				if ( isset( $by_url[ $url ][ $severity ] ) ) {
+					$by_url[ $url ][ $severity ] = (int) $row['total'];
+				}
+			}
+		}
+
+		return $by_url;
+	}
+
+	/**
 	 * Count issues for a scan grouped by category.
 	 *
 	 * @param int $scan_id Scan id.

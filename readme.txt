@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, audit, axe-core
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,12 @@ order). Raise or lower the cap with the `accg_scan_url_limit` filter. The scan
 still runs in your browser one page at a time, so very large sites take a long
 time and require the admin tab to stay open.
 
+= How is the accessibility score calculated? =
+
+Each scanned page starts at 100 and loses points for issues (Critical −10,
+Major −5, Minor −2, Warning −1). For multi-page scans, the site score is the
+average of those per-page scores. Pages scanned with no violations count as 100.
+
 = Where is the axe-core source code? =
 
 Unminified axe-core 4.10.2 is included as `assets/js/axe.js`. The project is
@@ -102,6 +108,11 @@ maintained at https://github.com/dequelabs/axe-core (tag v4.10.2).
 
 == Changelog ==
 
+= 1.1.1 =
+* Fix site score for multi-page scans: average per-page scores instead of
+  penalizing the total issue count (which could incorrectly show 0).
+* Scan UI shows scores as N/100 to match the dashboard.
+
 = 1.1.0 =
 * WordPress.org readiness: unique `accg_` prefix, GPLv2 LICENSE.txt, axe-core
   source, i18n for rule catalog, PHP 8.0 requirement.
@@ -114,6 +125,10 @@ maintained at https://github.com/dequelabs/axe-core (tag v4.10.2).
   supplemental custom rules, scoring, dashboard and CSV/JSON export.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Multi-page scan scores are now averaged per page. Re-run a scan to refresh the
+dashboard score; older completed scans keep their previous values.
 
 = 1.1.0 =
 Database tables and settings keys are renamed to the accg_ prefix. Existing

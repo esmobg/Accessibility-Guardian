@@ -211,8 +211,10 @@ final class ScanController {
 			wp_send_json_error( array( 'message' => __( 'Scan is not running.', 'accessibility-guardian' ) ), 409 );
 		}
 
-		$counts = $this->issues->severity_counts( $scan_id );
-		$score  = $this->score->calculate( $counts );
+		$counts_by_url = $this->issues->severity_counts_by_url( $scan_id );
+		$scanned_urls  = (int) $scan['scanned_urls'];
+		$counts        = $this->issues->severity_counts( $scan_id );
+		$score         = $this->score->calculate_site_score( $counts_by_url, $scanned_urls );
 
 		$totals = array(
 			'score'    => $score,
