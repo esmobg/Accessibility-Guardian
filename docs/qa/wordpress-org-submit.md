@@ -1,4 +1,4 @@
-# Submit Accessibility Guardian 1.1.0 to WordPress.org
+# Submit Accessibility Guardian 1.1.1 to WordPress.org
 
 The plugin zip is review-ready after Plugin Check is clean. This document is the human submission path. It does **not** log into wordpress.org for you.
 
@@ -6,12 +6,12 @@ The plugin zip is review-ready after Plugin Check is clean. This document is the
 
 1. WordPress.org account: [esmobg](https://profiles.wordpress.org/esmobg/) (must match `Contributors: esmobg` in `readme.txt`).
 2. Confirm the slug `accessibility-guardian` is free at https://wordpress.org/plugins/accessibility-guardian/ (404 = available).
-3. Use the built zip only: `dist/accessibility-guardian-1.1.0.zip` (built with `.distignore`; no tests, docs, git, or `wp-org-assets`).
+3. Use the built zip only: `dist/accessibility-guardian-1.1.1.zip` (built with `.distignore`; no tests, docs, git, or `wp-org-assets`).
 
 ## First-time listing (Add Plugin)
 
 1. Open https://wordpress.org/plugins/developers/add/
-2. Upload `dist/accessibility-guardian-1.1.0.zip`.
+2. Upload `dist/accessibility-guardian-1.1.1.zip`.
 3. Wait for the automated checks, then the human review (often several days to weeks).
 4. When approved you receive SVN: `https://plugins.svn.wordpress.org/accessibility-guardian/`
 
@@ -25,7 +25,7 @@ assets/          ← from wp-org-assets/ plus screenshots
   screenshot-2.png
   screenshot-3.png
 trunk/           ← unzipped plugin folder contents
-tags/1.1.0/      ← copy of trunk for the stable tag
+tags/1.1.1/      ← copy of trunk for the stable tag
 ```
 
 Example:
@@ -35,11 +35,11 @@ svn co https://plugins.svn.wordpress.org/accessibility-guardian/ ag-svn
 # copy plugin files into ag-svn/trunk/
 # copy wp-org-assets/* and screenshot-*.png into ag-svn/assets/
 svn add ag-svn/trunk/* ag-svn/assets/*
-svn copy ag-svn/trunk ag-svn/tags/1.1.0
-svn ci -m "Initial 1.1.0 release"
+svn copy ag-svn/trunk ag-svn/tags/1.1.1
+svn ci -m "Initial 1.1.1 release"
 ```
 
-Directory banners (`banner-1544x500.png`) are optional. `readme.txt` `Stable tag` must match `tags/1.1.0`.
+Directory banners (`banner-1544x500.png`) are optional. `readme.txt` `Stable tag` must match `tags/1.1.1`.
 
 ## What reviewers already have
 
