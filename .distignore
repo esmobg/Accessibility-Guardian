@@ -13,6 +13,7 @@ composer.json
 composer.lock
 README.md
 wp-org-assets
+screenshot-*.png
 dist
 *.zip
 *.log
