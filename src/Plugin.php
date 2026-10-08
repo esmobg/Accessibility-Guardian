@@ -79,12 +79,26 @@ final class Plugin {
 		$this->register_services();
 
 		add_action( 'admin_init', array( Installer::class, 'maybe_upgrade' ) );
+		add_action( 'wp_initialize_site', array( Installer::class, 'install_for_new_site' ), 200 );
+		add_filter( 'wpmu_drop_tables', array( Installer::class, 'drop_tables_for_site' ), 10, 2 );
 
 		$this->service( AdminMenu::class )->register();
 		$this->service( AssetManager::class )->register();
 		$this->service( ScanController::class )->register();
 		$this->service( ExportController::class )->register();
 		$this->service( AutoFixer::class )->register();
+	}
+
+	/**
+	 * Capability required to view reports, run scans, export and change settings.
+	 *
+	 * Filterable through `accg_required_capability`; falls back to
+	 * `manage_options` when a filter returns something unusable.
+	 */
+	public static function capability(): string {
+		$capability = apply_filters( 'accg_required_capability', 'manage_options' );
+
+		return is_string( $capability ) && '' !== $capability ? $capability : 'manage_options';
 	}
 
 	/**
@@ -116,6 +130,8 @@ final class Plugin {
 		$url_provider     = new UrlProvider();
 		$normalizer       = new ResultNormalizer( $rule_catalog );
 
+		$admin_menu       = new AdminMenu( $scan_repository, $issue_repository, $score_calculator, $rule_catalog );
+
 		$this->services = array(
 			ScanRepository::class   => $scan_repository,
 			IssueRepository::class  => $issue_repository,
@@ -123,8 +139,8 @@ final class Plugin {
 			ScoreCalculator::class  => $score_calculator,
 			UrlProvider::class      => $url_provider,
 			ResultNormalizer::class => $normalizer,
-			AssetManager::class     => new AssetManager(),
-			AdminMenu::class        => new AdminMenu( $scan_repository, $issue_repository, $score_calculator, $rule_catalog ),
+			AdminMenu::class        => $admin_menu,
+			AssetManager::class     => new AssetManager( $admin_menu ),
 			ScanController::class   => new ScanController(
 				$url_provider,
 				$scan_repository,

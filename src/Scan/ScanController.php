@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace AccessibilityGuardian\Scan;
 
+use AccessibilityGuardian\Plugin;
 use AccessibilityGuardian\Storage\IssueRepository;
 use AccessibilityGuardian\Storage\ScanRepository;
 
@@ -19,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 /**
- * Handles start/save/finish/status AJAX requests for scans.
+ * Handles start/save/finish AJAX requests for scans.
  */
 final class ScanController {
 
@@ -83,7 +84,6 @@ final class ScanController {
 		add_action( 'wp_ajax_accg_start_scan', array( $this, 'handle_start' ) );
 		add_action( 'wp_ajax_accg_save_results', array( $this, 'handle_save' ) );
 		add_action( 'wp_ajax_accg_finish_scan', array( $this, 'handle_finish' ) );
-		add_action( 'wp_ajax_accg_scan_status', array( $this, 'handle_status' ) );
 	}
 
 	/**
@@ -95,8 +95,8 @@ final class ScanController {
 		// Recover from scans abandoned mid-run (e.g. the admin closed the tab).
 		$this->scans->fail_stale();
 
-		$scan_type = isset( $_POST['scan_type'] ) ? sanitize_key( wp_unslash( (string) $_POST['scan_type'] ) ) : 'full';
-		$post_id   = isset( $_POST['post_id'] ) ? absint( wp_unslash( (string) $_POST['post_id'] ) ) : 0;
+		$scan_type = isset( $_POST['scan_type'] ) ? sanitize_key( wp_unslash( $_POST['scan_type'] ) ) : 'full';
+		$post_id   = isset( $_POST['post_id'] ) ? absint( wp_unslash( $_POST['post_id'] ) ) : 0;
 
 		if ( 'single' === $scan_type && $post_id > 0 ) {
 			$queue = $this->url_provider->get_single_post_urls( $post_id );
@@ -142,8 +142,8 @@ final class ScanController {
 	public function handle_save(): void {
 		$this->guard();
 
-		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( (string) $_POST['scan_id'] ) ) : 0;
-		$raw     = isset( $_POST['payload'] ) ? wp_unslash( (string) $_POST['payload'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload is decoded and type-checked below.
+		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( $_POST['scan_id'] ) ) : 0;
+		$raw     = isset( $_POST['payload'] ) && is_string( $_POST['payload'] ) ? wp_unslash( $_POST['payload'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload is decoded and type-checked below.
 
 		if ( 0 === $scan_id || '' === $raw ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan payload.', 'accessibility-guardian' ) ), 400 );
@@ -183,15 +183,16 @@ final class ScanController {
 	public function handle_finish(): void {
 		$this->guard();
 
-		$scan_id = isset( $_POST['scan_id'] ) ? absint( wp_unslash( (string) $_POST['scan_id'] ) ) : 0;
-		$passes  = isset( $_POST['passes'] ) ? absint( wp_unslash( (string) $_POST['passes'] ) ) : 0;
+		$scan_id   = isset( $_POST['scan_id'] ) ? absint( wp_unslash( $_POST['scan_id'] ) ) : 0;
+		$passes    = isset( $_POST['passes'] ) ? absint( wp_unslash( $_POST['passes'] ) ) : 0;
+		$cancelled = ! empty( $_POST['cancelled'] );
 
 		$scan = $this->scans->find( $scan_id );
 		if ( 0 === $scan_id || null === $scan ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid scan id.', 'accessibility-guardian' ) ), 400 );
 		}
 
-		if ( 'complete' === $scan['status'] ) {
+		if ( in_array( $scan['status'], array( 'complete', 'cancelled' ), true ) ) {
 			wp_send_json_success(
 				array(
 					'score'  => (int) $scan['score'],
@@ -223,7 +224,22 @@ final class ScanController {
 			'passes'   => $passes,
 		);
 
-		$this->scans->complete( $scan_id, $totals );
+		if ( $cancelled ) {
+			// A cancelled scan keeps its partial results but never becomes the "latest" report.
+			$this->scans->cancel( $scan_id, $totals );
+		} else {
+			$this->scans->complete( $scan_id, $totals );
+
+			/**
+			 * Fires after a scan has finished and its score has been stored.
+			 *
+			 * @since 1.2.0
+			 *
+			 * @param int                                                 $scan_id Scan id.
+			 * @param array{score:int,errors:int,warnings:int,passes:int} $totals  Aggregate results.
+			 */
+			do_action( 'accg_scan_completed', $scan_id, $totals );
+		}
 
 		wp_send_json_success(
 			array(
@@ -236,33 +252,10 @@ final class ScanController {
 	}
 
 	/**
-	 * Report the current progress of a scan.
-	 */
-	public function handle_status(): void {
-		$this->guard();
-
-		$scan_id = isset( $_GET['scan_id'] ) ? absint( wp_unslash( (string) $_GET['scan_id'] ) ) : 0;
-		$scan    = $this->scans->find( $scan_id );
-
-		if ( null === $scan ) {
-			wp_send_json_error( array( 'message' => __( 'Scan not found.', 'accessibility-guardian' ) ), 404 );
-		}
-
-		wp_send_json_success(
-			array(
-				'status'       => $scan['status'],
-				'total_urls'   => (int) $scan['total_urls'],
-				'scanned_urls' => (int) $scan['scanned_urls'],
-				'score'        => (int) $scan['score'],
-			)
-		);
-	}
-
-	/**
 	 * Verify nonce and capability for every request.
 	 */
 	private function guard(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( Plugin::capability() ) ) {
 			wp_send_json_error( array( 'message' => __( 'You are not allowed to run scans.', 'accessibility-guardian' ) ), 403 );
 		}
 

@@ -90,12 +90,16 @@
 			return Promise.reject( new Error( 'axe-core unavailable in frame' ) );
 		}
 
-		var options = {
-			resultTypes: [ 'violations', 'incomplete', 'passes' ],
-			runOnly: { type: 'tag', values: settings.wcagTags && settings.wcagTags.length ? settings.wcagTags : [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice' ] }
-		};
+		var options = settings.axeOptions && typeof settings.axeOptions === 'object' ? settings.axeOptions : {};
+		if ( ! options.runOnly ) {
+			options.runOnly = { type: 'tag', values: [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice' ] };
+		}
+		options.resultTypes = [ 'violations', 'incomplete', 'passes' ];
 
-		return axe.run( frameDocument, options ).then( function ( results ) {
+		// The frame is loaded as the logged-in admin; never report on the WordPress toolbar.
+		var context = { exclude: [ [ '#wpadminbar' ] ] };
+
+		return axe.run( context, options ).then( function ( results ) {
 			var custom = window.accgCustomRules ? window.accgCustomRules.run( frameDocument ) : { violations: [] };
 
 			return {
@@ -108,10 +112,14 @@
 
 	function compactResult( result ) {
 		return ( result || [] ).map( function ( rule ) {
+			var tags = rule.tags || [];
 			return {
 				id: rule.id,
 				impact: rule.impact || '',
 				help: rule.help || '',
+				bestPractice: tags.indexOf( 'best-practice' ) !== -1 && ! tags.some( function ( tag ) {
+					return /^wcag/.test( tag );
+				} ),
 				nodes: ( rule.nodes || [] ).slice( 0, 25 ).map( function ( node ) {
 					return {
 						html: node.html || '',
@@ -129,7 +137,8 @@
 	 */
 	function injectAxe( ctx ) {
 		return new Promise( function ( resolve, reject ) {
-			if ( ctx.win.axe ) {
+			// Reuse an axe instance only if it is the exact version bundled with the plugin.
+			if ( ctx.win.axe && ctx.win.axe.version === settings.axeVersion ) {
 				resolve( ctx );
 				return;
 			}
@@ -170,6 +179,12 @@
 				window.clearTimeout( timer );
 
 				try {
+					// Reading location throws for cross-origin and browser error pages
+					// (e.g. a page refused by X-Frame-Options), so those are reported as failures.
+					var loc = frame.contentWindow.location;
+					if ( loc.origin !== window.location.origin || loc.href === 'about:blank' ) {
+						throw new Error( 'blocked' );
+					}
 					var doc = frame.contentDocument || frame.contentWindow.document;
 					resolve( { win: frame.contentWindow, doc: doc } );
 				} catch ( err ) {
@@ -232,7 +247,8 @@
 	function finish() {
 		post( 'accg_finish_scan', {
 			scan_id: state.scanId,
-			passes: state.passes
+			passes: state.passes,
+			cancelled: state.cancelled ? 1 : 0
 		} ).then( function ( res ) {
 			if ( res && res.success ) {
 				var doneLabel = state.cancelled ? t( 'cancelled', 'Scan cancelled' ) : t( 'complete', 'Scan complete' );
@@ -277,6 +293,13 @@
 		fill( 'ag-result-major', counts.major || 0 );
 		fill( 'ag-result-minor', counts.minor || 0 );
 		fill( 'ag-result-warning', counts.warning || 0 );
+
+		// Point "Review issues" at this scan, which matters for cancelled (partial) scans.
+		var issuesLink = document.getElementById( 'ag-result-issues' );
+		if ( issuesLink && state.scanId ) {
+			var href = issuesLink.getAttribute( 'href' ) || '';
+			issuesLink.setAttribute( 'href', href.split( '&scan_id=' )[ 0 ] + '&scan_id=' + encodeURIComponent( state.scanId ) );
+		}
 
 		var badge = document.getElementById( 'ag-result-badge' );
 		if ( badge && data.band && data.band.key ) {

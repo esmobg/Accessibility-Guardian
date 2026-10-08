@@ -19,7 +19,7 @@ final class Installer {
 	/**
 	 * Current schema version. Bump to trigger dbDelta migrations.
 	 */
-	private const DB_VERSION = '1.1.0';
+	private const DB_VERSION = '1.2.0';
 
 	/**
 	 * Option key that stores the installed schema version.
@@ -27,12 +27,36 @@ final class Installer {
 	private const DB_VERSION_OPTION = 'accg_db_version';
 
 	/**
-	 * Run on plugin activation.
+	 * Table name suffixes (appended to the site's table prefix).
+	 *
+	 * @var array<int, string>
 	 */
-	public static function activate(): void {
-		self::maybe_migrate_legacy();
-		self::install_tables();
-		self::seed_default_settings();
+	public const TABLES = array( 'accg_scans', 'accg_issues', 'accg_history' );
+
+	/**
+	 * Run on plugin activation.
+	 *
+	 * @param bool $network_wide Whether the plugin is being network-activated.
+	 */
+	public static function activate( $network_wide = false ): void {
+		if ( is_multisite() && $network_wide ) {
+			$site_ids = get_sites(
+				array(
+					'fields' => 'ids',
+					'number' => 0,
+				)
+			);
+
+			foreach ( $site_ids as $site_id ) {
+				switch_to_blog( (int) $site_id );
+				self::install_site();
+				restore_current_blog();
+			}
+
+			return;
+		}
+
+		self::install_site();
 	}
 
 	/**
@@ -43,47 +67,67 @@ final class Installer {
 	}
 
 	/**
-	 * Ensure the schema is up to date. Safe to call repeatedly.
+	 * Ensure the schema and default settings exist. Cheap when up to date.
 	 */
 	public static function maybe_upgrade(): void {
-		self::maybe_migrate_legacy();
-
-		if ( get_option( self::DB_VERSION_OPTION ) !== self::DB_VERSION ) {
-			self::install_tables();
+		if ( get_option( self::DB_VERSION_OPTION ) === self::DB_VERSION ) {
+			return;
 		}
+
+		self::install_site();
 	}
 
 	/**
-	 * Rename 1.0 ag_* tables/options to accg_* when they still exist.
+	 * Create tables for a site added to a network where the plugin is network-active.
+	 *
+	 * @param \WP_Site $site New site object.
 	 */
-	private static function maybe_migrate_legacy(): void {
+	public static function install_for_new_site( $site ): void {
+		if ( ! $site instanceof \WP_Site ) {
+			return;
+		}
+
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( ! is_plugin_active_for_network( plugin_basename( ACCG_PLUGIN_FILE ) ) ) {
+			return;
+		}
+
+		switch_to_blog( (int) $site->blog_id );
+		self::install_site();
+		restore_current_blog();
+	}
+
+	/**
+	 * Drop this plugin's tables when a network site is deleted.
+	 *
+	 * @param mixed $tables  Table names core is about to drop.
+	 * @param int   $site_id Site being deleted.
+	 * @return mixed
+	 */
+	public static function drop_tables_for_site( $tables, $site_id = 0 ) {
 		global $wpdb;
 
-		$pairs = array(
-			$wpdb->prefix . 'ag_scans'   => $wpdb->prefix . 'accg_scans',
-			$wpdb->prefix . 'ag_issues'  => $wpdb->prefix . 'accg_issues',
-			$wpdb->prefix . 'ag_history' => $wpdb->prefix . 'accg_history',
-		);
-
-		foreach ( $pairs as $old => $new ) {
-			$old_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $old ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$new_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $new ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-
-			if ( $old_exists && ! $new_exists ) {
-				// Table names are $wpdb->prefix plus hardcoded ag_/accg_ suffixes, not user input.
-				$wpdb->query( "RENAME TABLE {$old} TO {$new}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,PluginCheck.Security.DirectDB.UnescapedDBParameter
-			}
+		if ( ! is_array( $tables ) ) {
+			return $tables;
 		}
 
-		$legacy_settings = get_option( 'ag_settings', false );
-		if ( false !== $legacy_settings && false === get_option( 'accg_settings', false ) ) {
-			add_option( 'accg_settings', $legacy_settings );
+		$prefix = $wpdb->get_blog_prefix( (int) $site_id );
+		foreach ( self::TABLES as $suffix ) {
+			$tables[] = $prefix . $suffix;
 		}
 
-		$legacy_version = get_option( 'ag_db_version', false );
-		if ( false !== $legacy_version && false === get_option( self::DB_VERSION_OPTION, false ) ) {
-			add_option( self::DB_VERSION_OPTION, $legacy_version );
-		}
+		return $tables;
+	}
+
+	/**
+	 * Install tables and default settings for the current site.
+	 */
+	private static function install_site(): void {
+		self::install_tables();
+		self::seed_default_settings();
 	}
 
 	/**
@@ -166,15 +210,22 @@ final class Installer {
 	 */
 	private static function seed_default_settings(): void {
 		if ( false === get_option( 'accg_settings' ) ) {
-			add_option(
-				'accg_settings',
-				array(
-					'include_post_types' => array( 'post', 'page' ),
-					'include_terms'      => false,
-					'batch_size'         => 5,
-					'wcag_level'         => 'aa',
-				)
-			);
+			add_option( 'accg_settings', self::default_settings() );
 		}
+	}
+
+	/**
+	 * Default plugin settings for a fresh install.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function default_settings(): array {
+		return array(
+			'include_post_types' => array( 'post', 'page' ),
+			'include_terms'      => false,
+			'wcag_level'         => 'aa',
+			'best_practice'      => true,
+			'fixes'              => array(),
+		);
 	}
 }

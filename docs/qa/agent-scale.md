@@ -3,7 +3,7 @@
 Agent: Scale1000Urls  
 Date: 2026-08-13  
 Site: `http://localhost:8089/`  
-WP path: `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/site`  
+WP path: `<project>/.wp-test/site`  
 Loaded plugin: `.../wp-content/plugins/accessibility-guardian` version **1.1.0** (active)  
 Constraint: production plugin PHP was not modified by this agent; WP settings were not changed.  
 Method: `$PHP $WPCLI --path=SITE eval` using `AccessibilityGuardian\Plugin::instance()->service(UrlProvider::class)`.
@@ -99,9 +99,9 @@ End-to-end subset (progress UI, cancel, fail_stale, 30–50 URL smoke) is owned 
 
 ## Commands (reproducible)
 
-PHP: `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/bin/php`  
-WP-CLI: `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/bin/wp-cli.phar`  
-`--path=`: `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/site`
+PHP: `<project>/.wp-test/bin/php`  
+WP-CLI: `<project>/.wp-test/bin/wp-cli.phar`  
+`--path=`: `<project>/.wp-test/site`
 
 ## GO rule (informational)
 

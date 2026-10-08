@@ -59,12 +59,13 @@ final class IssueRepository {
 					'severity'       => sanitize_key( (string) ( $issue['severity'] ?? 'minor' ) ),
 					'category'       => sanitize_key( (string) ( $issue['category'] ?? '' ) ),
 					'impact'         => sanitize_text_field( (string) ( $issue['impact'] ?? '' ) ),
-					'message'        => sanitize_textarea_field( (string) ( $issue['message'] ?? '' ) ),
-					'html_snippet'   => wp_kses_post( (string) ( $issue['html_snippet'] ?? '' ) ),
+					'message'        => self::readable_text( (string) ( $issue['message'] ?? '' ) ),
+					// Stored as plain text (never rendered as HTML); escaped on output and in exports.
+					'html_snippet'   => self::plain_text( (string) ( $issue['html_snippet'] ?? '' ) ),
 					'dom_path'       => sanitize_text_field( (string) ( $issue['dom_path'] ?? '' ) ),
-					'fix_suggestion' => sanitize_textarea_field( (string) ( $issue['fix_suggestion'] ?? '' ) ),
+					'fix_suggestion' => self::readable_text( (string) ( $issue['fix_suggestion'] ?? '' ) ),
 					'doc_link'       => esc_url_raw( (string) ( $issue['doc_link'] ?? '' ) ),
-					'status'         => (string) ( $issue['status'] ?? 'open' ),
+					'status'         => sanitize_key( (string) ( $issue['status'] ?? 'open' ) ),
 					'created_at'     => $now,
 				),
 				array( '%d', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
@@ -76,6 +77,29 @@ final class IssueRepository {
 		}
 
 		return $count;
+	}
+
+	/**
+	 * Sanitize human-readable text while keeping element names such as "<main>".
+	 *
+	 * Angle brackets are stored as entities so sanitize_textarea_field() does
+	 * not strip them as tags; esc_html() renders them as text on output.
+	 *
+	 * @param string $value Message or fix suggestion.
+	 */
+	private static function readable_text( string $value ): string {
+		return sanitize_textarea_field( str_replace( array( '<', '>' ), array( '&lt;', '&gt;' ), $value ) );
+	}
+
+	/**
+	 * Normalise a snippet of page markup for storage as text.
+	 *
+	 * @param string $value Raw snippet.
+	 */
+	private static function plain_text( string $value ): string {
+		$value = wp_check_invalid_utf8( $value );
+
+		return str_replace( chr( 0 ), '', $value );
 	}
 
 	/**

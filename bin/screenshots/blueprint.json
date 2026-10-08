@@ -1,0 +1,19 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"landingPage": "/wp-admin/admin.php?page=accessibility-guardian",
+	"login": true,
+	"steps": [
+		{
+			"step": "activatePlugin",
+			"pluginPath": "accessibility-guardian/accessibility-guardian.php"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php define( 'ACCG_DEMO_CONTENT', true ); require '/wordpress/accg-tools/demo-content.php';"
+		}
+	]
+}

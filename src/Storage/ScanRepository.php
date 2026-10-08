@@ -117,21 +117,29 @@ final class ScanRepository {
 	}
 
 	/**
-	 * Mark a scan as failed.
+	 * Mark a scan as cancelled, keeping its partial totals.
 	 *
-	 * @param int $scan_id Scan id.
+	 * Cancelled scans are not added to the score history and are never
+	 * returned by latest().
+	 *
+	 * @param int   $scan_id Scan id.
+	 * @param array{score:int,errors:int,warnings:int,passes:int} $totals Aggregate counts so far.
 	 */
-	public function fail( int $scan_id ): void {
+	public function cancel( int $scan_id, array $totals ): void {
 		global $wpdb;
 
 		$wpdb->update(
 			$this->table,
 			array(
-				'status'      => 'failed',
+				'status'      => 'cancelled',
 				'finished_at' => current_time( 'mysql' ),
+				'score'       => (int) $totals['score'],
+				'errors'      => (int) $totals['errors'],
+				'warnings'    => (int) $totals['warnings'],
+				'passes'      => (int) $totals['passes'],
 			),
 			array( 'id' => $scan_id ),
-			array( '%s', '%s' ),
+			array( '%s', '%s', '%d', '%d', '%d', '%d' ),
 			array( '%d' )
 		);
 	}
@@ -148,7 +156,8 @@ final class ScanRepository {
 	public function fail_stale( int $max_age_seconds = 3600 ): int {
 		global $wpdb;
 
-		$cutoff = gmdate( 'Y-m-d H:i:s', (int) current_time( 'timestamp' ) - $max_age_seconds );
+		// started_at is stored in site-local time (current_time( 'mysql' )), so compare in the same zone.
+		$cutoff = wp_date( 'Y-m-d H:i:s', time() - $max_age_seconds );
 
 		$updated = $wpdb->query(
 			$wpdb->prepare(

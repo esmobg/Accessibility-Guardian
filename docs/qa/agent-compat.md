@@ -11,7 +11,7 @@ Browser scans: **not run** (no long iframe runs; no site-wide `X-Frame-Options` 
 | Item | Value |
 | --- | --- |
 | Plugin under test | Accessibility Guardian **1.1.0** (active) |
-| WP-test site | `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/site` |
+| WP-test site | `<project>/.wp-test/site` |
 | PHP | 8.3.14 (`/.wp-test/bin/php`) |
 | Database | SQLite (`sqlite-database-integration` 2.2.23) |
 | Active theme (start/end) | **Twenty Twenty-Five** 1.5 (`is_block_theme=yes`) |

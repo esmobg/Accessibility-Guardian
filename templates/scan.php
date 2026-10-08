@@ -4,18 +4,26 @@
  *
  * @package AccessibilityGuardian
  *
- * @var int    $post_id
- * @var string $scan_type
- * @var string $post_title
+ * @var array<string,mixed> $args Template context.
+ *
+ * @var int    $accg_post_id
+ * @var string $accg_scan_type
+ * @var string $accg_post_title
  */
 
 defined( 'ABSPATH' ) || exit;
+
+// Template context passed by AdminMenu::render() via load_template().
+$accg_post_id    = $args['post_id'] ?? 0;
+$accg_scan_type  = $args['scan_type'] ?? 'full';
+$accg_post_title = $args['post_title'] ?? '';
 ?>
 <div class="wrap ag-wrap">
 	<h1 class="ag-title">
 		<span class="dashicons dashicons-search" aria-hidden="true"></span>
 		<?php esc_html_e( 'Run Accessibility Scan', 'accessibility-guardian' ); ?>
 	</h1>
+	<hr class="wp-header-end">
 
 	<p class="ag-intro">
 		<?php esc_html_e( 'Scanning runs in your browser using axe-core against the rendered front-end of each page. Keep this tab open until the scan completes.', 'accessibility-guardian' ); ?>
@@ -30,18 +38,18 @@ defined( 'ABSPATH' ) || exit;
 	</p>
 
 	<div class="ag-scan-controls">
-		<?php if ( 'single' === $scan_type && $post_id > 0 ) : ?>
+		<?php if ( 'single' === $accg_scan_type && $accg_post_id > 0 ) : ?>
 			<p>
 				<?php
 				printf(
 					/* translators: %s: post title. */
 					esc_html__( 'Single page scan: %s', 'accessibility-guardian' ),
-					'<strong>' . esc_html( $post_title ) . '</strong>'
+					'<strong>' . esc_html( $accg_post_title ) . '</strong>'
 				);
 				?>
 			</p>
 			<button type="button" class="button button-primary button-hero" id="ag-start-scan"
-				data-scan-type="single" data-post-id="<?php echo esc_attr( (string) $post_id ); ?>">
+				data-scan-type="single" data-post-id="<?php echo esc_attr( (string) $accg_post_id ); ?>">
 				<?php esc_html_e( 'Start single page scan', 'accessibility-guardian' ); ?>
 			</button>
 		<?php else : ?>
@@ -70,7 +78,7 @@ defined( 'ABSPATH' ) || exit;
 	<div id="ag-scan-result" class="ag-result" hidden tabindex="-1" aria-live="polite">
 		<div class="ag-result__head">
 			<span id="ag-result-badge" class="ag-result__badge">
-				<strong id="ag-result-score" class="ag-result__score">0%</strong>
+				<strong id="ag-result-score" class="ag-result__score">&ndash;/100</strong>
 				<span id="ag-result-band" class="ag-result__band"></span>
 			</span>
 			<h2 class="ag-result__title"><?php esc_html_e( 'Scan finished', 'accessibility-guardian' ); ?></h2>
@@ -96,7 +104,7 @@ defined( 'ABSPATH' ) || exit;
 		</ul>
 
 		<p class="ag-result__actions">
-			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=accessibility-guardian-issues' ) ); ?>">
+			<a class="button button-primary" id="ag-result-issues" href="<?php echo esc_url( admin_url( 'admin.php?page=accessibility-guardian-issues' ) ); ?>">
 				<?php esc_html_e( 'Review issues', 'accessibility-guardian' ); ?>
 			</a>
 			<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=accessibility-guardian' ) ); ?>">
@@ -107,5 +115,5 @@ defined( 'ABSPATH' ) || exit;
 
 	<ul id="ag-scan-log" class="ag-log" aria-live="polite"></ul>
 
-	<iframe id="ag-scan-frame" class="ag-scan-frame" title="<?php esc_attr_e( 'Accessibility scan sandbox', 'accessibility-guardian' ); ?>" aria-hidden="true" tabindex="-1"></iframe>
+	<iframe id="ag-scan-frame" class="ag-scan-frame" title="<?php esc_attr_e( 'Accessibility scan frame', 'accessibility-guardian' ); ?>" aria-hidden="true" tabindex="-1" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
 </div>

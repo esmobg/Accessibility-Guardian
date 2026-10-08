@@ -63,9 +63,48 @@ final class UrlProvider {
 			}
 		}
 
+		/**
+		 * Filters the URL queue of a full-site scan before it is capped.
+		 *
+		 * Each entry is an array with `url` (string), `post_id` (int) and `label` (string).
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param array<int, array{url:string,post_id:int,label:string}> $urls  URLs to scan, in order.
+		 * @param int                                                    $limit Maximum number of URLs that will be scanned.
+		 */
+		$filtered = apply_filters( 'accg_scan_urls', $urls, $limit );
+		if ( is_array( $filtered ) ) {
+			$urls = $this->sanitize_entries( $filtered );
+		}
+
 		$urls = $this->deduplicate( $urls );
 
 		return array_slice( $urls, 0, $limit );
+	}
+
+	/**
+	 * Keep only well-formed queue entries (used after the accg_scan_urls filter).
+	 *
+	 * @param array<int|string, mixed> $entries Raw entries.
+	 * @return array<int, array{url:string,post_id:int,label:string}>
+	 */
+	private function sanitize_entries( array $entries ): array {
+		$clean = array();
+
+		foreach ( $entries as $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['url'] ) || ! is_string( $entry['url'] ) ) {
+				continue;
+			}
+
+			$clean[] = array(
+				'url'     => $entry['url'],
+				'post_id' => isset( $entry['post_id'] ) ? (int) $entry['post_id'] : 0,
+				'label'   => isset( $entry['label'] ) && is_string( $entry['label'] ) && '' !== $entry['label'] ? $entry['label'] : $entry['url'],
+			);
+		}
+
+		return $clean;
 	}
 
 	/**
@@ -132,6 +171,11 @@ final class UrlProvider {
 				'order'                  => 'ASC',
 			)
 		);
+
+		// Load all posts in one query instead of one query per permalink/title lookup.
+		if ( function_exists( '_prime_post_caches' ) && ! empty( $query->posts ) ) {
+			_prime_post_caches( array_map( 'intval', $query->posts ), false, false );
+		}
 
 		$entries = array();
 

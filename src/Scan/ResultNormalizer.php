@@ -72,10 +72,13 @@ final class ResultNormalizer {
 	private function build_rows( array $result, string $url, int $post_id, bool $is_incomplete ): array {
 		$rule_id = isset( $result['id'] ) ? sanitize_key( (string) $result['id'] ) : '';
 		$impact  = isset( $result['impact'] ) ? sanitize_text_field( (string) $result['impact'] ) : '';
-		$help    = isset( $result['help'] ) ? sanitize_text_field( (string) $result['help'] ) : '';
+		$help    = isset( $result['help'] ) ? $this->readable_text( (string) $result['help'] ) : '';
+
+		// Best-practice rules (headings, landmarks, ...) are advisory, not WCAG failures.
+		$best_practice = ! empty( $result['bestPractice'] );
 
 		$meta     = $this->catalog->get( $rule_id, $impact );
-		$severity = $is_incomplete ? 'warning' : $meta['severity'];
+		$severity = ( $is_incomplete || $best_practice ) ? 'warning' : $meta['severity'];
 
 		$nodes = isset( $result['nodes'] ) && is_array( $result['nodes'] ) ? $result['nodes'] : array();
 
@@ -90,7 +93,7 @@ final class ResultNormalizer {
 			$node    = is_array( $node ) ? $node : array();
 			$snippet = isset( $node['html'] ) ? (string) $node['html'] : '';
 			$target  = $this->target_to_path( $node['target'] ?? array() );
-			$summary = isset( $node['failureSummary'] ) ? (string) $node['failureSummary'] : '';
+			$summary = isset( $node['failureSummary'] ) ? $this->readable_text( (string) $node['failureSummary'] ) : '';
 
 			$message = '' !== $help ? $help : $summary;
 			if ( $is_incomplete ) {
@@ -109,7 +112,7 @@ final class ResultNormalizer {
 				'severity'       => $severity,
 				'category'       => $meta['category'],
 				'impact'         => $impact,
-				'message'        => wp_strip_all_tags( $message ),
+				'message'        => $message,
 				'html_snippet'   => $this->truncate( $snippet, 2000 ),
 				'dom_path'       => $this->truncate( $target, 1000 ),
 				'fix_suggestion' => $meta['fix'],
@@ -185,6 +188,18 @@ final class ResultNormalizer {
 		}
 
 		return sanitize_text_field( (string) $target );
+	}
+
+	/**
+	 * Sanitize rule text while keeping element names such as "<ul>" readable.
+	 *
+	 * The angle brackets are stored as entities so sanitize_text_field() does
+	 * not strip them as tags; esc_html() renders them as text on output.
+	 *
+	 * @param string $value Raw text from axe-core.
+	 */
+	private function readable_text( string $value ): string {
+		return sanitize_text_field( str_replace( array( '<', '>' ), array( '&lt;', '&gt;' ), $value ) );
 	}
 
 	/**

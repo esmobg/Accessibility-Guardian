@@ -1,8 +1,10 @@
 /**
  * Accessibility Guardian - front-end automatic fixes.
  *
- * Applies opt-in DOM remediations on page load based on flags supplied by the
- * server. CSS-only fixes are handled via body classes, not here.
+ * Applies opt-in DOM remediations based on flags supplied by the server.
+ * CSS-only fixes are handled via body classes, not here. Fixes are re-applied
+ * to content inserted later (for example by the Interactivity API router or
+ * "load more" buttons) through a MutationObserver.
  */
 ( function () {
 	'use strict';
@@ -10,6 +12,14 @@
 	var config = window.accgFixes || {};
 	var flags = config.flags || {};
 	var i18n = config.i18n || {};
+
+	function each( root, selector, callback ) {
+		var scope = root && root.querySelectorAll ? root : document;
+		Array.prototype.forEach.call( scope.querySelectorAll( selector ), callback );
+		if ( scope !== document && scope.matches && scope.matches( selector ) ) {
+			callback( scope );
+		}
+	}
 
 	function ensureHtmlLang() {
 		var html = document.documentElement;
@@ -33,9 +43,8 @@
 		meta.setAttribute( 'content', content.replace( /^[,\s]+/, '' ) );
 	}
 
-	function removePositiveTabindex() {
-		var nodes = document.querySelectorAll( '[tabindex]' );
-		Array.prototype.forEach.call( nodes, function ( el ) {
+	function removePositiveTabindex( root ) {
+		each( root, '[tabindex]', function ( el ) {
 			var value = parseInt( el.getAttribute( 'tabindex' ), 10 );
 			if ( ! isNaN( value ) && value > 0 ) {
 				el.setAttribute( 'tabindex', '0' );
@@ -43,21 +52,35 @@
 		} );
 	}
 
-	function removeTitleAttr() {
-		var nodes = document.querySelectorAll( 'a[title], input[title], button[title]' );
-		Array.prototype.forEach.call( nodes, function ( el ) {
-			var text = ( el.textContent || el.value || '' ).trim();
-			if ( text ) {
+	/**
+	 * Whether a form field has an accessible name other than its title.
+	 */
+	function fieldHasOtherName( field ) {
+		if ( field.getAttribute( 'aria-label' ) || field.getAttribute( 'aria-labelledby' ) || field.closest( 'label' ) ) {
+			return true;
+		}
+		if ( field.labels && field.labels.length ) {
+			return true;
+		}
+		var type = ( field.getAttribute( 'type' ) || '' ).toLowerCase();
+		return ( type === 'submit' || type === 'button' || type === 'reset' ) && !! ( field.value || '' ).trim();
+	}
+
+	function removeTitleAttr( root ) {
+		each( root, 'a[title], button[title], input[title]', function ( el ) {
+			var redundant = el.nodeName === 'INPUT'
+				? fieldHasOtherName( el )
+				: !! ( el.textContent || '' ).trim();
+			if ( redundant ) {
 				el.removeAttribute( 'title' );
 			}
 		} );
 	}
 
-	function newWindowWarning() {
+	function newWindowWarning( root ) {
 		var notice = i18n.newWindow || '(opens in a new window)';
-		var links = document.querySelectorAll( 'a[target="_blank"]' );
-		Array.prototype.forEach.call( links, function ( link ) {
-			if ( link.getAttribute( 'data-ag-new-window' ) ) {
+		each( root, 'a[target="_blank"]', function ( link ) {
+			if ( link.getAttribute( 'data-accg-new-window' ) ) {
 				return;
 			}
 			var label = ( link.getAttribute( 'aria-label' ) || link.textContent || '' ).toLowerCase();
@@ -65,14 +88,68 @@
 				return;
 			}
 			var span = document.createElement( 'span' );
-			span.className = 'screen-reader-text ag-new-window-note';
+			span.className = 'screen-reader-text accg-new-window-note';
 			span.textContent = ' ' + notice;
 			link.appendChild( span );
-			if ( ! link.getAttribute( 'rel' ) || ! /noopener/.test( link.getAttribute( 'rel' ) ) ) {
+			if ( ! /noopener/.test( link.getAttribute( 'rel' ) || '' ) ) {
 				link.setAttribute( 'rel', ( ( link.getAttribute( 'rel' ) || '' ) + ' noopener' ).trim() );
 			}
-			link.setAttribute( 'data-ag-new-window', '1' );
+			link.setAttribute( 'data-accg-new-window', '1' );
 		} );
+	}
+
+	/**
+	 * Fixes that apply to individual elements and must be re-run on new content.
+	 */
+	function applyElementFixes( root ) {
+		if ( flags.removePositiveTabindex ) {
+			removePositiveTabindex( root );
+		}
+		if ( flags.removeTitleAttr ) {
+			removeTitleAttr( root );
+		}
+		if ( flags.newWindowWarning ) {
+			newWindowWarning( root );
+		}
+	}
+
+	function observe() {
+		if ( ! window.MutationObserver || ! document.body ) {
+			return;
+		}
+		if ( ! flags.removePositiveTabindex && ! flags.removeTitleAttr && ! flags.newWindowWarning ) {
+			return;
+		}
+
+		var pending = [];
+		var scheduled = false;
+
+		var observer = new window.MutationObserver( function ( mutations ) {
+			mutations.forEach( function ( mutation ) {
+				Array.prototype.forEach.call( mutation.addedNodes, function ( node ) {
+					if ( node.nodeType === 1 && ! ( node.classList && node.classList.contains( 'accg-new-window-note' ) ) ) {
+						pending.push( node );
+					}
+				} );
+			} );
+			if ( ! pending.length || scheduled ) {
+				return;
+			}
+			scheduled = true;
+			// setTimeout rather than requestAnimationFrame: rAF is paused in background tabs.
+			window.setTimeout( function () {
+				var nodes = pending;
+				pending = [];
+				scheduled = false;
+				nodes.forEach( function ( node ) {
+					if ( node.isConnected ) {
+						applyElementFixes( node );
+					}
+				} );
+			}, 50 );
+		} );
+
+		observer.observe( document.body, { childList: true, subtree: true } );
 	}
 
 	function init() {
@@ -82,15 +159,8 @@
 		if ( flags.fixViewport ) {
 			fixViewport();
 		}
-		if ( flags.removePositiveTabindex ) {
-			removePositiveTabindex();
-		}
-		if ( flags.removeTitleAttr ) {
-			removeTitleAttr();
-		}
-		if ( flags.newWindowWarning ) {
-			newWindowWarning();
-		}
+		applyElementFixes( document );
+		observe();
 	}
 
 	if ( document.readyState === 'loading' ) {

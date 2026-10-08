@@ -18,6 +18,19 @@ defined( 'ABSPATH' ) || exit;
 final class AutoFixer {
 
 	/**
+	 * Fixes implemented by assets/js/frontend-fixes.js (the rest are CSS or PHP only).
+	 *
+	 * @var array<int, string>
+	 */
+	private const JS_FIXES = array(
+		'add_html_lang',
+		'new_window_warning',
+		'fix_viewport',
+		'remove_positive_tabindex',
+		'remove_title_attr',
+	);
+
+	/**
 	 * Enabled fix flags keyed by fix id.
 	 *
 	 * @var array<string, bool>
@@ -80,6 +93,19 @@ final class AutoFixer {
 	}
 
 	/**
+	 * Whether any enabled fix needs the front-end script.
+	 */
+	private function needs_script(): bool {
+		foreach ( self::JS_FIXES as $key ) {
+			if ( $this->on( $key ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Enqueue the front-end fix assets and pass the active flags to JS.
 	 */
 	public function enqueue_assets(): void {
@@ -90,12 +116,19 @@ final class AutoFixer {
 			ACCG_VERSION
 		);
 
+		if ( ! $this->needs_script() ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'accg-frontend-fixes',
 			ACCG_PLUGIN_URL . 'assets/js/frontend-fixes.js',
 			array(),
 			ACCG_VERSION,
-			true
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 
 		wp_localize_script(
@@ -103,11 +136,11 @@ final class AutoFixer {
 			'accgFixes',
 			array(
 				'flags' => array(
-					'ensureHtmlLang'        => $this->on( 'add_html_lang' ),
-					'newWindowWarning'      => $this->on( 'new_window_warning' ),
-					'fixViewport'           => $this->on( 'fix_viewport' ),
+					'ensureHtmlLang'         => $this->on( 'add_html_lang' ),
+					'newWindowWarning'       => $this->on( 'new_window_warning' ),
+					'fixViewport'            => $this->on( 'fix_viewport' ),
 					'removePositiveTabindex' => $this->on( 'remove_positive_tabindex' ),
-					'removeTitleAttr'       => $this->on( 'remove_title_attr' ),
+					'removeTitleAttr'        => $this->on( 'remove_title_attr' ),
 				),
 				'lang'  => str_replace( '_', '-', get_bloginfo( 'language' ) ),
 				'i18n'  => array(
@@ -120,16 +153,20 @@ final class AutoFixer {
 	/**
 	 * Add body classes that enable CSS-only fixes.
 	 *
-	 * @param array<int, string> $classes Existing body classes.
-	 * @return array<int, string>
+	 * @param mixed $classes Existing body classes.
+	 * @return mixed
 	 */
-	public function add_body_classes( array $classes ): array {
+	public function add_body_classes( $classes ) {
+		if ( ! is_array( $classes ) ) {
+			return $classes;
+		}
+
 		if ( $this->on( 'add_focus_outline' ) ) {
-			$classes[] = 'ag-fix-focus-outline';
+			$classes[] = 'accg-fix-focus-outline';
 		}
 
 		if ( $this->on( 'underline_links' ) ) {
-			$classes[] = 'ag-fix-underline-links';
+			$classes[] = 'accg-fix-underline-links';
 		}
 
 		return $classes;
@@ -137,15 +174,22 @@ final class AutoFixer {
 
 	/**
 	 * Output a skip-to-content link at the top of the page.
+	 *
+	 * Block themes already receive a skip link from WordPress core, so a second
+	 * one is only added for classic themes.
 	 */
 	public function render_skip_link(): void {
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			return;
+		}
+
 		$target = apply_filters( 'accg_skip_link_target', '#content' );
 		if ( ! is_string( $target ) || '' === $target ) {
 			$target = '#content';
 		}
 
 		printf(
-			'<a class="ag-skip-link screen-reader-text" href="%s">%s</a>',
+			'<a class="accg-skip-link screen-reader-text" href="%s">%s</a>',
 			esc_url( $target ),
 			esc_html__( 'Skip to content', 'accessibility-guardian' )
 		);
@@ -154,10 +198,11 @@ final class AutoFixer {
 	/**
 	 * Ensure the default search form field has an accessible label.
 	 *
-	 * @param string $form Search form markup.
+	 * @param mixed $form Search form markup (other filters may return null).
+	 * @return mixed
 	 */
-	public function label_search_form( string $form ): string {
-		if ( false !== strpos( $form, 'aria-label' ) ) {
+	public function label_search_form( $form ) {
+		if ( ! is_string( $form ) || false !== strpos( $form, 'aria-label' ) ) {
 			return $form;
 		}
 
