@@ -37,6 +37,13 @@ final class CsvExporter {
 	);
 
 	/**
+	 * Characters that make spreadsheet applications treat a cell as a formula.
+	 *
+	 * @var array<int, string>
+	 */
+	private const FORMULA_TRIGGERS = array( '=', '+', '-', '@', "\t", "\r" );
+
+	/**
 	 * Build the CSV body for a set of issue rows.
 	 *
 	 * @param array<int, array<string, mixed>> $issues Issue rows.
@@ -46,14 +53,20 @@ final class CsvExporter {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- In-memory CSV buffer, not a disk file.
 		$stream = fopen( 'php://temp', 'r+' );
 
-		fputcsv( $stream, self::COLUMNS );
+		// Pass every fputcsv() argument explicitly: omitting $escape is deprecated since PHP 8.4.
+		fputcsv( $stream, self::COLUMNS, ',', '"', '\\' );
 
 		foreach ( $issues as $issue ) {
 			$row = array();
 			foreach ( self::COLUMNS as $column ) {
-				$row[] = (string) ( $issue[ $column ] ?? '' );
+				$value = (string) ( $issue[ $column ] ?? '' );
+				if ( 'message' === $column || 'fix_suggestion' === $column ) {
+					// These keep element names as entities (e.g. "&lt;ul&gt;"); export plain text.
+					$value = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+				}
+				$row[] = self::neutralize_formula( $value );
 			}
-			fputcsv( $stream, $row );
+			fputcsv( $stream, $row, ',', '"', '\\' );
 		}
 
 		rewind( $stream );
@@ -62,6 +75,19 @@ final class CsvExporter {
 		fclose( $stream );
 
 		return $content;
+	}
+
+	/**
+	 * Prevent spreadsheet apps from evaluating scanned page content as a formula.
+	 *
+	 * @param string $value Cell value.
+	 */
+	public static function neutralize_formula( string $value ): string {
+		if ( '' !== $value && in_array( $value[0], self::FORMULA_TRIGGERS, true ) ) {
+			return "'" . $value;
+		}
+
+		return $value;
 	}
 
 	/**

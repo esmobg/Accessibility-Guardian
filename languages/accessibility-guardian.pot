@@ -2,29 +2,29 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Accessibility Guardian 1.1.1\n"
+"Project-Id-Version: Accessibility Guardian 1.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/accessibility-guardian\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-13T11:15:26+00:00\n"
+"POT-Creation-Date: 2026-10-08T13:38:54+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: accessibility-guardian\n"
 
 #. Plugin Name of the plugin
 #: accessibility-guardian.php
-#: src/Admin/AdminMenu.php:92
-#: src/Admin/AdminMenu.php:93
-#: templates/dashboard.php:45
+#: src/Admin/AdminMenu.php:137
+#: src/Admin/AdminMenu.php:138
+#: templates/dashboard.php:62
 msgid "Accessibility Guardian"
 msgstr ""
 
 #. Plugin URI of the plugin
 #: accessibility-guardian.php
-msgid "https://github.com/esmobg/accessibility-guardian"
+msgid "https://github.com/esmobg/Accessibility-Guardian"
 msgstr ""
 
 #. Description of the plugin
@@ -46,160 +46,182 @@ msgstr ""
 msgid "Accessibility Guardian requires PHP 8.0 or later."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:103
-#: src/Admin/AdminMenu.php:104
+#: src/Admin/AdminMenu.php:118
+msgid "Scan accessibility"
+msgstr ""
+
+#: src/Admin/AdminMenu.php:148
+#: src/Admin/AdminMenu.php:149
 msgid "Dashboard"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:112
-#: src/Admin/AdminMenu.php:113
+#: src/Admin/AdminMenu.php:157
+#: src/Admin/AdminMenu.php:158
 msgid "Run Scan"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:121
-#: src/Admin/AdminMenu.php:122
+#: src/Admin/AdminMenu.php:166
+#: src/Admin/AdminMenu.php:167
 msgid "Issues"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:130
-#: src/Admin/AdminMenu.php:131
+#: src/Admin/AdminMenu.php:175
+#: src/Admin/AdminMenu.php:176
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/AdminMenu.php:272
+#: src/Admin/AdminMenu.php:326
 msgid "You are not allowed to manage these settings."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:308
+#: src/Admin/AdminMenu.php:362
 msgid "Settings saved."
 msgstr ""
 
-#: src/Admin/AdminMenu.php:321
+#: src/Admin/AdminMenu.php:375
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: src/Admin/AssetManager.php:57
+#: src/Admin/AssetManager.php:81
 msgid "Links must use descriptive text"
 msgstr ""
 
-#: src/Admin/AssetManager.php:58
+#: src/Admin/AssetManager.php:82
 msgid "Link text does not describe its destination."
 msgstr ""
 
-#: src/Admin/AssetManager.php:59
+#: src/Admin/AssetManager.php:83
 msgid "Placeholder is not a substitute for a label"
 msgstr ""
 
-#: src/Admin/AssetManager.php:60
+#: src/Admin/AssetManager.php:84
 msgid "Field relies on placeholder text instead of a persistent label."
 msgstr ""
 
-#: src/Admin/AssetManager.php:61
+#: src/Admin/AssetManager.php:85
 msgid "Warn users when links open new windows"
 msgstr ""
 
-#: src/Admin/AssetManager.php:62
+#: src/Admin/AssetManager.php:86
 msgid "Link opens in a new window without warning the user."
 msgstr ""
 
-#: src/Admin/AssetManager.php:63
+#: src/Admin/AssetManager.php:87
 msgid "Verify accessibility of linked PDF documents"
 msgstr ""
 
-#: src/Admin/AssetManager.php:64
+#: src/Admin/AssetManager.php:88
 msgid "Linked PDF detected; verify it is tagged and accessible."
 msgstr ""
 
-#: src/Admin/AssetManager.php:98
+#: src/Admin/AssetManager.php:148
 msgid "Preparing scan…"
 msgstr ""
 
-#: src/Admin/AssetManager.php:99
+#: src/Admin/AssetManager.php:149
 msgid "Scanning"
 msgstr ""
 
-#: src/Admin/AssetManager.php:100
+#: src/Admin/AssetManager.php:150
 msgid "Queued URLs"
 msgstr ""
 
-#: src/Admin/AssetManager.php:101
+#: src/Admin/AssetManager.php:151
 msgid "issues"
 msgstr ""
 
-#: src/Admin/AssetManager.php:102
+#: src/Admin/AssetManager.php:152
 msgid "could not be scanned"
 msgstr ""
 
-#: src/Admin/AssetManager.php:103
+#: src/Admin/AssetManager.php:153
 msgid "results could not be saved"
 msgstr ""
 
-#: src/Admin/AssetManager.php:104
+#: src/Admin/AssetManager.php:154
 msgid "Scan complete"
 msgstr ""
 
-#: src/Admin/AssetManager.php:105
-#: templates/dashboard.php:195
+#: src/Admin/AssetManager.php:155
+#: templates/dashboard.php:216
 msgid "Score"
 msgstr ""
 
-#: src/Admin/AssetManager.php:106
+#: src/Admin/AssetManager.php:156
 msgid "Cancelling after current page…"
 msgstr ""
 
-#: src/Admin/AssetManager.php:107
+#: src/Admin/AssetManager.php:157
 msgid "Scan cancelled"
 msgstr ""
 
-#: src/Admin/AssetManager.php:108
+#: src/Admin/AssetManager.php:158
 msgid "Could not start scan. Please reload the page and try again."
 msgstr ""
 
-#: src/Admin/AssetManager.php:109
+#: src/Admin/AssetManager.php:159
 msgid "Scan could not be finalized."
 msgstr ""
 
-#: src/Admin/AssetManager.php:110
+#: src/Admin/AssetManager.php:160
 msgid "Connection problem while talking to the server."
 msgstr ""
 
-#: src/Admin/AssetManager.php:111
+#: src/Admin/AssetManager.php:161
 msgid "pages could not be scanned"
 msgstr ""
 
-#: src/Admin/AssetManager.php:129
-#: templates/dashboard.php:155
+#: src/Admin/AssetManager.php:179
+#: templates/dashboard.php:176
 msgid "No history yet."
 msgstr ""
 
 #. translators: %d: accessibility score.
-#: src/Admin/AssetManager.php:131
+#: src/Admin/AssetManager.php:181
 #, php-format
 msgid "Latest accessibility score %d out of 100"
 msgstr ""
 
-#: src/Export/ExportController.php:60
+#. translators: 1: first score, 2: latest score, 3: number of scans.
+#: src/Admin/AssetManager.php:183
+#, php-format
+msgid "Accessibility score changed from %1$d to %2$d over the last %3$d scans"
+msgstr ""
+
+#. translators: %d: number of scans.
+#: src/Admin/AssetManager.php:185
+#, php-format
+msgid "%d scans"
+msgstr ""
+
+#: src/Export/ExportController.php:61
 msgid "You are not allowed to export reports."
 msgstr ""
 
-#: src/Export/ExportController.php:71
-#: src/Scan/ScanController.php:242
+#: src/Export/ExportController.php:72
 msgid "Scan not found."
 msgstr ""
 
-#: src/Fixes/AutoFixer.php:114
+#: src/Fixes/AutoFixer.php:147
 msgid "(opens in a new window)"
 msgstr ""
 
-#: src/Fixes/AutoFixer.php:150
+#: src/Fixes/AutoFixer.php:194
 msgid "Skip to content"
 msgstr ""
 
-#: src/Fixes/AutoFixer.php:166
+#: src/Fixes/AutoFixer.php:211
 msgid "Search"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:45
+#: src/Rules/RuleCatalog.php:748
+#: src/Rules/RuleCatalog.php:755
+#: src/Rules/RuleCatalog.php:762
+#: src/Rules/RuleCatalog.php:769
+#: src/Rules/RuleCatalog.php:776
+#: src/Rules/RuleCatalog.php:783
+#: src/Rules/RuleCatalog.php:790
 msgid "Best practice"
 msgstr ""
 
@@ -220,7 +242,7 @@ msgid "Add a skip-to-content link"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:69
-msgid "Inserts a keyboard skip link at the top of every page (WCAG 2.4.1)."
+msgid "Inserts a keyboard skip link at the top of every page on classic themes; block themes already get one from WordPress (WCAG 2.4.1)."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:72
@@ -228,7 +250,7 @@ msgid "Add a visible focus outline"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:73
-msgid "Ensures focused links and controls show a clear outline (WCAG 2.4.7)."
+msgid "Ensures links and controls show a clear outline when focused with the keyboard (WCAG 2.4.7)."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:76
@@ -268,7 +290,7 @@ msgid "Add labels to search forms"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:93
-msgid "Adds an accessible label to the default search form field (WCAG 3.3.2)."
+msgid "Adds an accessible label to the classic get_search_form() field; the Search block is already labelled (WCAG 3.3.2)."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:96
@@ -276,7 +298,7 @@ msgid "Remove redundant title attributes"
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:97
-msgid "Strips title attributes from links and inputs that already have visible text."
+msgid "Strips title attributes from links, buttons and fields that already have another accessible name."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:161
@@ -285,7 +307,10 @@ msgstr ""
 #: src/Rules/RuleCatalog.php:182
 #: src/Rules/RuleCatalog.php:189
 #: src/Rules/RuleCatalog.php:196
-#: src/Rules/RuleCatalog.php:584
+#: src/Rules/RuleCatalog.php:651
+#: src/Rules/RuleCatalog.php:711
+#: src/Rules/RuleCatalog.php:718
+#: src/Rules/RuleCatalog.php:820
 msgid "1.1.1 Non-text Content"
 msgstr ""
 
@@ -335,6 +360,12 @@ msgstr ""
 #: src/Rules/RuleCatalog.php:487
 #: src/Rules/RuleCatalog.php:494
 #: src/Rules/RuleCatalog.php:501
+#: src/Rules/RuleCatalog.php:563
+#: src/Rules/RuleCatalog.php:570
+#: src/Rules/RuleCatalog.php:577
+#: src/Rules/RuleCatalog.php:584
+#: src/Rules/RuleCatalog.php:591
+#: src/Rules/RuleCatalog.php:702
 msgid "1.3.1 Info and Relationships"
 msgstr ""
 
@@ -352,7 +383,7 @@ msgstr ""
 
 #: src/Rules/RuleCatalog.php:237
 #: src/Rules/RuleCatalog.php:251
-#: src/Rules/RuleCatalog.php:563
+#: src/Rules/RuleCatalog.php:799
 msgid "2.4.4 Link Purpose (In Context)"
 msgstr ""
 
@@ -375,7 +406,7 @@ msgstr ""
 #: src/Rules/RuleCatalog.php:260
 #: src/Rules/RuleCatalog.php:267
 #: src/Rules/RuleCatalog.php:274
-#: src/Rules/RuleCatalog.php:570
+#: src/Rules/RuleCatalog.php:806
 msgid "3.3.2 Labels or Instructions"
 msgstr ""
 
@@ -414,6 +445,11 @@ msgstr ""
 #: src/Rules/RuleCatalog.php:510
 #: src/Rules/RuleCatalog.php:517
 #: src/Rules/RuleCatalog.php:540
+#: src/Rules/RuleCatalog.php:600
+#: src/Rules/RuleCatalog.php:607
+#: src/Rules/RuleCatalog.php:725
+#: src/Rules/RuleCatalog.php:732
+#: src/Rules/RuleCatalog.php:739
 msgid "4.1.2 Name, Role, Value"
 msgstr ""
 
@@ -598,370 +634,568 @@ msgid "Avoid positive tabindex values; rely on natural DOM order for focus."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:566
-msgid "Replace generic link text such as \"click here\" or \"read more\" with text that describes the destination."
+msgid "Make sure <ul> and <ol> elements only directly contain <li>, <script> or <template> elements."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:573
-msgid "Do not rely on placeholder text as the only label. Add a persistent visible label."
-msgstr ""
-
-#: src/Rules/RuleCatalog.php:577
-msgid "3.2.5 Change on Request"
+msgid "Place every <li> element inside a <ul>, <ol> or an element with role=\"list\"."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:580
-msgid "Warn users when a link opens in a new window, for example by appending \"(opens in new window)\" to the link text."
+msgid "Make sure <dl> elements only contain properly ordered <dt> and <dd> groups, <script>, <template> or <div> elements."
 msgstr ""
 
 #: src/Rules/RuleCatalog.php:587
+msgid "Place <dt> and <dd> elements inside a <dl> element."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:594
+msgid "Use real heading elements (<h2>, <h3>, ...) instead of styling paragraphs to look like headings."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:603
+msgid "Give input buttons discernible text with the value attribute, aria-label or aria-labelledby."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:610
+msgid "Give every <summary> element discernible text."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:614
+#: src/Rules/RuleCatalog.php:621
+#: src/Rules/RuleCatalog.php:658
+msgid "2.1.1 Keyboard"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:617
+msgid "Make scrollable regions reachable by keyboard, for example with tabindex=\"0\" and an accessible name."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:624
+msgid "Do not set tabindex=\"-1\" on frames that contain focusable content."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:628
+msgid "2.5.8 Target Size (Minimum)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:631
+msgid "Make touch targets at least 24 by 24 CSS pixels, or leave enough space around smaller targets."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:635
+msgid "1.3.4 Orientation"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:638
+msgid "Do not lock content to portrait or landscape orientation with CSS."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:642
+msgid "1.4.12 Text Spacing"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:645
+msgid "Do not use !important on inline line-height, letter-spacing or word-spacing styles, so users can adjust text spacing."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:654
+msgid "Give elements with role=\"img\" an accessible name using aria-label or aria-labelledby."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:661
+msgid "Replace server-side image maps with client-side image maps or regular links."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:665
+msgid "1.2.2 Captions (Prerecorded)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:668
+msgid "Provide captions for video with a <track kind=\"captions\"> element."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:672
+msgid "1.2.1 Audio-only and Video-only (Prerecorded)"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:675
+msgid "Provide a transcript or captions for audio content."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:679
+#: src/Rules/RuleCatalog.php:686
+msgid "2.2.2 Pause, Stop, Hide"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:682
+msgid "Remove <blink> elements; blinking content distracts and cannot be paused."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:689
+msgid "Remove <marquee> elements or replace them with content users can pause."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:693
+msgid "2.2.1 Timing Adjustable"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:696
+msgid "Do not refresh or redirect the page automatically with <meta http-equiv=\"refresh\">."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:705
+msgid "Associate every data cell in large tables with a header cell (<th> or headers attribute)."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:714
+msgid "Give elements with role=\"meter\" an accessible name."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:721
+msgid "Give elements with role=\"progressbar\" an accessible name."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:728
+msgid "Give elements with role=\"tooltip\" discernible text."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:735
+msgid "Give elements with role=\"treeitem\" an accessible name."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:742
+msgid "Replace deprecated ARIA roles with a current role."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:751
+msgid "Do not nest the banner (site header) landmark inside another landmark."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:758
+msgid "Do not nest the contentinfo (site footer) landmark inside another landmark."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:765
+msgid "Do not nest the main landmark inside another landmark."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:772
+msgid "Keep complementary (aside) landmarks at the top level of the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:779
+msgid "Use only one banner (site header) landmark per page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:786
+msgid "Use only one contentinfo (site footer) landmark per page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:793
+msgid "Make sure the skip link points to an element that exists on the page."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:802
+msgid "Replace generic link text such as \"click here\" or \"read more\" with text that describes the destination."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:809
+msgid "Do not rely on placeholder text as the only label. Add a persistent visible label."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:813
+msgid "3.2.5 Change on Request"
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:816
+msgid "Warn users when a link opens in a new window, for example by appending \"(opens in new window)\" to the link text."
+msgstr ""
+
+#: src/Rules/RuleCatalog.php:823
 msgid "Linked PDF detected. Verify the PDF is tagged and accessible; automated checks cannot validate PDF contents."
 msgstr ""
 
 #. translators: %s: rule description.
-#: src/Scan/ResultNormalizer.php:99
+#: src/Scan/ResultNormalizer.php:102
 #, php-format
 msgid "Needs manual review: %s"
 msgstr ""
 
-#: src/Scan/ScanController.php:106
+#: src/Scan/ScanController.php:110
 msgid "No scannable URLs were found."
 msgstr ""
 
-#: src/Scan/ScanController.php:115
+#: src/Scan/ScanController.php:119
 msgid "Unable to create a scan record."
 msgstr ""
 
-#: src/Scan/ScanController.php:145
+#: src/Scan/ScanController.php:149
 msgid "Invalid scan payload."
 msgstr ""
 
-#: src/Scan/ScanController.php:149
+#: src/Scan/ScanController.php:153
 msgid "Scan payload is too large."
 msgstr ""
 
-#: src/Scan/ScanController.php:155
-#: src/Scan/ScanController.php:207
+#: src/Scan/ScanController.php:159
+#: src/Scan/ScanController.php:212
 msgid "Scan is not running."
 msgstr ""
 
-#: src/Scan/ScanController.php:161
+#: src/Scan/ScanController.php:165
 msgid "Malformed scan payload."
 msgstr ""
 
-#: src/Scan/ScanController.php:187
+#: src/Scan/ScanController.php:192
 msgid "Invalid scan id."
 msgstr ""
 
-#: src/Scan/ScanController.php:260
+#: src/Scan/ScanController.php:259
 msgid "You are not allowed to run scans."
 msgstr ""
 
-#: src/Scan/ScoreCalculator.php:80
+#: src/Scan/ScoreCalculator.php:109
 msgid "Excellent"
 msgstr ""
 
-#: src/Scan/ScoreCalculator.php:87
+#: src/Scan/ScoreCalculator.php:116
 msgid "Good"
 msgstr ""
 
-#: src/Scan/ScoreCalculator.php:94
+#: src/Scan/ScoreCalculator.php:123
 msgid "Needs Improvement"
 msgstr ""
 
-#: src/Scan/ScoreCalculator.php:100
+#: src/Scan/ScoreCalculator.php:129
 msgid "Poor"
 msgstr ""
 
-#: src/Scan/UrlProvider.php:31
+#: src/Scan/UrlProvider.php:51
 msgid "Home page"
 msgstr ""
 
 #. translators: 1: taxonomy name, 2: term name.
-#: src/Scan/UrlProvider.php:175
+#: src/Scan/UrlProvider.php:239
 #, php-format
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: templates/dashboard.php:50
+#: templates/dashboard.php:39
+msgid "Running"
+msgstr ""
+
+#: templates/dashboard.php:40
+msgid "Complete"
+msgstr ""
+
+#: templates/dashboard.php:41
+msgid "Cancelled"
+msgstr ""
+
+#: templates/dashboard.php:42
+msgid "Failed"
+msgstr ""
+
+#: templates/dashboard.php:68
 msgid "No scans yet. Run your first accessibility scan to see results here."
 msgstr ""
 
-#: templates/dashboard.php:52
+#: templates/dashboard.php:70
 msgid "Run your first scan"
 msgstr ""
 
-#: templates/dashboard.php:58
+#: templates/dashboard.php:76
 msgid "Run new scan"
 msgstr ""
 
-#: templates/dashboard.php:61
+#: templates/dashboard.php:79
 msgid "Export:"
 msgstr ""
 
 #. translators: %d: score.
-#: templates/dashboard.php:70
+#: templates/dashboard.php:88
 #, php-format
 msgid "Accessibility score %d out of 100"
 msgstr ""
 
-#: templates/dashboard.php:79
+#: templates/dashboard.php:95
+msgid "Site score is the average across scanned pages."
+msgstr ""
+
+#: templates/dashboard.php:100
 msgid "Pages scanned"
 msgstr ""
 
-#: templates/dashboard.php:83
-#: templates/dashboard.php:196
+#: templates/dashboard.php:104
+#: templates/dashboard.php:217
 msgid "Errors"
 msgstr ""
 
-#: templates/dashboard.php:87
-#: templates/dashboard.php:197
-#: templates/scan.php:86
+#: templates/dashboard.php:108
+#: templates/dashboard.php:218
+#: templates/scan.php:102
 msgid "Warnings"
 msgstr ""
 
-#: templates/dashboard.php:91
+#: templates/dashboard.php:112
 msgid "Passed checks"
 msgstr ""
 
-#: templates/dashboard.php:98
+#: templates/dashboard.php:119
 msgid "Issues by severity"
 msgstr ""
 
-#: templates/dashboard.php:102
-#: templates/issues.php:21
-#: templates/scan.php:74
+#: templates/dashboard.php:123
+#: templates/issues.php:34
+#: templates/scan.php:90
 msgid "Critical"
 msgstr ""
 
-#: templates/dashboard.php:103
-#: templates/issues.php:22
-#: templates/scan.php:78
+#: templates/dashboard.php:124
+#: templates/issues.php:35
+#: templates/scan.php:94
 msgid "Major"
 msgstr ""
 
-#: templates/dashboard.php:104
-#: templates/issues.php:23
-#: templates/scan.php:82
+#: templates/dashboard.php:125
+#: templates/issues.php:36
+#: templates/scan.php:98
 msgid "Minor"
 msgstr ""
 
-#: templates/dashboard.php:105
-#: templates/issues.php:24
+#: templates/dashboard.php:126
+#: templates/issues.php:37
 msgid "Warning"
 msgstr ""
 
 #. translators: 1: count, 2: severity label.
-#: templates/dashboard.php:114
+#: templates/dashboard.php:135
 #, php-format
 msgid "View %1$d %2$s issues"
 msgstr ""
 
-#: templates/dashboard.php:128
+#: templates/dashboard.php:149
 msgid "WCAG category distribution"
 msgstr ""
 
-#: templates/dashboard.php:130
-#: templates/dashboard.php:161
+#: templates/dashboard.php:151
+#: templates/dashboard.php:182
 msgid "No issues recorded."
 msgstr ""
 
-#: templates/dashboard.php:152
+#: templates/dashboard.php:173
 msgid "Progress over time"
 msgstr ""
 
-#: templates/dashboard.php:159
+#: templates/dashboard.php:180
 msgid "Most common problems"
 msgstr ""
 
-#: templates/dashboard.php:166
+#: templates/dashboard.php:187
 msgid "Rule"
 msgstr ""
 
-#: templates/dashboard.php:167
+#: templates/dashboard.php:188
 msgid "WCAG"
 msgstr ""
 
-#: templates/dashboard.php:168
+#: templates/dashboard.php:189
 msgid "Severity"
 msgstr ""
 
-#: templates/dashboard.php:169
+#: templates/dashboard.php:190
 msgid "Count"
 msgstr ""
 
-#: templates/dashboard.php:188
+#: templates/dashboard.php:209
 msgid "Recent scans"
 msgstr ""
 
-#: templates/dashboard.php:192
+#: templates/dashboard.php:213
 msgid "Date"
 msgstr ""
 
-#: templates/dashboard.php:193
+#: templates/dashboard.php:214
 msgid "Type"
 msgstr ""
 
-#: templates/dashboard.php:194
+#: templates/dashboard.php:215
 msgid "Pages"
 msgstr ""
 
-#: templates/dashboard.php:198
+#: templates/dashboard.php:219
 msgid "Status"
 msgstr ""
 
-#: templates/issues.php:32
+#: templates/issues.php:45
 msgid "Accessibility Issues"
 msgstr ""
 
-#: templates/issues.php:37
+#: templates/issues.php:51
 msgid "No scans yet. Run a scan to see categorized issues here."
 msgstr ""
 
-#: templates/issues.php:44
+#: templates/issues.php:58
 msgid "All"
 msgstr ""
 
-#: templates/issues.php:60
+#: templates/issues.php:74
 msgid "No issues in this category. Great work!"
 msgstr ""
 
-#: templates/issues.php:80
+#: templates/issues.php:94
 msgid "Page:"
 msgstr ""
 
-#: templates/issues.php:89
+#: templates/issues.php:97
+#: templates/issues.php:136
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: templates/issues.php:104
 msgid "Element:"
 msgstr ""
 
-#: templates/issues.php:99
+#: templates/issues.php:114
 msgid "Recommended fix:"
 msgstr ""
 
 #. translators: %s: auto-fix option name.
-#: templates/issues.php:110
+#: templates/issues.php:125
 #, php-format
 msgid "Auto-fix available: %s"
 msgstr ""
 
-#: templates/issues.php:114
+#: templates/issues.php:129
 msgid "Enable"
 msgstr ""
 
-#: templates/issues.php:119
+#: templates/issues.php:134
 msgid "Documentation"
 msgstr ""
 
-#: templates/issues.php:138
+#: templates/issues.php:154
 msgid "&laquo; Previous"
 msgstr ""
 
-#: templates/issues.php:139
+#: templates/issues.php:155
 msgid "Next &raquo;"
 msgstr ""
 
-#: templates/issues.php:144
+#: templates/issues.php:160
 msgid "Issues pagination"
 msgstr ""
 
-#: templates/scan.php:17
+#: templates/scan.php:24
 msgid "Run Accessibility Scan"
 msgstr ""
 
-#: templates/scan.php:21
+#: templates/scan.php:29
 msgid "Scanning runs in your browser using axe-core against the rendered front-end of each page. Keep this tab open until the scan completes."
 msgstr ""
 
+#. translators: %d: maximum URLs in a full-site scan.
+#: templates/scan.php:34
+#, php-format
+msgid "A full-site scan includes at most %d URLs (filter: accg_scan_url_limit)."
+msgstr ""
+
 #. translators: %s: post title.
-#: templates/scan.php:30
+#: templates/scan.php:46
 #, php-format
 msgid "Single page scan: %s"
 msgstr ""
 
-#: templates/scan.php:37
+#: templates/scan.php:53
 msgid "Start single page scan"
 msgstr ""
 
-#: templates/scan.php:42
+#: templates/scan.php:58
 msgid "Start full site scan"
 msgstr ""
 
-#: templates/scan.php:47
+#: templates/scan.php:63
 msgid "Cancel"
 msgstr ""
 
-#: templates/scan.php:57
+#: templates/scan.php:73
 msgid "Scan progress"
 msgstr ""
 
-#: templates/scan.php:68
+#: templates/scan.php:84
 msgid "Scan finished"
 msgstr ""
 
-#: templates/scan.php:92
+#: templates/scan.php:108
 msgid "Review issues"
 msgstr ""
 
-#: templates/scan.php:95
+#: templates/scan.php:111
 msgid "Open dashboard"
 msgstr ""
 
-#: templates/scan.php:102
-msgid "Accessibility scan sandbox"
+#: templates/scan.php:118
+msgid "Accessibility scan frame"
 msgstr ""
 
-#: templates/settings.php:27
+#: templates/settings.php:32
 msgid "Accessibility Guardian Settings"
 msgstr ""
 
-#: templates/settings.php:36
+#: templates/settings.php:44
 msgid "Content to scan"
 msgstr ""
 
-#: templates/settings.php:39
+#: templates/settings.php:47
 msgid "Post types to include"
 msgstr ""
 
-#: templates/settings.php:50
+#: templates/settings.php:57
 msgid "Choose which public post types are included in full-site scans."
 msgstr ""
 
-#: templates/settings.php:54
+#: templates/settings.php:61
 msgid "Term archives"
 msgstr ""
 
-#: templates/settings.php:58
+#: templates/settings.php:65
 msgid "Include category and tag archive pages"
 msgstr ""
 
-#: templates/settings.php:63
-msgid "Batch size"
-msgstr ""
-
-#: templates/settings.php:67
-msgid "Number of pages processed before progress is reported. Lower values reduce memory use."
-msgstr ""
-
-#: templates/settings.php:71
+#: templates/settings.php:70
 msgid "WCAG level"
 msgstr ""
 
-#: templates/settings.php:74
+#: templates/settings.php:73
 msgid "A"
 msgstr ""
 
-#: templates/settings.php:75
+#: templates/settings.php:74
 msgid "AA (recommended)"
 msgstr ""
 
-#: templates/settings.php:82
-#: templates/settings.php:87
+#: templates/settings.php:79
+msgid "Best-practice checks"
+msgstr ""
+
+#: templates/settings.php:83
+msgid "Also check headings, landmarks and other axe-core best practices"
+msgstr ""
+
+#: templates/settings.php:85
+msgid "These rules are not strict WCAG failures but catch common structural problems such as skipped heading levels, a missing main heading or content outside landmarks."
+msgstr ""
+
+#: templates/settings.php:91
+#: templates/settings.php:96
 msgid "Automatic fixes"
 msgstr ""
 
-#: templates/settings.php:84
+#: templates/settings.php:93
 msgid "Enable safe, site-wide remediations applied automatically on the front end. Each fix is optional; test your site after enabling."
 msgstr ""
 
-#: templates/settings.php:98
+#: templates/settings.php:107
 msgid "Save settings"
 msgstr ""

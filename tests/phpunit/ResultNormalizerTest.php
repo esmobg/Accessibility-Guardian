@@ -137,6 +137,67 @@ final class ResultNormalizerTest extends TestCase {
 		$this->assertStringEndsWith( 'я...', $stored );
 	}
 
+	public function test_best_practice_violations_are_reported_as_warnings(): void {
+		$payload = array(
+			'url'        => 'https://example.com/',
+			'post_id'    => 0,
+			'violations' => array(
+				array(
+					'id'           => 'heading-order',
+					'impact'       => 'moderate',
+					'help'         => 'Heading levels should only increase by one',
+					'bestPractice' => true,
+					'nodes'        => array(
+						array(
+							'html'   => '<h4>Skipped</h4>',
+							'target' => array( 'h4' ),
+						),
+					),
+				),
+				array(
+					'id'     => 'image-alt',
+					'impact' => 'critical',
+					'help'   => 'Images must have alternate text',
+					'nodes'  => array(
+						array(
+							'html'   => '<img src="a.jpg">',
+							'target' => array( 'img' ),
+						),
+					),
+				),
+			),
+		);
+
+		$issues = $this->normalizer->normalize( $payload );
+
+		$this->assertCount( 2, $issues );
+		$this->assertSame( 'heading-order', $issues[0]['rule_id'] );
+		$this->assertSame( 'warning', $issues[0]['severity'] );
+		$this->assertSame( 'headings', $issues[0]['category'] );
+		$this->assertSame( 'critical', $issues[1]['severity'] );
+	}
+
+	public function test_messages_keep_element_names(): void {
+		$payload = array(
+			'url'        => 'https://example.com/',
+			'violations' => array(
+				array(
+					'id'     => 'list',
+					'impact' => 'serious',
+					'help'   => '<ul> and <ol> must only directly contain <li>, <script> or <template> elements',
+					'nodes'  => array( array( 'target' => array( 'ul' ) ) ),
+				),
+			),
+		);
+
+		$issues = $this->normalizer->normalize( $payload );
+
+		$this->assertSame(
+			'&lt;ul&gt; and &lt;ol&gt; must only directly contain &lt;li&gt;, &lt;script&gt; or &lt;template&gt; elements',
+			$issues[0]['message']
+		);
+	}
+
 	public function test_severity_counts_aggregate_correctly(): void {
 		$issues = array(
 			array( 'severity' => 'critical' ),

@@ -19,6 +19,14 @@
 		'continue'
 	];
 
+	/**
+	 * Skip WordPress' own admin toolbar, which is present because the scan
+	 * frame loads pages as the logged-in administrator.
+	 */
+	function inScope( el ) {
+		return ! ( el.closest && el.closest( '#wpadminbar' ) );
+	}
+
 	function textOf( el ) {
 		return ( el.textContent || '' ).replace( /\s+/g, ' ' ).trim().toLowerCase();
 	}
@@ -52,6 +60,9 @@
 		var nodes = [];
 		var links = doc.querySelectorAll( 'a[href]' );
 		Array.prototype.forEach.call( links, function ( link ) {
+			if ( ! inScope( link ) ) {
+				return;
+			}
 			var label = link.getAttribute( 'aria-label' );
 			var text = label ? label.trim().toLowerCase() : textOf( link );
 			if ( text && GENERIC_LINK_TEXT.indexOf( text ) !== -1 ) {
@@ -67,6 +78,9 @@
 		var nodes = [];
 		var fields = doc.querySelectorAll( 'input[placeholder], textarea[placeholder]' );
 		Array.prototype.forEach.call( fields, function ( field ) {
+			if ( ! inScope( field ) ) {
+				return;
+			}
 			var id = field.getAttribute( 'id' );
 			var hasLabel = ( id && doc.querySelector( 'label[for="' + cssEscape( id ) + '"]' ) ) ||
 				field.closest( 'label' ) ||
@@ -85,6 +99,9 @@
 		var nodes = [];
 		var links = doc.querySelectorAll( 'a[target="_blank"]' );
 		Array.prototype.forEach.call( links, function ( link ) {
+			if ( ! inScope( link ) ) {
+				return;
+			}
 			var label = ( link.getAttribute( 'aria-label' ) || link.textContent || '' ).toLowerCase();
 			var warns = /new window|new tab|opens in/.test( label );
 			if ( ! warns ) {
@@ -100,6 +117,9 @@
 		var nodes = [];
 		var links = doc.querySelectorAll( 'a[href]' );
 		Array.prototype.forEach.call( links, function ( link ) {
+			if ( ! inScope( link ) ) {
+				return;
+			}
 			var href = ( link.getAttribute( 'href' ) || '' ).toLowerCase();
 			if ( /\.pdf($|\?|#)/.test( href ) ) {
 				nodes.push( nodeFor( link, i18n.pdfSummary || 'Linked PDF detected; verify it is tagged and accessible.' ) );

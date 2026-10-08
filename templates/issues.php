@@ -4,18 +4,31 @@
  *
  * @package AccessibilityGuardian
  *
- * @var int                                       $scan_id
- * @var string                                    $severity
- * @var int                                       $paged
- * @var int                                       $per_page
- * @var array<string,int>                         $severity_counts
- * @var array<int,array<string,mixed>>            $issues
- * @var \AccessibilityGuardian\Rules\RuleCatalog  $catalog
- * @var string                                    $base_url
- * @var string                                    $settings_url
+ * @var array<string,mixed> $args Template context.
+ *
+ * @var int                                       $accg_scan_id
+ * @var string                                    $accg_severity
+ * @var int                                       $accg_paged
+ * @var int                                       $accg_per_page
+ * @var array<string,int>                         $accg_severity_counts
+ * @var array<int,array<string,mixed>>            $accg_issues
+ * @var \AccessibilityGuardian\Rules\RuleCatalog  $accg_catalog
+ * @var string                                    $accg_base_url
+ * @var string                                    $accg_settings_url
  */
 
 defined( 'ABSPATH' ) || exit;
+
+// Template context passed by AdminMenu::render() via load_template().
+$accg_scan_id         = $args['scan_id'] ?? 0;
+$accg_severity        = $args['severity'] ?? '';
+$accg_paged           = $args['paged'] ?? 1;
+$accg_per_page        = $args['per_page'] ?? 25;
+$accg_severity_counts = $args['severity_counts'] ?? array();
+$accg_issues          = $args['issues'] ?? array();
+$accg_catalog         = $args['catalog'] ?? null;
+$accg_base_url        = $args['base_url'] ?? '';
+$accg_settings_url    = $args['settings_url'] ?? '';
 
 $accg_severity_labels = array(
 	'critical' => __( 'Critical', 'accessibility-guardian' ),
@@ -24,47 +37,48 @@ $accg_severity_labels = array(
 	'warning'  => __( 'Warning', 'accessibility-guardian' ),
 );
 
-$accg_total = array_sum( $severity_counts );
+$accg_total = array_sum( $accg_severity_counts );
 ?>
 <div class="wrap ag-wrap">
 	<h1 class="ag-title">
 		<span class="dashicons dashicons-list-view" aria-hidden="true"></span>
 		<?php esc_html_e( 'Accessibility Issues', 'accessibility-guardian' ); ?>
 	</h1>
+	<hr class="wp-header-end">
 
-	<?php if ( 0 === $scan_id ) : ?>
+	<?php if ( 0 === $accg_scan_id ) : ?>
 		<div class="ag-empty">
 			<p><?php esc_html_e( 'No scans yet. Run a scan to see categorized issues here.', 'accessibility-guardian' ); ?></p>
 		</div>
 	<?php else : ?>
 		<ul class="ag-sev-tabs">
 			<li>
-				<a class="ag-sev-tab <?php echo '' === $severity ? 'is-active' : ''; ?>"
-					href="<?php echo esc_url( add_query_arg( array( 'scan_id' => $scan_id ), $base_url ) ); ?>">
+				<a class="ag-sev-tab <?php echo '' === $accg_severity ? 'is-active' : ''; ?>"
+					href="<?php echo esc_url( add_query_arg( array( 'scan_id' => $accg_scan_id ), $accg_base_url ) ); ?>">
 					<?php esc_html_e( 'All', 'accessibility-guardian' ); ?>
 					<span class="ag-sev-tab__count"><?php echo esc_html( (string) $accg_total ); ?></span>
 				</a>
 			</li>
 			<?php foreach ( $accg_severity_labels as $accg_key => $accg_label ) : ?>
 				<li>
-					<a class="ag-sev-tab ag-sev-tab--<?php echo esc_attr( $accg_key ); ?> <?php echo $severity === $accg_key ? 'is-active' : ''; ?>"
-						href="<?php echo esc_url( add_query_arg( array( 'scan_id' => $scan_id, 'severity' => $accg_key ), $base_url ) ); ?>">
+					<a class="ag-sev-tab ag-sev-tab--<?php echo esc_attr( $accg_key ); ?> <?php echo $accg_severity === $accg_key ? 'is-active' : ''; ?>"
+						href="<?php echo esc_url( add_query_arg( array( 'scan_id' => $accg_scan_id, 'severity' => $accg_key ), $accg_base_url ) ); ?>">
 						<?php echo esc_html( $accg_label ); ?>
-						<span class="ag-sev-tab__count"><?php echo esc_html( (string) ( $severity_counts[ $accg_key ] ?? 0 ) ); ?></span>
+						<span class="ag-sev-tab__count"><?php echo esc_html( (string) ( $accg_severity_counts[ $accg_key ] ?? 0 ) ); ?></span>
 					</a>
 				</li>
 			<?php endforeach; ?>
 		</ul>
 
-		<?php if ( empty( $issues ) ) : ?>
+		<?php if ( empty( $accg_issues ) ) : ?>
 			<p class="ag-muted"><?php esc_html_e( 'No issues in this category. Great work!', 'accessibility-guardian' ); ?></p>
 		<?php else : ?>
 			<div class="ag-issues">
-				<?php foreach ( $issues as $accg_issue ) : ?>
+				<?php foreach ( $accg_issues as $accg_issue ) : ?>
 					<?php
 					$accg_sev      = (string) $accg_issue['severity'];
 					$accg_rule     = (string) $accg_issue['rule_id'];
-					$accg_auto_fix = $catalog->auto_fix_for( $accg_rule );
+					$accg_auto_fix = $accg_catalog->auto_fix_for( $accg_rule );
 					?>
 					<article class="ag-issue ag-issue--<?php echo esc_attr( $accg_sev ); ?>">
 						<header class="ag-issue__head">
@@ -80,6 +94,7 @@ $accg_total = array_sum( $severity_counts );
 								<strong><?php esc_html_e( 'Page:', 'accessibility-guardian' ); ?></strong>
 								<a href="<?php echo esc_url( (string) $accg_issue['url'] ); ?>" target="_blank" rel="noopener noreferrer">
 									<?php echo esc_html( (string) $accg_issue['url'] ); ?>
+									<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'accessibility-guardian' ); ?></span>
 								</a>
 							</p>
 						<?php endif; ?>
@@ -111,13 +126,14 @@ $accg_total = array_sum( $severity_counts );
 										esc_html( $accg_auto_fix['label'] )
 									);
 									?>
-									<a href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( 'Enable', 'accessibility-guardian' ); ?></a>
+									<a href="<?php echo esc_url( $accg_settings_url ); ?>"><?php esc_html_e( 'Enable', 'accessibility-guardian' ); ?></a>
 								</span>
 							<?php endif; ?>
 							<?php if ( '' !== (string) $accg_issue['doc_link'] ) : ?>
 								<a class="ag-issue__doc" href="<?php echo esc_url( (string) $accg_issue['doc_link'] ); ?>" target="_blank" rel="noopener noreferrer">
 									<?php esc_html_e( 'Documentation', 'accessibility-guardian' ); ?>
 									<span class="dashicons dashicons-external" aria-hidden="true"></span>
+									<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'accessibility-guardian' ); ?></span>
 								</a>
 							<?php endif; ?>
 						</footer>
@@ -126,14 +142,14 @@ $accg_total = array_sum( $severity_counts );
 			</div>
 
 			<?php
-			$accg_filtered_total = '' !== $severity ? (int) ( $severity_counts[ $severity ] ?? 0 ) : $accg_total;
-			$accg_total_pages    = (int) max( 1, (int) ceil( $accg_filtered_total / $per_page ) );
+			$accg_filtered_total = '' !== $accg_severity ? (int) ( $accg_severity_counts[ $accg_severity ] ?? 0 ) : $accg_total;
+			$accg_total_pages    = (int) max( 1, (int) ceil( $accg_filtered_total / $accg_per_page ) );
 			if ( $accg_total_pages > 1 ) :
 				$accg_page_links = paginate_links(
 					array(
-						'base'      => add_query_arg( 'paged', '%#%', add_query_arg( array_filter( array( 'scan_id' => $scan_id, 'severity' => $severity ) ), $base_url ) ),
+						'base'      => add_query_arg( 'paged', '%#%', add_query_arg( array_filter( array( 'scan_id' => $accg_scan_id, 'severity' => $accg_severity ) ), $accg_base_url ) ),
 						'format'    => '',
-						'current'   => $paged,
+						'current'   => $accg_paged,
 						'total'     => $accg_total_pages,
 						'prev_text' => __( '&laquo; Previous', 'accessibility-guardian' ),
 						'next_text' => __( 'Next &raquo;', 'accessibility-guardian' ),

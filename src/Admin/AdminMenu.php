@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace AccessibilityGuardian\Admin;
 
+use AccessibilityGuardian\Plugin;
 use AccessibilityGuardian\Rules\RuleCatalog;
 use AccessibilityGuardian\Scan\ScoreCalculator;
 use AccessibilityGuardian\Storage\IssueRepository;
@@ -62,6 +63,13 @@ final class AdminMenu {
 	private RuleCatalog $catalog;
 
 	/**
+	 * Admin page hook suffixes returned by add_menu_page()/add_submenu_page().
+	 *
+	 * @var array<int, string>
+	 */
+	private array $hook_suffixes = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ScanRepository  $scans   Scan repository.
@@ -82,57 +90,103 @@ final class AdminMenu {
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
 		add_action( 'admin_init', array( $this, 'maybe_save_settings' ) );
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_scan_link' ), 100 );
+	}
+
+	/**
+	 * Add a "Scan accessibility" link to the toolbar while viewing published content.
+	 *
+	 * @param mixed $wp_admin_bar Toolbar instance.
+	 */
+	public function add_admin_bar_scan_link( $wp_admin_bar ): void {
+		if ( ! $wp_admin_bar instanceof \WP_Admin_Bar || is_admin() || ! is_singular() ) {
+			return;
+		}
+
+		if ( ! current_user_can( Plugin::capability() ) ) {
+			return;
+		}
+
+		$post_id = (int) get_queried_object_id();
+		if ( $post_id < 1 || 'publish' !== get_post_status( $post_id ) ) {
+			return;
+		}
+
+		$wp_admin_bar->add_node(
+			array(
+				'id'    => 'accg-scan-page',
+				'title' => esc_html__( 'Scan accessibility', 'accessibility-guardian' ),
+				'href'  => add_query_arg(
+					array(
+						'page'    => self::SLUG_SCAN,
+						'post_id' => $post_id,
+					),
+					admin_url( 'admin.php' )
+				),
+			)
+		);
 	}
 
 	/**
 	 * Register the menu and subpages.
 	 */
 	public function add_menu(): void {
-		add_menu_page(
+		$capability = Plugin::capability();
+
+		$this->hook_suffixes[] = (string) add_menu_page(
 			__( 'Accessibility Guardian', 'accessibility-guardian' ),
 			__( 'Accessibility Guardian', 'accessibility-guardian' ),
-			'manage_options',
+			$capability,
 			self::SLUG_DASHBOARD,
 			array( $this, 'render_dashboard' ),
 			'dashicons-universal-access-alt',
 			81
 		);
 
-		add_submenu_page(
+		$this->hook_suffixes[] = (string) add_submenu_page(
 			self::SLUG_DASHBOARD,
 			__( 'Dashboard', 'accessibility-guardian' ),
 			__( 'Dashboard', 'accessibility-guardian' ),
-			'manage_options',
+			$capability,
 			self::SLUG_DASHBOARD,
 			array( $this, 'render_dashboard' )
 		);
 
-		add_submenu_page(
+		$this->hook_suffixes[] = (string) add_submenu_page(
 			self::SLUG_DASHBOARD,
 			__( 'Run Scan', 'accessibility-guardian' ),
 			__( 'Run Scan', 'accessibility-guardian' ),
-			'manage_options',
+			$capability,
 			self::SLUG_SCAN,
 			array( $this, 'render_scan' )
 		);
 
-		add_submenu_page(
+		$this->hook_suffixes[] = (string) add_submenu_page(
 			self::SLUG_DASHBOARD,
 			__( 'Issues', 'accessibility-guardian' ),
 			__( 'Issues', 'accessibility-guardian' ),
-			'manage_options',
+			$capability,
 			self::SLUG_ISSUES,
 			array( $this, 'render_issues' )
 		);
 
-		add_submenu_page(
+		$this->hook_suffixes[] = (string) add_submenu_page(
 			self::SLUG_DASHBOARD,
 			__( 'Settings', 'accessibility-guardian' ),
 			__( 'Settings', 'accessibility-guardian' ),
-			'manage_options',
+			$capability,
 			self::SLUG_SETTINGS,
 			array( $this, 'render_settings' )
 		);
+	}
+
+	/**
+	 * Whether a hook suffix belongs to one of this plugin's admin pages.
+	 *
+	 * @param string $hook_suffix Hook suffix passed to admin_enqueue_scripts.
+	 */
+	public function is_plugin_screen( string $hook_suffix ): bool {
+		return '' !== $hook_suffix && in_array( $hook_suffix, $this->hook_suffixes, true );
 	}
 
 	/**
@@ -180,7 +234,7 @@ final class AdminMenu {
 		$this->guard();
 
 		// Reading filter params for display only.
-		$post_id   = isset( $_GET['post_id'] ) ? absint( wp_unslash( (string) $_GET['post_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$post_id   = isset( $_GET['post_id'] ) ? absint( wp_unslash( $_GET['post_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$scan_type = $post_id > 0 ? 'single' : 'full';
 
 		$this->render(
@@ -200,9 +254,9 @@ final class AdminMenu {
 		$this->guard();
 
 		// Read-only filters for display; no state change.
-		$scan_id  = isset( $_GET['scan_id'] ) ? absint( wp_unslash( (string) $_GET['scan_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$severity = isset( $_GET['severity'] ) ? sanitize_key( wp_unslash( (string) $_GET['severity'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$paged    = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( (string) $_GET['paged'] ) ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$scan_id  = isset( $_GET['scan_id'] ) ? absint( wp_unslash( $_GET['scan_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$severity = isset( $_GET['severity'] ) ? sanitize_key( wp_unslash( $_GET['severity'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$paged    = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( $_GET['paged'] ) ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( 0 === $scan_id ) {
 			$latest  = $this->scans->latest();
@@ -243,7 +297,7 @@ final class AdminMenu {
 		$notice = get_transient( 'accg_settings_notice' );
 		if ( is_string( $notice ) && '' !== $notice ) {
 			delete_transient( 'accg_settings_notice' );
-			add_settings_error( 'accg_settings', 'accg_settings_saved', $notice, 'updated' );
+			add_settings_error( 'accg_settings', 'accg_settings_saved', $notice, 'success' );
 		}
 
 		$settings   = (array) get_option( 'accg_settings', array() );
@@ -268,7 +322,7 @@ final class AdminMenu {
 			return;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( Plugin::capability() ) ) {
 			wp_die( esc_html__( 'You are not allowed to manage these settings.', 'accessibility-guardian' ) );
 		}
 
@@ -288,7 +342,7 @@ final class AdminMenu {
 			$fixes[ $fix_key ] = in_array( $fix_key, $submitted, true );
 		}
 
-		$wcag_level = isset( $_POST['wcag_level'] ) ? sanitize_key( wp_unslash( (string) $_POST['wcag_level'] ) ) : 'aa';
+		$wcag_level = isset( $_POST['wcag_level'] ) ? sanitize_key( wp_unslash( $_POST['wcag_level'] ) ) : 'aa';
 		if ( ! in_array( $wcag_level, array( 'a', 'aa' ), true ) ) {
 			$wcag_level = 'aa';
 		}
@@ -296,8 +350,8 @@ final class AdminMenu {
 		$settings = array(
 			'include_post_types' => $post_types,
 			'include_terms'      => ! empty( $_POST['include_terms'] ),
-			'batch_size'         => isset( $_POST['batch_size'] ) ? min( 50, max( 1, absint( wp_unslash( (string) $_POST['batch_size'] ) ) ) ) : 5,
 			'wcag_level'         => $wcag_level,
+			'best_practice'      => ! empty( $_POST['best_practice'] ),
 			'fixes'              => $fixes,
 		);
 
@@ -317,13 +371,13 @@ final class AdminMenu {
 	 * Capability gate shared by all pages.
 	 */
 	private function guard(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( Plugin::capability() ) ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'accessibility-guardian' ) );
 		}
 	}
 
 	/**
-	 * Render a template with extracted variables.
+	 * Render a template. The context is available to it as `$args`.
 	 *
 	 * @param string               $template Template filename without extension.
 	 * @param array<string, mixed> $context  Variables exposed to the template.
@@ -335,12 +389,6 @@ final class AdminMenu {
 			return;
 		}
 
-		// Helpers available to every template.
-		$score_calculator = $this->score;
-
-		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-		extract( $context, EXTR_SKIP );
-
-		require $file;
+		load_template( $file, false, $context );
 	}
 }

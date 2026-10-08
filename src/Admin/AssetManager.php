@@ -19,6 +19,25 @@ defined( 'ABSPATH' ) || exit;
 final class AssetManager {
 
 	/**
+	 * Version of the bundled axe-core build in assets/js/axe.min.js.
+	 */
+	public const AXE_VERSION = '4.10.2';
+
+	/**
+	 * Admin menu, used to recognise this plugin's screens.
+	 */
+	private AdminMenu $menu;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param AdminMenu $menu Admin menu that registered the plugin pages.
+	 */
+	public function __construct( AdminMenu $menu ) {
+		$this->menu = $menu;
+	}
+
+	/**
 	 * Register the enqueue hook.
 	 */
 	public function register(): void {
@@ -28,12 +47,17 @@ final class AssetManager {
 	/**
 	 * Enqueue scripts and styles on plugin pages only.
 	 *
-	 * @param string $hook Current admin page hook suffix.
+	 * @param mixed $hook_suffix Current admin page hook suffix.
 	 */
-	public function enqueue( string $hook ): void {
-		if ( ! $this->is_plugin_page() ) {
+	public function enqueue( $hook_suffix ): void {
+		if ( ! is_string( $hook_suffix ) || ! $this->menu->is_plugin_screen( $hook_suffix ) ) {
 			return;
 		}
+
+		$script_args = array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		);
 
 		wp_enqueue_style(
 			'accg-admin',
@@ -47,7 +71,7 @@ final class AssetManager {
 			ACCG_PLUGIN_URL . 'assets/js/custom-rules.js',
 			array(),
 			ACCG_VERSION,
-			true
+			$script_args
 		);
 
 		wp_localize_script(
@@ -70,7 +94,7 @@ final class AssetManager {
 			ACCG_PLUGIN_URL . 'assets/js/scanner.js',
 			array( 'accg-custom-rules' ),
 			ACCG_VERSION,
-			true
+			$script_args
 		);
 
 		$settings   = (array) get_option( 'accg_settings', array() );
@@ -84,16 +108,42 @@ final class AssetManager {
 			$tags = array_merge( $tags, array( 'wcag2aa', 'wcag21aa', 'wcag22aa' ) );
 		}
 
+		$best_practice = ! isset( $settings['best_practice'] ) || ! empty( $settings['best_practice'] );
+		if ( $best_practice ) {
+			$tags[] = 'best-practice';
+		}
+
+		/**
+		 * Filters the options passed to axe.run() for every scanned page.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param array<string, mixed> $options axe-core run options (runOnly, rules, ...).
+		 */
+		$axe_options = apply_filters(
+			'accg_axe_options',
+			array(
+				'runOnly' => array(
+					'type'   => 'tag',
+					'values' => $tags,
+				),
+			)
+		);
+		if ( ! is_array( $axe_options ) ) {
+			$axe_options = array();
+		}
+
 		wp_localize_script(
 			'accg-scanner',
 			'accgScanner',
 			array(
 				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
 				'nonce'        => wp_create_nonce( ScanController::NONCE_ACTION ),
-				'axeUrl'       => ACCG_PLUGIN_URL . 'assets/js/axe.min.js',
+				'axeUrl'       => add_query_arg( 'ver', self::AXE_VERSION . '-' . ACCG_VERSION, ACCG_PLUGIN_URL . 'assets/js/axe.min.js' ),
+				'axeVersion'   => self::AXE_VERSION,
 				'dashboardUrl' => admin_url( 'admin.php?page=accessibility-guardian' ),
 				'issuesUrl'    => admin_url( 'admin.php?page=accessibility-guardian-issues' ),
-				'wcagTags'     => $tags,
+				'axeOptions'   => $axe_options,
 				'i18n'         => array(
 					'preparing'    => __( 'Preparing scan…', 'accessibility-guardian' ),
 					'scanning'     => __( 'Scanning', 'accessibility-guardian' ),
@@ -118,7 +168,7 @@ final class AssetManager {
 			ACCG_PLUGIN_URL . 'assets/js/dashboard.js',
 			array(),
 			ACCG_VERSION,
-			true
+			$script_args
 		);
 
 		wp_localize_script(
@@ -129,18 +179,12 @@ final class AssetManager {
 					'noHistory'  => __( 'No history yet.', 'accessibility-guardian' ),
 					/* translators: %d: accessibility score. */
 					'scoreLabel' => __( 'Latest accessibility score %d out of 100', 'accessibility-guardian' ),
+					/* translators: 1: first score, 2: latest score, 3: number of scans. */
+					'trendLabel' => __( 'Accessibility score changed from %1$d to %2$d over the last %3$d scans', 'accessibility-guardian' ),
+					/* translators: %d: number of scans. */
+					'scansLabel' => __( '%d scans', 'accessibility-guardian' ),
 				),
 			)
 		);
-	}
-
-	/**
-	 * Determine whether the current screen belongs to this plugin.
-	 */
-	private function is_plugin_page(): bool {
-		// Reading the page slug for asset gating only; no state change occurs.
-		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( (string) $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		return str_starts_with( $page, 'accessibility-guardian' );
 	}
 }

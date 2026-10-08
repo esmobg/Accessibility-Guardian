@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace AccessibilityGuardian\Export;
 
+use AccessibilityGuardian\Plugin;
 use AccessibilityGuardian\Storage\IssueRepository;
 use AccessibilityGuardian\Storage\ScanRepository;
 
@@ -56,14 +57,14 @@ final class ExportController {
 	 * Validate the request and stream the requested format.
 	 */
 	public function handle(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( Plugin::capability() ) ) {
 			wp_die( esc_html__( 'You are not allowed to export reports.', 'accessibility-guardian' ), '', array( 'response' => 403 ) );
 		}
 
 		check_admin_referer( 'accg_export' );
 
-		$scan_id = isset( $_GET['scan_id'] ) ? absint( wp_unslash( (string) $_GET['scan_id'] ) ) : 0;
-		$format  = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( (string) $_GET['format'] ) ) : 'csv';
+		$scan_id = isset( $_GET['scan_id'] ) ? absint( wp_unslash( $_GET['scan_id'] ) ) : 0;
+		$format  = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( $_GET['format'] ) ) : 'csv';
 
 		$scan = $this->scans->find( $scan_id );
 

@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Works with PHPUnit 9.6 (PHP 8.0) and PHPUnit 10.5 (PHP 8.1+). -->
 <phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	bootstrap="tests/phpunit/bootstrap.php"
 	colors="true"
 	failOnWarning="true"
-	failOnRisky="true"
-	cacheResultFile=".phpunit.cache/result.cache">
+	failOnRisky="true">
 	<testsuites>
 		<testsuite name="unit">
 			<directory suffix="Test.php">tests/phpunit</directory>
 		</testsuite>
 	</testsuites>
-	<source>
-		<include>
-			<directory suffix=".php">src</directory>
-		</include>
-	</source>
 </phpunit>

@@ -66,11 +66,11 @@ final class RuleCatalog {
 			),
 			'add_skip_link'           => array(
 				'label'       => __( 'Add a skip-to-content link', 'accessibility-guardian' ),
-				'description' => __( 'Inserts a keyboard skip link at the top of every page (WCAG 2.4.1).', 'accessibility-guardian' ),
+				'description' => __( 'Inserts a keyboard skip link at the top of every page on classic themes; block themes already get one from WordPress (WCAG 2.4.1).', 'accessibility-guardian' ),
 			),
 			'add_focus_outline'       => array(
 				'label'       => __( 'Add a visible focus outline', 'accessibility-guardian' ),
-				'description' => __( 'Ensures focused links and controls show a clear outline (WCAG 2.4.7).', 'accessibility-guardian' ),
+				'description' => __( 'Ensures links and controls show a clear outline when focused with the keyboard (WCAG 2.4.7).', 'accessibility-guardian' ),
 			),
 			'underline_links'         => array(
 				'label'       => __( 'Underline links in content', 'accessibility-guardian' ),
@@ -90,11 +90,11 @@ final class RuleCatalog {
 			),
 			'label_search_form'       => array(
 				'label'       => __( 'Add labels to search forms', 'accessibility-guardian' ),
-				'description' => __( 'Adds an accessible label to the default search form field (WCAG 3.3.2).', 'accessibility-guardian' ),
+				'description' => __( 'Adds an accessible label to the classic get_search_form() field; the Search block is already labelled (WCAG 3.3.2).', 'accessibility-guardian' ),
 			),
 			'remove_title_attr'       => array(
 				'label'       => __( 'Remove redundant title attributes', 'accessibility-guardian' ),
-				'description' => __( 'Strips title attributes from links and inputs that already have visible text.', 'accessibility-guardian' ),
+				'description' => __( 'Strips title attributes from links, buttons and fields that already have another accessible name.', 'accessibility-guardian' ),
 			),
 		);
 	}
@@ -556,6 +556,242 @@ final class RuleCatalog {
 				'severity' => 'major',
 				'fix'      => __( 'Avoid positive tabindex values; rely on natural DOM order for focus.', 'accessibility-guardian' ),
 				'doc'      => $axe . 'tabindex',
+			),
+
+			// Lists.
+			'list' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'structure',
+				'severity' => 'major',
+				'fix'      => __( 'Make sure <ul> and <ol> elements only directly contain <li>, <script> or <template> elements.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'list',
+			),
+			'listitem' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'structure',
+				'severity' => 'major',
+				'fix'      => __( 'Place every <li> element inside a <ul>, <ol> or an element with role="list".', 'accessibility-guardian' ),
+				'doc'      => $axe . 'listitem',
+			),
+			'definition-list' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'structure',
+				'severity' => 'major',
+				'fix'      => __( 'Make sure <dl> elements only contain properly ordered <dt> and <dd> groups, <script>, <template> or <div> elements.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'definition-list',
+			),
+			'dlitem' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'structure',
+				'severity' => 'major',
+				'fix'      => __( 'Place <dt> and <dd> elements inside a <dl> element.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'dlitem',
+			),
+			'p-as-heading' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'headings',
+				'severity' => 'major',
+				'fix'      => __( 'Use real heading elements (<h2>, <h3>, ...) instead of styling paragraphs to look like headings.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'p-as-heading',
+			),
+
+			// Controls and keyboard.
+			'input-button-name' => array(
+				'wcag'     => __( '4.1.2 Name, Role, Value', 'accessibility-guardian' ),
+				'category' => 'buttons',
+				'severity' => 'critical',
+				'fix'      => __( 'Give input buttons discernible text with the value attribute, aria-label or aria-labelledby.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'input-button-name',
+			),
+			'summary-name' => array(
+				'wcag'     => __( '4.1.2 Name, Role, Value', 'accessibility-guardian' ),
+				'category' => 'buttons',
+				'severity' => 'major',
+				'fix'      => __( 'Give every <summary> element discernible text.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'summary-name',
+			),
+			'scrollable-region-focusable' => array(
+				'wcag'     => __( '2.1.1 Keyboard', 'accessibility-guardian' ),
+				'category' => 'keyboard',
+				'severity' => 'major',
+				'fix'      => __( 'Make scrollable regions reachable by keyboard, for example with tabindex="0" and an accessible name.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'scrollable-region-focusable',
+			),
+			'frame-focusable-content' => array(
+				'wcag'     => __( '2.1.1 Keyboard', 'accessibility-guardian' ),
+				'category' => 'keyboard',
+				'severity' => 'major',
+				'fix'      => __( 'Do not set tabindex="-1" on frames that contain focusable content.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'frame-focusable-content',
+			),
+			'target-size' => array(
+				'wcag'     => __( '2.5.8 Target Size (Minimum)', 'accessibility-guardian' ),
+				'category' => 'responsive',
+				'severity' => 'major',
+				'fix'      => __( 'Make touch targets at least 24 by 24 CSS pixels, or leave enough space around smaller targets.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'target-size',
+			),
+			'css-orientation-lock' => array(
+				'wcag'     => __( '1.3.4 Orientation', 'accessibility-guardian' ),
+				'category' => 'responsive',
+				'severity' => 'major',
+				'fix'      => __( 'Do not lock content to portrait or landscape orientation with CSS.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'css-orientation-lock',
+			),
+			'avoid-inline-spacing' => array(
+				'wcag'     => __( '1.4.12 Text Spacing', 'accessibility-guardian' ),
+				'category' => 'responsive',
+				'severity' => 'major',
+				'fix'      => __( 'Do not use !important on inline line-height, letter-spacing or word-spacing styles, so users can adjust text spacing.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'avoid-inline-spacing',
+			),
+
+			// Images and media.
+			'role-img-alt' => array(
+				'wcag'     => __( '1.1.1 Non-text Content', 'accessibility-guardian' ),
+				'category' => 'images',
+				'severity' => 'major',
+				'fix'      => __( 'Give elements with role="img" an accessible name using aria-label or aria-labelledby.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'role-img-alt',
+			),
+			'server-side-image-map' => array(
+				'wcag'     => __( '2.1.1 Keyboard', 'accessibility-guardian' ),
+				'category' => 'images',
+				'severity' => 'minor',
+				'fix'      => __( 'Replace server-side image maps with client-side image maps or regular links.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'server-side-image-map',
+			),
+			'video-caption' => array(
+				'wcag'     => __( '1.2.2 Captions (Prerecorded)', 'accessibility-guardian' ),
+				'category' => 'media',
+				'severity' => 'critical',
+				'fix'      => __( 'Provide captions for video with a <track kind="captions"> element.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'video-caption',
+			),
+			'audio-caption' => array(
+				'wcag'     => __( '1.2.1 Audio-only and Video-only (Prerecorded)', 'accessibility-guardian' ),
+				'category' => 'media',
+				'severity' => 'critical',
+				'fix'      => __( 'Provide a transcript or captions for audio content.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'audio-caption',
+			),
+			'blink' => array(
+				'wcag'     => __( '2.2.2 Pause, Stop, Hide', 'accessibility-guardian' ),
+				'category' => 'media',
+				'severity' => 'major',
+				'fix'      => __( 'Remove <blink> elements; blinking content distracts and cannot be paused.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'blink',
+			),
+			'marquee' => array(
+				'wcag'     => __( '2.2.2 Pause, Stop, Hide', 'accessibility-guardian' ),
+				'category' => 'media',
+				'severity' => 'major',
+				'fix'      => __( 'Remove <marquee> elements or replace them with content users can pause.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'marquee',
+			),
+			'meta-refresh' => array(
+				'wcag'     => __( '2.2.1 Timing Adjustable', 'accessibility-guardian' ),
+				'category' => 'document',
+				'severity' => 'critical',
+				'fix'      => __( 'Do not refresh or redirect the page automatically with <meta http-equiv="refresh">.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'meta-refresh',
+			),
+
+			// Tables.
+			'td-has-header' => array(
+				'wcag'     => __( '1.3.1 Info and Relationships', 'accessibility-guardian' ),
+				'category' => 'tables',
+				'severity' => 'critical',
+				'fix'      => __( 'Associate every data cell in large tables with a header cell (<th> or headers attribute).', 'accessibility-guardian' ),
+				'doc'      => $axe . 'td-has-header',
+			),
+
+			// ARIA widgets.
+			'aria-meter-name' => array(
+				'wcag'     => __( '1.1.1 Non-text Content', 'accessibility-guardian' ),
+				'category' => 'aria',
+				'severity' => 'major',
+				'fix'      => __( 'Give elements with role="meter" an accessible name.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'aria-meter-name',
+			),
+			'aria-progressbar-name' => array(
+				'wcag'     => __( '1.1.1 Non-text Content', 'accessibility-guardian' ),
+				'category' => 'aria',
+				'severity' => 'major',
+				'fix'      => __( 'Give elements with role="progressbar" an accessible name.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'aria-progressbar-name',
+			),
+			'aria-tooltip-name' => array(
+				'wcag'     => __( '4.1.2 Name, Role, Value', 'accessibility-guardian' ),
+				'category' => 'aria',
+				'severity' => 'major',
+				'fix'      => __( 'Give elements with role="tooltip" discernible text.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'aria-tooltip-name',
+			),
+			'aria-treeitem-name' => array(
+				'wcag'     => __( '4.1.2 Name, Role, Value', 'accessibility-guardian' ),
+				'category' => 'aria',
+				'severity' => 'major',
+				'fix'      => __( 'Give elements with role="treeitem" an accessible name.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'aria-treeitem-name',
+			),
+			'aria-deprecated-role' => array(
+				'wcag'     => __( '4.1.2 Name, Role, Value', 'accessibility-guardian' ),
+				'category' => 'aria',
+				'severity' => 'minor',
+				'fix'      => __( 'Replace deprecated ARIA roles with a current role.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'aria-deprecated-role',
+			),
+
+			// Best-practice landmark rules.
+			'landmark-banner-is-top-level' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Do not nest the banner (site header) landmark inside another landmark.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-banner-is-top-level',
+			),
+			'landmark-contentinfo-is-top-level' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Do not nest the contentinfo (site footer) landmark inside another landmark.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-contentinfo-is-top-level',
+			),
+			'landmark-main-is-top-level' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Do not nest the main landmark inside another landmark.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-main-is-top-level',
+			),
+			'landmark-complementary-is-top-level' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Keep complementary (aside) landmarks at the top level of the page.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-complementary-is-top-level',
+			),
+			'landmark-no-duplicate-banner' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Use only one banner (site header) landmark per page.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-no-duplicate-banner',
+			),
+			'landmark-no-duplicate-contentinfo' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'landmarks',
+				'severity' => 'minor',
+				'fix'      => __( 'Use only one contentinfo (site footer) landmark per page.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'landmark-no-duplicate-contentinfo',
+			),
+			'skip-link' => array(
+				'wcag'     => __( 'Best practice', 'accessibility-guardian' ),
+				'category' => 'structure',
+				'severity' => 'minor',
+				'fix'      => __( 'Make sure the skip link points to an element that exists on the page.', 'accessibility-guardian' ),
+				'doc'      => $axe . 'skip-link',
 			),
 
 			// Supplemental custom JS rules (prefixed ag-).
