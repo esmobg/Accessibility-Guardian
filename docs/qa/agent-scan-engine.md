@@ -3,8 +3,8 @@
 **Agent:** ScanEngine QA  
 **Date:** 2026-08-13  
 **Plugin version:** 1.1.0 (`ACCG_VERSION`)  
-**Workspace:** `/home/esmobg/Документи/my   project/WordPress plugin/acessability check`  
-**SITE:** `/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/site`
+**Workspace:** `<project>`  
+**SITE:** `<project>/.wp-test/site`
 
 ## Charter
 

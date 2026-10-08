@@ -1,135 +1,142 @@
 === Accessibility Guardian ===
 Contributors: esmobg
-Tags: accessibility, wcag, a11y, audit, axe-core
+Tags: accessibility, wcag, a11y, accessibility checker, audit
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automated WCAG 2.2 AA accessibility auditing for WordPress. Scan your content with axe-core and get prioritized issues with remediation guidance.
+Check your site against WCAG 2.2 AA with axe-core, right in wp-admin. Get a score, prioritized issues, fix guidance and optional auto-fixes.
 
 == Description ==
 
-Accessibility Guardian audits your WordPress site for accessibility compliance
-(WCAG 2.2 Level A & AA) directly from the admin dashboard. It uses the
-industry-standard [axe-core](https://github.com/dequelabs/axe-core) engine,
-running in your browser against the fully rendered front-end of each page, so
-it can evaluate computed color contrast, ARIA, headings, landmarks and form
-labelling without any extra server software (no Node.js or headless browser
-required).
+Accessibility Guardian checks your WordPress site against **WCAG 2.2 Level A and AA** from the admin dashboard. It runs the widely used [axe-core](https://github.com/dequelabs/axe-core) engine in your browser against the fully rendered front end of each page, so it sees what visitors see: computed colour contrast, ARIA, headings, landmarks, form labels, images, links and more.
 
-= Key features =
+No external service, no account, no Node.js or headless browser on the server. If your site runs WordPress, it can be scanned.
 
-* Single-page and full-site scans of posts, pages, custom post types,
-  WooCommerce products and term archives.
-* Real rendered-DOM analysis with axe-core 4.10, plus supplemental checks for
-  generic link text, placeholder-only labels, new-window links and linked PDFs.
-* Every issue includes a rule id, WCAG reference, severity, category, HTML
-  snippet, DOM path, a suggested fix and a documentation link.
-* Accessibility score (0-100) with Excellent / Good / Needs Improvement / Poor
-  bands.
-* Dashboard with summary cards, issues by severity, WCAG category distribution,
-  a progress-over-time trend and the most common problems.
-* Optional, opt-in front-end remediations (skip link, focus outline, language
-  attribute, and similar).
-* CSV and JSON report export.
+= What you get =
 
-= Third-party libraries =
+* **Full-site or single-page scans.** Posts, pages, public custom post types (including WooCommerce products) and, optionally, category and tag archives. Start a single-page scan from the "Scan accessibility" link in the toolbar while viewing any published page.
+* **Real rendered-page analysis** with axe-core 4.10 plus extra checks for generic link text ("click here"), placeholder-only form fields, links that open new windows without warning, and linked PDF documents.
+* **Best-practice checks** (optional, on by default) for headings, landmarks and page structure. They are reported as warnings because they are not strict WCAG failures.
+* **Clear, actionable issues.** Every finding has a severity (Critical, Major, Minor, Warning), the WCAG success criterion, the affected page, the element and its HTML, a recommended fix and a link to documentation.
+* **An accessibility score** from 0 to 100 for every scan, with Excellent, Good, Needs Improvement and Poor bands, and a progress-over-time chart.
+* **Dashboard** with issues by severity, WCAG category distribution, the most common problems and recent scans.
+* **Optional automatic fixes** you can switch on one by one: skip link, visible keyboard focus, underlined content links, a language attribute, new-window warnings, zoom-friendly viewport, removal of positive tabindex and redundant title attributes, and search-form labels.
+* **CSV and JSON export** of every scan for your team, agency or audit records.
+* **Works on single sites and multisite networks**, including network activation.
 
-This plugin bundles [axe-core 4.10.2](https://github.com/dequelabs/axe-core/tree/v4.10.2)
-by Deque Systems, licensed under the Mozilla Public License 2.0 (GPL-compatible).
-The minified runtime is `assets/js/axe.min.js`. The unminified source is shipped
-as `assets/js/axe.js`. Upstream source: https://github.com/dequelabs/axe-core
+= What automated testing can and cannot do =
+
+Automated tools, including this one, find a meaningful share of accessibility problems, but not all of them. Many WCAG requirements (meaningful alternative text, logical reading order, captions, keyboard-only workflows, plain language) still need a human review. Accessibility Guardian helps you find and fix issues faster; it does not certify that a site is accessible or legally compliant with the ADA, the European Accessibility Act, EN 301 549 or Section 508.
 
 = Privacy =
 
-Scanning runs entirely on your own site and in your own browser. No data is
-sent to third-party services. Optional automatic fixes only change front-end
-markup on your site when you enable them in Settings.
+* Scans run on your own site and in your own browser. Page content and results are never sent to the plugin author or any third party.
+* Results are stored in your WordPress database and removed when you delete the plugin.
+* The issues list links to rule documentation on dequeuniversity.com and w3.org. Those sites are only contacted if you click a link.
+* While scanning, pages are loaded in a hidden frame as the logged-in administrator. Analytics or ads on your site may count those page views, just as they would if you opened the pages yourself.
+* Automatic fixes only change your site's front end, and only the ones you enable.
+
+= Third-party library =
+
+This plugin bundles [axe-core 4.10.2](https://github.com/dequelabs/axe-core/tree/v4.10.2) by Deque Systems, licensed under the Mozilla Public License 2.0, which is compatible with the GPL. The minified file is `assets/js/axe.min.js`; the unminified source is included as `assets/js/axe.js`.
+
+= For developers =
+
+Filters and actions let you change the scan queue, the axe-core options, the required capability and more. See the [developer documentation on GitHub](https://github.com/esmobg/Accessibility-Guardian#developer-hooks).
 
 == Installation ==
 
-1. Upload the plugin zip via Plugins > Add New > Upload Plugin, or copy the
-   `accessibility-guardian` folder to `wp-content/plugins/`.
-2. Activate the plugin through the Plugins screen.
-3. Open the **Accessibility Guardian** menu in the admin sidebar.
-4. Go to **Run Scan** and start a single-page or full-site scan. Keep the tab
-   open until the scan finishes.
+1. In your dashboard go to **Plugins > Add New Plugin**, search for "Accessibility Guardian", then click **Install Now** and **Activate**.
+2. Open **Accessibility Guardian > Run Scan** and click **Start full site scan**. Keep the tab open until the scan finishes; you can cancel at any time.
+3. Review the results under **Accessibility Guardian > Issues** and the **Dashboard**.
+4. Optionally choose which content to scan and enable automatic fixes under **Accessibility Guardian > Settings**.
+
+To install manually, upload the `accessibility-guardian` folder to `/wp-content/plugins/` and activate it on the Plugins screen.
 
 == Frequently Asked Questions ==
 
-= Does scanning require Node.js or a headless browser on the server? =
+= Does this make my site compliant with the ADA or the European Accessibility Act? =
 
-No. Scanning runs in the administrator's browser using a hidden, same-origin
-iframe, so standard WordPress hosting is all you need.
+No tool can do that on its own. Automated checks catch many common problems quickly, but some WCAG requirements can only be verified by a person. Use the report to fix what is found, then test key pages with a keyboard and a screen reader.
 
-= Why does a scan only run while I keep the tab open? =
+= Does scanning need anything installed on the server? =
 
-Because the engine executes in your browser. Scheduled background scanning is on
-the roadmap for a future release.
+No. The scan runs in the administrator's browser using a hidden frame on your own site, so standard WordPress hosting is all you need.
+
+= Why must I keep the tab open during a scan? =
+
+The axe-core engine runs in your browser, one page at a time. If you close the tab, the scan stops; the next scan you start marks the unfinished one as failed.
 
 = A page could not be scanned. Why? =
 
-The scan iframe must be allowed to load your front-end. Security headers such as
-`X-Frame-Options: DENY` or `Content-Security-Policy: frame-ancestors 'none'`
-block embedding and prevent that URL from being analysed. Allow same-origin
-framing for the scan to work.
+The scan frame must be allowed to load your own pages. Security headers such as `X-Frame-Options: DENY` or `Content-Security-Policy: frame-ancestors 'none'` block this. `X-Frame-Options: SAMEORIGIN` and `frame-ancestors 'self'` work. A very strict `script-src` policy can also stop the scanner from loading axe-core in the frame. Other pages in the scan continue normally.
+
+= Will the WordPress toolbar show up in my results? =
+
+No. Pages are scanned as the logged-in administrator, so the toolbar is present, but it is excluded from all checks.
 
 = Which standards are covered? =
 
-WCAG 2.2 Level A and AA via axe-core, which also underpins EN 301 549, the
-European Accessibility Act, Section 508 and ADA best-practice expectations.
+WCAG 2.0, 2.1 and 2.2 at Level A and AA (choose A or AA in Settings), plus optional axe-core best practices. Each issue shows the related WCAG success criterion.
+
+= How is the score calculated? =
+
+Each scanned page starts at 100 and loses points per issue: Critical 10, Major 5, Minor 2, Warning 1, never going below 0. The site score is the average of all scanned pages, so a few problem pages do not hide an otherwise good site.
 
 = How many pages can a full-site scan cover? =
 
-By default the queue is capped at 1000 URLs (home, then published content in ID
-order). Raise or lower the cap with the `accg_scan_url_limit` filter. The scan
-still runs in your browser one page at a time, so very large sites take a long
-time and require the admin tab to stay open.
+Up to 1,000 URLs by default: the home page, then published content in ID order. Developers can raise or lower the limit with the `accg_scan_url_limit` filter.
 
-= How is the accessibility score calculated? =
+= Are the automatic fixes safe? =
 
-Each scanned page starts at 100 and loses points for issues (Critical −10,
-Major −5, Minor −2, Warning −1). For multi-page scans, the site score is the
-average of those per-page scores. Pages scanned with no violations count as 100.
+Each fix is off by default and changes only one thing, using WordPress hooks rather than editing your theme. Turn on one fix at a time and check your site afterwards. Fixing problems in your content and theme is always the best long-term solution.
+
+= Does it work with multisite? =
+
+Yes. Activate it on individual sites or network-activate it. Each site keeps its own settings and results, and deleting the plugin removes the data from every site.
 
 = Where is the axe-core source code? =
 
-Unminified axe-core 4.10.2 is included as `assets/js/axe.js`. The project is
-maintained at https://github.com/dequelabs/axe-core (tag v4.10.2).
+The unminified axe-core 4.10.2 source is included as `assets/js/axe.js`. The project is maintained at https://github.com/dequelabs/axe-core (tag v4.10.2).
 
 == Screenshots ==
 
-1. Dashboard with accessibility score, severity bars and recent scans.
-2. Run Scan page with progress, completion summary and issue log.
-3. Issues page filtered by severity, with recommended fixes.
+1. Dashboard: site score, severity breakdown, WCAG categories and progress over time.
+2. A completed full-site scan with the score summary and per-page log.
+3. The Issues page: every finding with its WCAG reference, element, HTML and recommended fix.
+4. Settings: content to scan, WCAG level, best-practice checks and optional automatic fixes.
 
 == Changelog ==
 
+= 1.2.0 =
+* Tested with WordPress 7.1 and PHP 8.0 to 8.5.
+* New: optional best-practice checks for headings, landmarks and page structure (on by default, reported as warnings).
+* New: "Scan accessibility" toolbar link for a one-click single-page scan.
+* New: full multisite support, including network activation, new sites and site deletion.
+* New: developer hooks `accg_scan_urls`, `accg_axe_options`, `accg_required_capability` and `accg_scan_completed`.
+* New: the dashboard chart shows how your score changes across scans.
+* Improved: the WordPress toolbar is no longer included in scan results.
+* Improved: issue messages and fix suggestions keep element names such as `<ul>` and `<main>`.
+* Improved: HTML snippets are kept for form fields, SVGs and frames.
+* Improved: rule details for lists, touch target size, media captions, keyboard access and more.
+* Improved: automatic fixes work with block themes (no duplicate skip link), use `:focus-visible`, and also apply to content loaded later.
+* Improved: the plugin's own admin screens pass axe-core WCAG 2.2 AA checks.
+* Fixed: cancelling a scan no longer saves it as the latest complete report.
+* Fixed: CSV export deprecation on PHP 8.4 and later; exported cells cannot be interpreted as spreadsheet formulas.
+* Fixed: pages that the browser refuses to show in a frame are reported as failed instead of scanning the browser's error page.
+* Removed: an unused status endpoint and the unused "batch size" setting.
+
 = 1.1.1 =
-* Fix site score for multi-page scans: average per-page scores instead of
-  penalizing the total issue count (which could incorrectly show 0).
-* Scan UI shows scores as N/100 to match the dashboard.
+* Fixed: site score for multi-page scans is the average of per-page scores.
 
 = 1.1.0 =
-* WordPress.org readiness: unique `accg_` prefix, GPLv2 LICENSE.txt, axe-core
-  source, i18n for rule catalog, PHP 8.0 requirement.
-* Map axe "serious" impact to Major severity so scores and filters stay accurate.
-* Harden settings save, payload size, skip-link target filter and uninstall.
-* Full-site scans default to 1000 URLs (`accg_scan_url_limit`).
-
-= 1.0.0 =
-* Initial release: single-page and full-site scanning, axe-core engine,
-  supplemental custom rules, scoring, dashboard and CSV/JSON export.
+* First public release (GitHub).
 
 == Upgrade Notice ==
 
-= 1.1.1 =
-Multi-page scan scores are now averaged per page. Re-run a scan to refresh the
-dashboard score; older completed scans keep their previous values.
-
-= 1.1.0 =
-Database tables and settings keys are renamed to the accg_ prefix. Existing
-scan data is migrated automatically on upgrade.
+= 1.2.0 =
+Adds best-practice checks, multisite support and a toolbar shortcut for single-page scans, and is tested with WordPress 7.1 and PHP 8.5. Run a new scan after updating.

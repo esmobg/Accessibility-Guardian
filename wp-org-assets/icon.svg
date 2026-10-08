@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Accessibility Guardian">
+	<rect width="256" height="256" rx="56" fill="#13202f"/>
+	<path d="M128 30 L206 58 V122 C206 172 173 208 128 226 C83 208 50 172 50 122 V58 Z" fill="#1f8f4e"/>
+	<path d="M128 30 L206 58 V122 C206 172 173 208 128 226 Z" fill="#1a7a43"/>
+	<circle cx="128" cy="78" r="15" fill="#ffffff"/>
+	<g fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M86 106 L128 114 L170 106"/>
+		<path d="M128 114 V148"/>
+		<path d="M128 148 L108 188"/>
+		<path d="M128 148 L148 188"/>
+	</g>
+</svg>

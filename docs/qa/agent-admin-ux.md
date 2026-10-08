@@ -2,7 +2,7 @@
 
 Date: 2026-08-13  
 Target: http://localhost:8089  
-Login: `admin` / `admin123`  
+Login: local test administrator account  
 Plugin admin: `/wp-admin/admin.php?page=accessibility-guardian`  
 Browser: `user-chrome-devtools` (requested `cursor-ide-browser` was not registered in this session). No plugin PHP was edited. Full-site scan was **not** started.
 

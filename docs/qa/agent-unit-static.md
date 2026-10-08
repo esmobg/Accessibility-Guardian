@@ -16,8 +16,8 @@ Verdict for this slice: **PASS** (no P0/P1). PHPUnit green. Plugin Check: 0 ERRO
 Command:
 
 ```text
-PHP=/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/bin/php
-PHPUNIT=/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/bin/phpunit.phar
+PHP=<project>/.wp-test/bin/php
+PHPUNIT=<project>/.wp-test/bin/phpunit.phar
 cd "<plugin workspace>"
 $PHP $PHPUNIT --configuration phpunit.xml.dist
 ```
@@ -50,7 +50,7 @@ Per suite (`--testdox`):
 Dist zip present: `dist/accessibility-guardian-1.1.0.zip`.  
 Target copy (already installed, not re-copied by this agent):
 
-`/home/esmobg/Документи/Web APP/WordPress plugin/acessability check/.wp-test/site/wp-content/plugins/accessibility-guardian`
+`<project>/.wp-test/site/wp-content/plugins/accessibility-guardian`
 
 Command:
 
