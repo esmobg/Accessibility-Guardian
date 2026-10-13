@@ -6,6 +6,9 @@
 	<title>Accessibility Guardian – WCAG 2.2 accessibility checker for WordPress</title>
 	<meta name="description" content="Free, open-source WordPress plugin that checks your site against WCAG 2.2 AA with axe-core, right in wp-admin. Score, prioritized issues, fix guidance and optional auto-fixes. No external service.">
 	<link rel="canonical" href="https://esmobg.github.io/Accessibility-Guardian/">
+	<link rel="alternate" hreflang="en" href="https://esmobg.github.io/Accessibility-Guardian/">
+	<link rel="alternate" hreflang="bg" href="https://esmobg.github.io/Accessibility-Guardian/bg/">
+	<link rel="alternate" hreflang="x-default" href="https://esmobg.github.io/Accessibility-Guardian/">
 	<meta name="theme-color" content="#13202f">
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="Accessibility Guardian for WordPress">
@@ -47,10 +50,18 @@
 					<li><a href="https://github.com/esmobg/Accessibility-Guardian">GitHub</a></li>
 				</ul>
 			</nav>
-			<button class="theme-toggle" type="button" aria-pressed="false" hidden>
-				<svg class="theme-toggle__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
-				<span>Dark mode</span>
-			</button>
+			<div class="header-tools">
+				<nav class="lang-switch" aria-label="Language">
+					<ul>
+						<li><a href="./" lang="en" hreflang="en" aria-current="page">English</a></li>
+						<li><a href="bg/" lang="bg" hreflang="bg">Български</a></li>
+					</ul>
+				</nav>
+				<button class="theme-toggle" type="button" aria-pressed="false" hidden>
+					<svg class="theme-toggle__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+					<span>Dark mode</span>
+				</button>
+			</div>
 		</div>
 	</header>
 
@@ -433,6 +444,7 @@ add_action( 'accg_scan_completed', function ( int $scan_id, array $totals ) {
 			<div>
 				<p class="brand brand--footer"><img src="assets/img/icon.svg" alt="" width="28" height="28"> Accessibility Guardian</p>
 				<p>Licensed under the <a href="https://github.com/esmobg/Accessibility-Guardian/blob/main/LICENSE.txt">GPL-2.0-or-later</a>. Bundles <a href="https://github.com/dequelabs/axe-core">axe-core</a> by Deque Systems (MPL-2.0).</p>
+				<p>Made by <a href="https://esmobg.github.io/en/">Ismail Ismail</a>.</p>
 			</div>
 			<nav aria-label="Project">
 				<ul>

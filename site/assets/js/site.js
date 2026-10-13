@@ -7,6 +7,25 @@
 
 	var root = document.documentElement;
 
+	/* Interface strings for the page language (lang attribute on <html>). */
+	var STRINGS = {
+		en: {
+			counter: 'Screenshot %1 of %2',
+			copy: 'Copy code',
+			copied: 'Copied',
+			copiedStatus: 'Code copied to the clipboard.',
+			copyFailed: 'Copying failed. Select the code and copy it manually.'
+		},
+		bg: {
+			counter: 'Снимка %1 от %2',
+			copy: 'Копирай кода',
+			copied: 'Копирано',
+			copiedStatus: 'Кодът е копиран.',
+			copyFailed: 'Копирането не успя. Маркирайте кода и го копирайте ръчно.'
+		}
+	};
+	var t = STRINGS[ ( root.getAttribute( 'lang' ) || 'en' ).slice( 0, 2 ) ] || STRINGS.en;
+
 	/* Theme toggle --------------------------------------------------------- */
 
 	function systemPrefersDark() {
@@ -72,7 +91,7 @@
 			image.src = link.getAttribute( 'href' );
 			image.alt = thumb ? thumb.alt : '';
 			caption.textContent = figcaption ? figcaption.textContent : '';
-			counter.textContent = 'Screenshot ' + ( current + 1 ) + ' of ' + links.length;
+			counter.textContent = t.counter.replace( '%1', String( current + 1 ) ).replace( '%2', String( links.length ) );
 		}
 
 		links.forEach( function ( link, index ) {
@@ -139,12 +158,12 @@
 			button.addEventListener( 'click', function () {
 				navigator.clipboard.writeText( target.textContent ).then(
 					function () {
-						button.textContent = 'Copied';
+						button.textContent = t.copied;
 						if ( status ) {
-							status.textContent = 'Code copied to the clipboard.';
+							status.textContent = t.copiedStatus;
 						}
 						window.setTimeout( function () {
-							button.textContent = 'Copy code';
+							button.textContent = t.copy;
 							if ( status ) {
 								status.textContent = '';
 							}
@@ -152,7 +171,7 @@
 					},
 					function () {
 						if ( status ) {
-							status.textContent = 'Copying failed. Select the code and copy it manually.';
+							status.textContent = t.copyFailed;
 						}
 					}
 				);

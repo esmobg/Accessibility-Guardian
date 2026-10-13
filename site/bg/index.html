@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="bg">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Accessibility Guardian – проверка за достъпност по WCAG 2.2 за WordPress</title>
+	<meta name="description" content="Безплатен плъгин с отворен код, който проверява WordPress сайта ви по WCAG 2.2 AA с axe-core направо от админ панела. Оценка, подредени по важност проблеми, насоки за поправка и автоматични поправки по избор. Без външни услуги.">
+	<link rel="canonical" href="https://esmobg.github.io/Accessibility-Guardian/bg/">
+	<link rel="alternate" hreflang="en" href="https://esmobg.github.io/Accessibility-Guardian/">
+	<link rel="alternate" hreflang="bg" href="https://esmobg.github.io/Accessibility-Guardian/bg/">
+	<link rel="alternate" hreflang="x-default" href="https://esmobg.github.io/Accessibility-Guardian/">
+	<meta name="theme-color" content="#13202f">
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="bg_BG">
+	<meta property="og:title" content="Accessibility Guardian за WordPress">
+	<meta property="og:description" content="Проверете WordPress сайта си по WCAG 2.2 AA с axe-core направо от админ панела. Безплатно и с отворен код.">
+	<meta property="og:url" content="https://esmobg.github.io/Accessibility-Guardian/bg/">
+	<meta property="og:image" content="https://esmobg.github.io/Accessibility-Guardian/assets/img/banner-1544x500.png">
+	<meta property="og:image:alt" content="Accessibility Guardian: проверки по WCAG 2.2 AA с axe-core направо в WordPress">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="icon" href="../assets/img/icon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="../assets/img/icon-256x256.png">
+	<script>
+		/* Прилага запазената тема преди първото изобразяване. Без JS страницата следва настройката на системата. */
+		try {
+			var accgTheme = localStorage.getItem( 'accg-theme' );
+			if ( accgTheme === 'light' || accgTheme === 'dark' ) {
+				document.documentElement.setAttribute( 'data-theme', accgTheme );
+			}
+		} catch ( e ) {}
+	</script>
+	<link rel="stylesheet" href="../assets/css/site.css">
+	<script src="../assets/js/site.js" defer></script>
+</head>
+<body>
+	<a class="skip-link" href="#content">Към съдържанието</a>
+
+	<header class="site-header">
+		<div class="container site-header__inner">
+			<a class="brand" href="#top" aria-label="Accessibility Guardian, към началото">
+				<img src="../assets/img/icon.svg" alt="" width="36" height="36">
+				<span class="brand__name" lang="en">Accessibility Guardian</span>
+			</a>
+			<nav class="site-nav" aria-label="Основна навигация">
+				<ul>
+					<li><a href="#how-it-works">Как работи</a></li>
+					<li><a href="#features">Възможности</a></li>
+					<li><a href="#screenshots">Снимки</a></li>
+					<li><a href="#developers">За разработчици</a></li>
+					<li><a href="#faq">Въпроси</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian">GitHub</a></li>
+				</ul>
+			</nav>
+			<div class="header-tools">
+				<nav class="lang-switch" aria-label="Език">
+					<ul>
+						<li><a href="../" lang="en" hreflang="en">English</a></li>
+						<li><a href="./" lang="bg" hreflang="bg" aria-current="page">Български</a></li>
+					</ul>
+				</nav>
+				<button class="theme-toggle" type="button" aria-pressed="false" hidden>
+					<svg class="theme-toggle__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+					<span>Тъмна тема</span>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main id="content" tabindex="-1">
+		<section class="hero" id="top" aria-labelledby="hero-title">
+			<div class="container hero__inner">
+				<div class="hero__copy">
+					<p class="eyebrow">Безплатен WordPress плъгин с отворен код</p>
+					<h1 id="hero-title">Откривайте и поправяйте проблеми с достъпността <span class="accent">направо в админ панела.</span></h1>
+					<p class="lead">Accessibility Guardian проверява всяка страница на WordPress сайта ви по <strong>WCAG&nbsp;2.2 ниво&nbsp;AA</strong> с axe-core и ви казва точно какво да поправите, къде и как. Без външни услуги, без регистрация и без нищо допълнително на сървъра.</p>
+					<div class="cta">
+						<a class="button button--primary" href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">
+							<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							Изтегли v__VERSION__ <span class="button__meta">(zip)</span>
+						</a>
+						<a class="button button--ghost" href="https://github.com/esmobg/Accessibility-Guardian">
+							<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.04 1.53 1.04.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+							Виж в GitHub
+						</a>
+					</div>
+					<p class="hero__note">Плъгинът е изпратен за преглед в официалната директория на WordPress.org и ще се появи там след одобрение.</p>
+					<ul class="pills" aria-label="Съвместимост">
+						<li>WCAG 2.2 A и AA</li>
+						<li>WordPress 6.4–7.1</li>
+						<li>PHP 8.0–8.5</li>
+						<li>Multisite</li>
+						<li>GPL-2.0-or-later</li>
+					</ul>
+				</div>
+				<div class="hero__visual">
+					<div class="window">
+						<div class="window__bar" aria-hidden="true"><span></span><span></span><span></span></div>
+						<img src="../assets/img/screenshot-1.png" width="1280" height="800" alt="Таблото на Accessibility Guardian в WordPress: оценка на сайта 88 от 100 („Добра“), 9 сканирани страници, проблеми по тежест, категории по WCAG и графика на напредъка, която расте от 83 на 88 за три сканирания.">
+					</div>
+					<div class="score-card" aria-hidden="true">
+						<svg class="score-ring" viewBox="0 0 120 120" width="88" height="88" focusable="false">
+							<circle cx="60" cy="60" r="50" class="score-ring__track"/>
+							<circle cx="60" cy="60" r="50" class="score-ring__value" pathLength="100"/>
+						</svg>
+						<div>
+							<p class="score-card__score">88<span>/100</span></p>
+							<p class="score-card__label">Добра · +5 от първото сканиране</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="strip" aria-label="Акценти">
+			<ul class="container strip__list">
+				<li><strong>Без външни услуги.</strong> Сканирането става във вашия браузър, на вашия сайт.</li>
+				<li><strong>Истински страници.</strong> Проверява крайния HTML, независимо от темата или редактора.</li>
+				<li><strong>Конкретни насоки.</strong> Всеки проблем показва елемента, неговия HTML и поправка.</li>
+				<li><strong>Отворен код.</strong> Лиценз GPL, тестван с PHP от 8.0 до 8.5.</li>
+			</ul>
+		</section>
+
+		<section class="section" id="how-it-works" aria-labelledby="how-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Как работи</p>
+				<h2 id="how-title">От сканиране до поправка в три стъпки</h2>
+				<ol class="steps">
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+						<h3>Сканирайте</h3>
+						<p>Пуснете сканиране на целия сайт от <em lang="en">Accessibility Guardian → Run Scan</em> или сканирайте една страница от горната лента, докато я разглеждате. Всяка страница се зарежда в скрита рамка и axe-core проверява реалния, изобразен резултат.</p>
+					</li>
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><path d="M8 6h12M8 12h12M8 18h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg></span>
+						<h3>Прегледайте</h3>
+						<p>Получавате оценка от 0 до 100 и списък с проблеми, подредени по тежест. Всеки от тях показва страницата, елемента, неговия HTML, критерия от WCAG и връзка към документация.</p>
+					</li>
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<h3>Поправете</h3>
+						<p>Следвайте препоръчаната поправка за всеки проблем, включете автоматични поправки за често срещаните случаи, сканирайте отново и наблюдавайте как оценката расте.</p>
+					</li>
+				</ol>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="features" aria-labelledby="features-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Възможности</p>
+				<h2 id="features-title">Всичко необходимо за проверка на WordPress сайт</h2>
+				<ul class="cards">
+					<li class="card">
+						<h3>Анализ на реалната страница</h3>
+						<p>axe-core 4.10 проверява напълно изобразената страница, така че се отчитат изчисленият цветови контраст, ARIA състоянията, кодът на темата и резултатът от page builder-ите.</p>
+					</li>
+					<li class="card">
+						<h3>WCAG 2.0, 2.1 и 2.2</h3>
+						<p>Изберете ниво A или AA. Допълнителните проверки за добри практики хващат прескочени нива на заглавия, липсващо основно заглавие и съдържание извън ориентирите (landmarks).</p>
+					</li>
+					<li class="card">
+						<h3>Проверки, които axe-core няма</h3>
+						<p>Общ текст на връзки като „натиснете тук“, полета само с placeholder вместо етикет, връзки, които отварят нов прозорец без предупреждение, и връзки към PDF файлове.</p>
+					</li>
+					<li class="card">
+						<h3>Конкретни проблеми</h3>
+						<p>Тежест, критерий от WCAG, страница, CSS път, HTML фрагмент, препоръчана поправка и документация за всяка находка, с филтър по тежест.</p>
+					</li>
+					<li class="card">
+						<h3>Оценка и напредък</h3>
+						<p>Оценка на сайта от 0 до 100 с нива „Отлична“, „Добра“, „Нужни са подобрения“ и „Слаба“, плюс графика как се променя между сканиранията.</p>
+					</li>
+					<li class="card">
+						<h3>Автоматични поправки по избор</h3>
+						<p>Девет малки поправки, които включвате сами: връзка за прескачане, видим фокус, подчертани връзки, атрибут за език, предупреждение за нов прозорец, мащабиране и още.</p>
+					</li>
+					<li class="card">
+						<h3>Експорт в CSV и JSON</h3>
+						<p>Експортирайте всяко сканиране за екипа си, за клиента или за отчетите си.</p>
+					</li>
+					<li class="card">
+						<h3>Multisite и hooks за разработчици</h3>
+						<p>Активиране за отделен сайт или за цялата мрежа, плюс филтри и действия за промяна на списъка с адреси, настройките на axe-core и нужните права.</p>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="section" id="screenshots" aria-labelledby="screenshots-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Снимки</p>
+				<h2 id="screenshots-title">Вижте го в действие</h2>
+				<p class="section__intro">Реални снимки от WordPress 7.1 на малък демонстрационен сайт с типични проблеми с достъпността. Интерфейсът на плъгина е на английски и може да бъде преведен.</p>
+				<ul class="gallery">
+					<li>
+						<figure>
+							<a class="gallery__link" href="../assets/img/screenshot-1.png" data-index="0">
+								<img src="../assets/img/screenshot-1.png" width="1280" height="800" loading="lazy" alt="Табло с оценка на сайта 88 от 100, карти за сканирани страници, грешки, предупреждения и успешни проверки, проблеми по тежест, разпределение по категории WCAG и графика на напредъка.">
+							</a>
+							<figcaption>Табло: оценка на сайта, разпределение по тежест, категории по WCAG и напредък във времето.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="../assets/img/screenshot-2.png" data-index="1">
+								<img src="../assets/img/screenshot-2.png" width="1280" height="800" loading="lazy" alt="Страницата за сканиране след завършено сканиране на 9 страници: оценка 88 от 100, брой критични, сериозни, леки проблеми и предупреждения, и дневник с броя проблеми за всяка страница.">
+							</a>
+							<figcaption>Завършено сканиране на целия сайт с обобщение на оценката и дневник по страници.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="../assets/img/screenshot-3.png" data-index="2">
+								<img src="../assets/img/screenshot-3.png" width="1280" height="800" loading="lazy" alt="Страница с проблеми и раздели по тежест. Критичен проблем image-alt показва критерия 1.1.1 Нетекстово съдържание, адреса на страницата, елемента, неговия HTML и препоръчаната поправка.">
+							</a>
+							<figcaption>Проблеми: всяка находка с критерий от WCAG, елемент, HTML и препоръчана поправка.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="../assets/img/screenshot-4.png" data-index="3">
+								<img src="../assets/img/screenshot-4.png" width="1280" height="1000" loading="lazy" alt="Страница с настройки: типове съдържание за сканиране, архиви на термини, ниво по WCAG, проверки за добри практики и девет автоматични поправки, три от които са включени.">
+							</a>
+							<figcaption>Настройки: какво да се сканира, ниво по WCAG, добри практики и автоматични поправки.</figcaption>
+						</figure>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="score" aria-labelledby="score-title">
+			<div class="container split">
+				<div>
+					<p class="eyebrow eyebrow--section">Оценка</p>
+					<h2 id="score-title">Оценка, която можете да обясните</h2>
+					<p>Всяка сканирана страница започва от 100 и губи точки за всеки проблем, но никога не пада под 0. Оценката на сайта е <strong>средната стойност от всички сканирани страници</strong>, така че една проблемна страница не скрива иначе добрия сайт.</p>
+					<ul class="bands" aria-label="Нива на оценката">
+						<li><span class="band band--excellent">Отлична</span> 95–100</li>
+						<li><span class="band band--good">Добра</span> 80–94</li>
+						<li><span class="band band--needs">Нужни са подобрения</span> 60–79</li>
+						<li><span class="band band--poor">Слаба</span> под 60</li>
+					</ul>
+				</div>
+				<div class="table-wrap" role="region" aria-labelledby="weights-caption" tabindex="0">
+					<table>
+						<caption id="weights-caption">Отнети точки за всеки проблем</caption>
+						<thead>
+							<tr><th scope="col">Тежест</th><th scope="col">Наказание</th><th scope="col">Типични примери</th></tr>
+						</thead>
+						<tbody>
+							<tr><th scope="row"><span class="sev sev--critical">Критичен</span></th><td>−10</td><td>Изображение без алтернативен текст, бутони без име, липсващ език на страницата</td></tr>
+							<tr><th scope="row"><span class="sev sev--major">Сериозен</span></th><td>−5</td><td>Нисък контраст, полета без етикет, грешна структура на списък</td></tr>
+							<tr><th scope="row"><span class="sev sev--minor">Лек</span></th><td>−2</td><td>Общ текст на връзка, полета само с placeholder</td></tr>
+							<tr><th scope="row"><span class="sev sev--warning">Предупреждение</span></th><td>−1</td><td>За ръчна проверка, добри практики, PDF файлове</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="fixes" aria-labelledby="fixes-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Автоматични поправки</p>
+				<h2 id="fixes-title">Бързи подобрения, само когато ги искате</h2>
+				<p class="section__intro">Всички поправки са изключени по подразбиране. Те използват hooks на WordPress и малки файлове за предната част на сайта; файловете на темата ви никога не се променят. Включвайте ги една по една и проверявайте сайта.</p>
+				<div class="table-wrap" role="region" aria-labelledby="fixes-caption" tabindex="0">
+					<table>
+						<caption id="fixes-caption" class="visually-hidden">Налични автоматични поправки</caption>
+						<thead>
+							<tr><th scope="col">Поправка</th><th scope="col">Какво прави</th><th scope="col">WCAG</th></tr>
+						</thead>
+						<tbody>
+							<tr><th scope="row">Атрибут за език</th><td>Добавя <code>lang</code> към <code>&lt;html&gt;</code>, когато темата го пропуска</td><td>3.1.1</td></tr>
+							<tr><th scope="row">Връзка „към съдържанието“</th><td>Добавя връзка за прескачане при класически теми (блоковите вече имат такава)</td><td>2.4.1</td></tr>
+							<tr><th scope="row">Видим фокус</th><td>Показва ясна рамка около връзки и контроли при работа с клавиатура</td><td>2.4.7</td></tr>
+							<tr><th scope="row">Подчертани връзки</th><td>Подчертава връзките в съдържанието, без да пипа бутони и менюта</td><td>1.4.1</td></tr>
+							<tr><th scope="row">Нов прозорец</th><td>Добавя скрит текст „(отваря се в нов прозорец)“ към връзки с <code>target="_blank"</code></td><td>3.2.5</td></tr>
+							<tr><th scope="row">Мащабиране</th><td>Премахва ограниченията <code>user-scalable=no</code> и <code>maximum-scale</code></td><td>1.4.4</td></tr>
+							<tr><th scope="row">Положителен tabindex</th><td>Връща стойности на <code>tabindex</code> над 0 към 0 за естествен ред на фокуса</td><td>2.4.3</td></tr>
+							<tr><th scope="row">Етикети за търсене</th><td>Добавя достъпен етикет към класическата форма за търсене</td><td>3.3.2</td></tr>
+							<tr><th scope="row">Излишни title</th><td>Премахва атрибути <code>title</code>, които повтарят друго достъпно име</td><td>—</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="privacy" aria-labelledby="privacy-title">
+			<div class="container split">
+				<div>
+					<p class="eyebrow eyebrow--section">Поверителност</p>
+					<h2 id="privacy-title">Вашият сайт, вашите данни</h2>
+					<ul class="checklist">
+						<li>Сканирането става на вашия сайт и във вашия браузър. Съдържанието и резултатите никога не се изпращат на автора на плъгина или на трети страни.</li>
+						<li>Резултатите се пазят във вашата база данни на WordPress и се изтриват, когато премахнете плъгина, на всеки сайт в мрежата.</li>
+						<li>Нищо не се зарежда за посетителите, освен ако не включите автоматична поправка.</li>
+						<li>Без регистрация, без API ключ, без проследяване.</li>
+					</ul>
+				</div>
+				<div class="callout" role="note" aria-labelledby="honest-title">
+					<h3 id="honest-title">Честно за автоматичните проверки</h3>
+					<p>Автоматичните инструменти, включително този, откриват бързо голяма част от честите проблеми, но не всички. Някои изисквания на WCAG, като смислен алтернативен текст, логичен ред на четене и субтитри, може да провери само човек.</p>
+					<p>Accessibility Guardian ви помага да откривате и поправяте проблеми по-бързо. Той не удостоверява, че сайтът е достъпен или че отговаря на законови изисквания като ADA, Европейския акт за достъпността, EN&nbsp;301&nbsp;549 или Section&nbsp;508.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="developers" aria-labelledby="developers-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">За разработчици</p>
+				<h2 id="developers-title">Hooks, с които да го нагодите</h2>
+				<div class="split split--top">
+					<div class="table-wrap" role="region" aria-labelledby="hooks-caption" tabindex="0">
+						<table>
+							<caption id="hooks-caption" class="visually-hidden">Филтри и действия</caption>
+							<thead>
+								<tr><th scope="col">Hook</th><th scope="col">Предназначение</th></tr>
+							</thead>
+							<tbody>
+								<tr><th scope="row"><code>accg_scan_urls</code></th><td>Промяна на списъка с адреси при пълно сканиране</td></tr>
+								<tr><th scope="row"><code>accg_scan_url_limit</code></th><td>Максимален брой адреси при пълно сканиране (по подразбиране 1000)</td></tr>
+								<tr><th scope="row"><code>accg_axe_options</code></th><td>Настройки, подавани на <code>axe.run()</code></td></tr>
+								<tr><th scope="row"><code>accg_required_capability</code></th><td>Кой може да сканира и да вижда докладите (по подразбиране <code>manage_options</code>)</td></tr>
+								<tr><th scope="row"><code>accg_skip_link_target</code></th><td>Цел на връзката за прескачане</td></tr>
+								<tr><th scope="row"><code>accg_scan_completed</code></th><td>Действие след завършено сканиране</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="code">
+						<div class="code__head">
+							<span id="code-label">functions.php</span>
+							<button class="copy-button" type="button" data-copy-target="hooks-example" hidden>Копирай кода</button>
+						</div>
+						<pre tabindex="0" aria-labelledby="code-label" lang="en"><code id="hooks-example">// Let editors run scans and see reports.
+add_filter( 'accg_required_capability', fn () =&gt; 'edit_others_posts' );
+
+// Email the site admin when a scan scores below 80.
+add_action( 'accg_scan_completed', function ( int $scan_id, array $totals ) {
+	if ( $totals['score'] &lt; 80 ) {
+		wp_mail(
+			get_option( 'admin_email' ),
+			'Accessibility score dropped',
+			sprintf( 'Scan #%d scored %d/100.', $scan_id, $totals['score'] )
+		);
+	}
+}, 10, 2 );</code></pre>
+						<p class="visually-hidden" role="status" aria-live="polite" id="copy-status"></p>
+					</div>
+				</div>
+				<p class="more"><a href="https://github.com/esmobg/Accessibility-Guardian#developer-hooks">Пълна документация за разработчици в GitHub (на английски)</a></p>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="install" aria-labelledby="install-title">
+			<div class="container split split--top">
+				<div>
+					<p class="eyebrow eyebrow--section">Начало</p>
+					<h2 id="install-title">Инсталиране за минута</h2>
+					<ol class="install">
+						<li>Изтеглете <a href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">accessibility-guardian-__VERSION__.zip</a> от последното издание.</li>
+						<li>В WordPress отидете на <em>Разширения → Добавяне на ново → Качване</em>, изберете zip файла и натиснете <em>Инсталиране</em> и <em>Активиране</em>.</li>
+						<li>Отворете <em lang="en">Accessibility Guardian → Run Scan</em> и натиснете <em lang="en">Start full site scan</em>. Оставете раздела отворен, докато сканирането приключи.</li>
+					</ol>
+					<p class="note">Използвайте zip файла от изданието, а не зеления бутон „Download ZIP“ в GitHub: той сваля хранилището за разработка и се разархивира в папка с грешно име.</p>
+				</div>
+				<div class="requirements">
+					<h3>Изисквания</h3>
+					<dl>
+						<div><dt>WordPress</dt><dd>6.4 или по-нова, тестван до 7.1</dd></div>
+						<div><dt>PHP</dt><dd>8.0 или по-нова, тестван с 8.0–8.5</dd></div>
+						<div><dt>Браузър</dt><dd>Актуален Chrome, Edge, Firefox или Safari</dd></div>
+						<div><dt>Рамки</dt><dd>Страниците трябва да позволяват вграждане от същия домейн. <code>X-Frame-Options: SAMEORIGIN</code> е наред; <code>DENY</code> спира сканирането.</dd></div>
+						<div><dt>Сървър</dt><dd>Нищо допълнително: без Node.js, браузър на сървъра или API ключ</dd></div>
+					</dl>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="faq" aria-labelledby="faq-title">
+			<div class="container container--narrow">
+				<p class="eyebrow eyebrow--section">Въпроси</p>
+				<h2 id="faq-title">Често задавани въпроси</h2>
+				<div class="faq">
+					<details>
+						<summary>Ще направи ли това сайта ми съвместим с ADA или с Европейския акт за достъпността?</summary>
+						<p>Нито един инструмент не може да направи това сам. Автоматичните проверки откриват бързо много от честите проблеми, но някои изисквания на WCAG може да провери само човек. Използвайте доклада, за да поправите откритото, а след това тествайте основните страници с клавиатура и екранен четец.</p>
+					</details>
+					<details>
+						<summary>Трябва ли да инсталирам нещо на сървъра?</summary>
+						<p>Не. Сканирането става в браузъра на администратора чрез скрита рамка на вашия сайт, така че е достатъчен обикновен WordPress хостинг.</p>
+					</details>
+					<details>
+						<summary>Защо трябва да държа раздела отворен по време на сканиране?</summary>
+						<p>axe-core работи във вашия браузър, страница по страница. Ако затворите раздела, сканирането спира. Можете да го отмените по всяко време; отмененото сканиране пази частичните си резултати, но не заменя последния завършен доклад.</p>
+					</details>
+					<details>
+						<summary>Една страница не беше сканирана. Защо?</summary>
+						<p>Обикновено страницата не може да се покаже в рамка заради <code>X-Frame-Options: DENY</code> или <code>Content-Security-Policy: frame-ancestors 'none'</code>, зареждането ѝ е отнело над 30 секунди или много строга политика за сигурност на съдържанието е блокирала axe-core. Останалата част от сканирането продължава нормално.</p>
+					</details>
+					<details>
+						<summary>Ще се появи ли горната лента на WordPress в резултатите?</summary>
+						<p>Не. Страниците се сканират като влязъл администратор, така че лентата присъства, но е изключена от всички проверки.</p>
+					</details>
+					<details>
+						<summary>Забавя ли сайта за посетителите?</summary>
+						<p>Не. Нищо не се зарежда за посетителите, освен ако не включите автоматична поправка. Включените поправки добавят един малък CSS файл и при някои поправки – един малък отложен скрипт.</p>
+					</details>
+					<details>
+						<summary>Работи ли с page builder-и, блокови теми и multisite?</summary>
+						<p>Да. Проверява крайния HTML, без значение какво го е създало, а автоматичните поправки се съобразяват с блоковите теми. При multisite можете да го активирате за отделен сайт или за цялата мрежа; всеки сайт пази своите настройки и резултати.</p>
+					</details>
+				</div>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="changelog" aria-labelledby="changelog-title">
+			<div class="container container--narrow">
+				<p class="eyebrow eyebrow--section">Какво ново</p>
+				<h2 id="changelog-title">Версия __VERSION__</h2>
+				<ul class="checklist">
+					<li>Тестван с WordPress 6.4–7.1 и PHP 8.0–8.5; Plugin Check не открива грешки и предупреждения.</li>
+					<li>Проверки за добри практики при заглавия, ориентири и структура на страницата.</li>
+					<li>Връзка „Scan accessibility“ в горната лента за сканиране на една страница с едно натискане.</li>
+					<li>Пълна поддръжка на multisite и четири нови hooks за разработчици.</li>
+					<li>Горната лента на WordPress вече не влиза в резултатите; съобщенията пазят имената на елементите като <code>&lt;ul&gt;</code>.</li>
+					<li>Собствените екрани на плъгина минават проверките на axe-core по WCAG 2.2 AA.</li>
+				</ul>
+				<p class="more"><a href="https://github.com/esmobg/Accessibility-Guardian/blob/main/CHANGELOG.md">Пълен списък с промени (на английски)</a></p>
+			</div>
+		</section>
+
+		<section class="final-cta" aria-labelledby="final-title">
+			<div class="container final-cta__inner">
+				<h2 id="final-title">Направете WordPress сайта си по-лесен за използване от всички</h2>
+				<p>Безплатно, с отворен код и поверително по замисъл.</p>
+				<div class="cta cta--center">
+					<a class="button button--primary" href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">Изтегли v__VERSION__ <span class="button__meta">(zip)</span></a>
+					<a class="button button--ghost" href="https://github.com/esmobg/Accessibility-Guardian">Звезда в GitHub</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container site-footer__inner">
+			<div>
+				<p class="brand brand--footer"><img src="../assets/img/icon.svg" alt="" width="28" height="28"> <span lang="en">Accessibility Guardian</span></p>
+				<p>Лиценз <a href="https://github.com/esmobg/Accessibility-Guardian/blob/main/LICENSE.txt">GPL-2.0-or-later</a>. Включва <a href="https://github.com/dequelabs/axe-core">axe-core</a> от Deque Systems (MPL-2.0).</p>
+				<p>Създаден от <a href="https://esmobg.github.io/">Исмаил Исмаил</a>.</p>
+			</div>
+			<nav aria-label="Проект">
+				<ul>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian">Изходен код</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/releases">Издания</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/issues">Съобщете за проблем</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/security">Сигурност</a></li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+
+	<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
+		<figure class="lightbox__figure">
+			<img class="lightbox__image" src="" alt="">
+			<figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
+		</figure>
+		<div class="lightbox__controls">
+			<button type="button" class="lightbox__button" data-action="prev">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				Предишна
+			</button>
+			<p class="lightbox__counter" aria-live="polite"></p>
+			<button type="button" class="lightbox__button" data-action="next">
+				Следваща
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</button>
+			<button type="button" class="lightbox__button lightbox__close" data-action="close">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+				Затвори
+			</button>
+		</div>
+	</dialog>
+</body>
+</html>
