@@ -1,0 +1,61 @@
+name: Website
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'site/**'
+      - 'wp-org-assets/**'
+      - 'bin/build-site.py'
+      - '.github/workflows/pages.yml'
+  # A release created by the Release workflow (GITHUB_TOKEN) does not emit a
+  # "release" event to other workflows, so also rebuild when that workflow succeeds.
+  workflow_run:
+    workflows: [ Release ]
+    types: [ completed ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Assemble the site (links to the latest published release)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python bin/build-site.py --out _site --require-release
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

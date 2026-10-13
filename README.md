@@ -9,6 +9,9 @@
 ![WordPress](https://img.shields.io/badge/WordPress-6.4%E2%80%937.1-21759b)
 ![PHP](https://img.shields.io/badge/PHP-8.0%E2%80%938.5-777bb4)
 ![License](https://img.shields.io/badge/license-GPL--2.0--or--later-green)
+[![Website](https://img.shields.io/badge/website-esmobg.github.io-16713a)](https://esmobg.github.io/Accessibility-Guardian/)
+
+**Website:** https://esmobg.github.io/Accessibility-Guardian/
 
 Accessibility Guardian is a WordPress plugin that checks your site against **WCAG 2.2 Level A and AA** from the admin dashboard. It runs the [axe-core](https://github.com/dequelabs/axe-core) engine in the administrator's browser against the fully rendered front end of each page. You get a score, a prioritized list of issues with the exact element and a recommended fix, a progress chart, exports and optional one-click fixes.
 
@@ -211,7 +214,7 @@ accessibility-guardian/
 └── languages/                     accessibility-guardian.pot
 ```
 
-Repository-only folders (not in the release zip): `tests/` (PHPUnit), `bin/` (build and screenshot tools), `docs/` (QA notes and the WordPress.org submission guide), `wp-org-assets/` (WordPress.org icons, banners, screenshots and Live Preview blueprint) and `.github/` (CI and releases).
+Repository-only folders (not in the release zip): `tests/` (PHPUnit), `bin/` (build and screenshot tools), `docs/` (QA notes and the WordPress.org submission guide), `site/` (the project website), `wp-org-assets/` (WordPress.org icons, banners, screenshots and Live Preview blueprint) and `.github/` (CI and releases).
 
 ### Stored data
 
@@ -349,6 +352,18 @@ npm install --no-save playwright && npx playwright install chromium
 # with the Playground server from above running:
 node bin/screenshots/capture.js http://127.0.0.1:9400 wp-org-assets
 node bin/screenshots/render-brand.js     # icon-128/256 and banner-772/1544 from icon.svg and brand.html
+```
+
+### Website
+
+The project website (https://esmobg.github.io/Accessibility-Guardian/) lives in `site/`: plain HTML, CSS and a little JavaScript, no build tools. `python bin/build-site.py` assembles it into `.site-build/`, copying the icon, banner and screenshots from `wp-org-assets/` and linking the download buttons to the latest published GitHub release that has the zip attached (so a version bump on `main` never produces broken links). The [Website workflow](.github/workflows/pages.yml) deploys it to GitHub Pages whenever `site/` or `wp-org-assets/` changes and after every successful release.
+
+To preview it locally:
+
+```bash
+python bin/build-site.py --out .site-build/Accessibility-Guardian
+python -m http.server 8765 --directory .site-build
+# open http://127.0.0.1:8765/Accessibility-Guardian/
 ```
 
 ### Translations

@@ -8,3 +8,5 @@
 *.zip
 *.log
 .DS_Store
+/.site-build/
+/_site/
