@@ -279,6 +279,45 @@ p {
 	text-decoration: underline;
 }
 
+/* Language switcher and theme toggle stay together on the right. */
+.header-tools {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+/* Language switcher: full language names, current language highlighted. */
+.lang-switch ul {
+	display: flex;
+	gap: 0.2rem;
+	margin: 0;
+	padding: 0.2rem;
+	border: 1px solid var(--ui-border);
+	border-radius: 999px;
+	list-style: none;
+}
+
+.lang-switch a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 40px;
+	padding: 0 0.8rem;
+	border-radius: 999px;
+	color: var(--text);
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.lang-switch a:hover {
+	text-decoration: underline;
+}
+
+.lang-switch a[aria-current="page"] {
+	background: var(--accent-soft);
+	color: var(--accent-soft-text);
+}
+
 .theme-toggle {
 	display: inline-flex;
 	align-items: center;
@@ -297,6 +336,23 @@ p {
 
 .theme-toggle:hover {
 	background: var(--surface);
+}
+
+/* Icon-only toggle; the visually hidden text remains its accessible name. */
+.theme-toggle {
+	width: 44px;
+	padding: 0;
+	justify-content: center;
+}
+
+.theme-toggle span {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
 }
 
 /* Buttons. */
@@ -400,7 +456,7 @@ p {
 }
 
 .hero h1 {
-	font-size: clamp(2.2rem, 1.4rem + 3.2vw, 3.6rem);
+	font-size: clamp(2.1rem, 1.4rem + 2.6vw, 3.25rem);
 	line-height: 1.08;
 	letter-spacing: -0.025em;
 	margin-bottom: 1.2rem;
@@ -1172,6 +1228,23 @@ tbody tr:last-child td {
 }
 
 /* Responsive. */
+@media (max-width: 1200px) {
+	/* Brand and tools on the first row, navigation on its own row below. */
+	.site-nav {
+		order: 3;
+		width: 100%;
+		margin: 0 0 0.5rem;
+	}
+
+	.site-nav a {
+		padding: 0 0.55rem;
+	}
+
+	.header-tools {
+		margin-left: auto;
+	}
+}
+
 @media (max-width: 960px) {
 	.hero__inner,
 	.split {
@@ -1205,19 +1278,7 @@ tbody tr:last-child td {
 		position: static;
 	}
 
-	.site-nav {
-		order: 3;
-		width: 100%;
-		margin: 0 0 0.5rem;
-	}
 
-	.site-nav a {
-		padding: 0 0.55rem;
-	}
-
-	.theme-toggle {
-		margin-left: auto;
-	}
 
 	.gallery,
 	.strip__list {
@@ -1244,23 +1305,6 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 480px) {
-	/* Icon-only toggle on small screens; the text stays available to screen readers. */
-	.theme-toggle {
-		width: 44px;
-		padding: 0;
-		justify-content: center;
-	}
-
-	.theme-toggle span {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0 0 0 0);
-		white-space: nowrap;
-	}
-
 	.brand__name {
 		font-size: 1rem;
 	}
