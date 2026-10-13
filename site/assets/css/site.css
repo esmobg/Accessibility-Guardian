@@ -1367,3 +1367,44 @@ tbody tr:last-child td {
 		color: #000000;
 	}
 }
+
+/* Author credit: the author's logo, brand blue on light, white on dark. */
+:root {
+	--author-logo: #2356eb;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--author-logo: #ffffff;
+	}
+}
+
+:root[data-theme="dark"] {
+	--author-logo: #ffffff;
+}
+
+.made-by {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35rem 0.5rem;
+}
+
+.made-by__link {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 0 0.4rem;
+	border-radius: var(--radius-sm);
+	color: var(--author-logo);
+}
+
+.made-by__link:hover {
+	background: var(--surface);
+}
+
+.made-by__logo {
+	display: block;
+	width: auto;
+	height: 22px;
+}
