@@ -15,6 +15,9 @@
 .build
 bin
 docs
+site
+.site-build
+_site
 tests
 phpunit.xml.dist
 phpcs.xml

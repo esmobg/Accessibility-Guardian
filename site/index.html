@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Accessibility Guardian – WCAG 2.2 accessibility checker for WordPress</title>
+	<meta name="description" content="Free, open-source WordPress plugin that checks your site against WCAG 2.2 AA with axe-core, right in wp-admin. Score, prioritized issues, fix guidance and optional auto-fixes. No external service.">
+	<link rel="canonical" href="https://esmobg.github.io/Accessibility-Guardian/">
+	<meta name="theme-color" content="#13202f">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Accessibility Guardian for WordPress">
+	<meta property="og:description" content="Check your WordPress site against WCAG 2.2 AA with axe-core, right in wp-admin. Free and open source.">
+	<meta property="og:url" content="https://esmobg.github.io/Accessibility-Guardian/">
+	<meta property="og:image" content="https://esmobg.github.io/Accessibility-Guardian/assets/img/banner-1544x500.png">
+	<meta property="og:image:alt" content="Accessibility Guardian: WCAG 2.2 AA audits with axe-core, right inside WordPress">
+	<meta name="twitter:card" content="summary_large_image">
+	<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="assets/img/icon-256x256.png">
+	<script>
+		/* Apply a saved theme before first paint. Without JS the page follows the system setting. */
+		try {
+			var accgTheme = localStorage.getItem( 'accg-theme' );
+			if ( accgTheme === 'light' || accgTheme === 'dark' ) {
+				document.documentElement.setAttribute( 'data-theme', accgTheme );
+			}
+		} catch ( e ) {}
+	</script>
+	<link rel="stylesheet" href="assets/css/site.css">
+	<script src="assets/js/site.js" defer></script>
+</head>
+<body>
+	<a class="skip-link" href="#content">Skip to content</a>
+
+	<header class="site-header">
+		<div class="container site-header__inner">
+			<a class="brand" href="#top" aria-label="Accessibility Guardian, back to top">
+				<img src="assets/img/icon.svg" alt="" width="36" height="36">
+				<span class="brand__name">Accessibility Guardian</span>
+			</a>
+			<nav class="site-nav" aria-label="Main">
+				<ul>
+					<li><a href="#how-it-works">How it works</a></li>
+					<li><a href="#features">Features</a></li>
+					<li><a href="#screenshots">Screenshots</a></li>
+					<li><a href="#developers">Developers</a></li>
+					<li><a href="#faq">FAQ</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian">GitHub</a></li>
+				</ul>
+			</nav>
+			<button class="theme-toggle" type="button" aria-pressed="false" hidden>
+				<svg class="theme-toggle__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+				<span>Dark mode</span>
+			</button>
+		</div>
+	</header>
+
+	<main id="content" tabindex="-1">
+		<section class="hero" id="top" aria-labelledby="hero-title">
+			<div class="container hero__inner">
+				<div class="hero__copy">
+					<p class="eyebrow">Free &amp; open-source WordPress plugin</p>
+					<h1 id="hero-title">Find and fix accessibility issues, <span class="accent">right in wp-admin.</span></h1>
+					<p class="lead">Accessibility Guardian checks every page of your WordPress site against <strong>WCAG&nbsp;2.2 Level&nbsp;AA</strong> with the axe-core engine and tells you exactly what to fix, where, and how. No external service, no account, nothing to install on the server.</p>
+					<div class="cta">
+						<a class="button button--primary" href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">
+							<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							Download v__VERSION__ <span class="button__meta">(zip)</span>
+						</a>
+						<a class="button button--ghost" href="https://github.com/esmobg/Accessibility-Guardian">
+							<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.04 1.53 1.04.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+							View on GitHub
+						</a>
+					</div>
+					<p class="hero__note">Submitted to the WordPress.org plugin directory; the listing will appear there once the review is complete.</p>
+					<ul class="pills" aria-label="Compatibility">
+						<li>WCAG 2.2 A &amp; AA</li>
+						<li>WordPress 6.4–7.1</li>
+						<li>PHP 8.0–8.5</li>
+						<li>Multisite</li>
+						<li>GPL-2.0-or-later</li>
+					</ul>
+				</div>
+				<div class="hero__visual">
+					<div class="window">
+						<div class="window__bar" aria-hidden="true"><span></span><span></span><span></span></div>
+						<img src="assets/img/screenshot-1.png" width="1280" height="800" alt="The Accessibility Guardian dashboard in WordPress: a site score of 88 out of 100 rated Good, 9 pages scanned, issues by severity, WCAG categories and a progress chart rising from 83 to 88 over three scans.">
+					</div>
+					<div class="score-card" aria-hidden="true">
+						<svg class="score-ring" viewBox="0 0 120 120" width="88" height="88" focusable="false">
+							<circle cx="60" cy="60" r="50" class="score-ring__track"/>
+							<circle cx="60" cy="60" r="50" class="score-ring__value" pathLength="100"/>
+						</svg>
+						<div>
+							<p class="score-card__score">88<span>/100</span></p>
+							<p class="score-card__label">Good · +5 since first scan</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="strip" aria-label="Highlights">
+			<ul class="container strip__list">
+				<li><strong>No external service.</strong> Scans run in your browser, on your own site.</li>
+				<li><strong>Real pages.</strong> Checks the final rendered HTML, whatever theme or builder made it.</li>
+				<li><strong>Actionable.</strong> Every issue shows the element, its HTML and a fix.</li>
+				<li><strong>Open source.</strong> GPL licensed, tested on PHP 8.0 to 8.5.</li>
+			</ul>
+		</section>
+
+		<section class="section" id="how-it-works" aria-labelledby="how-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">How it works</p>
+				<h2 id="how-title">From scan to fix in three steps</h2>
+				<ol class="steps">
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+						<h3>Scan</h3>
+						<p>Start a full-site scan from <em>Accessibility Guardian → Run Scan</em>, or scan a single page from the toolbar while you view it. Each page loads in a hidden frame and axe-core checks the real, rendered result.</p>
+					</li>
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><path d="M8 6h12M8 12h12M8 18h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg></span>
+						<h3>Review</h3>
+						<p>Get a 0–100 score and a list of issues sorted by severity. Each one shows the page, the element, its HTML, the WCAG success criterion and a link to documentation.</p>
+					</li>
+					<li class="step">
+						<span class="step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" focusable="false"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<h3>Fix</h3>
+						<p>Follow the recommended fix for each issue, switch on optional automatic fixes for common problems, then scan again and watch the score improve over time.</p>
+					</li>
+				</ol>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="features" aria-labelledby="features-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Features</p>
+				<h2 id="features-title">Everything you need to audit a WordPress site</h2>
+				<ul class="cards">
+					<li class="card">
+						<h3>Real rendered-page analysis</h3>
+						<p>axe-core 4.10 runs against the fully rendered page, so computed colour contrast, ARIA states, theme markup and page-builder output are all taken into account.</p>
+					</li>
+					<li class="card">
+						<h3>WCAG 2.0, 2.1 and 2.2</h3>
+						<p>Choose Level A or AA. Optional best-practice checks catch skipped heading levels, missing main headings and content outside landmarks.</p>
+					</li>
+					<li class="card">
+						<h3>Checks axe-core doesn't cover</h3>
+						<p>Generic link text such as “click here”, form fields that rely on a placeholder, links that open new windows without warning, and linked PDFs.</p>
+					</li>
+					<li class="card">
+						<h3>Actionable issues</h3>
+						<p>Severity, WCAG reference, page, CSS path, HTML snippet, a recommended fix and documentation for every finding, filterable by severity.</p>
+					</li>
+					<li class="card">
+						<h3>Score and progress</h3>
+						<p>A 0–100 site score with Excellent, Good, Needs Improvement and Poor bands, plus a chart of how it changes from scan to scan.</p>
+					</li>
+					<li class="card">
+						<h3>Optional automatic fixes</h3>
+						<p>Nine small, opt-in fixes: skip link, visible focus, underlined links, language attribute, new-window warnings, zoom and more.</p>
+					</li>
+					<li class="card">
+						<h3>CSV and JSON export</h3>
+						<p>Export any scan for your team, your client or your audit records.</p>
+					</li>
+					<li class="card">
+						<h3>Multisite and developer hooks</h3>
+						<p>Per-site or network activation, plus filters and actions to change the URL queue, axe-core options and required capability.</p>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="section" id="screenshots" aria-labelledby="screenshots-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Screenshots</p>
+				<h2 id="screenshots-title">See it in action</h2>
+				<p class="section__intro">Real screenshots from WordPress 7.1, taken on a small demo site with typical accessibility problems.</p>
+				<ul class="gallery">
+					<li>
+						<figure>
+							<a class="gallery__link" href="assets/img/screenshot-1.png" data-index="0">
+								<img src="assets/img/screenshot-1.png" width="1280" height="800" loading="lazy" alt="Dashboard with a site score of 88 out of 100, cards for pages scanned, errors, warnings and passed checks, issues by severity, WCAG category distribution and a progress chart.">
+							</a>
+							<figcaption>Dashboard: site score, severity breakdown, WCAG categories and progress over time.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="assets/img/screenshot-2.png" data-index="1">
+								<img src="assets/img/screenshot-2.png" width="1280" height="800" loading="lazy" alt="Run Scan page after a completed full-site scan of 9 pages: a score of 88 out of 100, counts of critical, major, minor and warning issues, and a log listing the number of issues per page.">
+							</a>
+							<figcaption>A completed full-site scan with the score summary and per-page log.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="assets/img/screenshot-3.png" data-index="2">
+								<img src="assets/img/screenshot-3.png" width="1280" height="800" loading="lazy" alt="Issues page with severity tabs. A critical image-alt issue shows the WCAG criterion 1.1.1 Non-text Content, the page URL, the element, its HTML and the recommended fix.">
+							</a>
+							<figcaption>Issues: every finding with its WCAG reference, element, HTML and recommended fix.</figcaption>
+						</figure>
+					</li>
+					<li>
+						<figure>
+							<a class="gallery__link" href="assets/img/screenshot-4.png" data-index="3">
+								<img src="assets/img/screenshot-4.png" width="1280" height="1000" loading="lazy" alt="Settings page with post types to scan, term archives, WCAG level, best-practice checks and nine optional automatic fixes, three of them enabled.">
+							</a>
+							<figcaption>Settings: content to scan, WCAG level, best-practice checks and automatic fixes.</figcaption>
+						</figure>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="score" aria-labelledby="score-title">
+			<div class="container split">
+				<div>
+					<p class="eyebrow eyebrow--section">Scoring</p>
+					<h2 id="score-title">A score you can explain</h2>
+					<p>Every scanned page starts at 100 and loses points for each issue, never going below 0. The site score is the <strong>average of all scanned pages</strong>, so one problem page does not hide an otherwise good site.</p>
+					<ul class="bands" aria-label="Score bands">
+						<li><span class="band band--excellent">Excellent</span> 95–100</li>
+						<li><span class="band band--good">Good</span> 80–94</li>
+						<li><span class="band band--needs">Needs improvement</span> 60–79</li>
+						<li><span class="band band--poor">Poor</span> below 60</li>
+					</ul>
+				</div>
+				<div class="table-wrap" role="region" aria-labelledby="weights-caption" tabindex="0">
+					<table>
+						<caption id="weights-caption">Points deducted per issue</caption>
+						<thead>
+							<tr><th scope="col">Severity</th><th scope="col">Penalty</th><th scope="col">Typical examples</th></tr>
+						</thead>
+						<tbody>
+							<tr><th scope="row"><span class="sev sev--critical">Critical</span></th><td>−10</td><td>Missing image alt text, unlabelled buttons, missing page language</td></tr>
+							<tr><th scope="row"><span class="sev sev--major">Major</span></th><td>−5</td><td>Low contrast, missing form labels, broken list structure</td></tr>
+							<tr><th scope="row"><span class="sev sev--minor">Minor</span></th><td>−2</td><td>Generic link text, placeholder-only fields</td></tr>
+							<tr><th scope="row"><span class="sev sev--warning">Warning</span></th><td>−1</td><td>Items for manual review, best-practice findings, PDFs</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="fixes" aria-labelledby="fixes-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">Automatic fixes</p>
+				<h2 id="fixes-title">Quick wins, only when you want them</h2>
+				<p class="section__intro">All fixes are off by default. They use WordPress hooks and small front-end assets; your theme files are never edited. Turn on one at a time and check your site.</p>
+				<div class="table-wrap" role="region" aria-labelledby="fixes-caption" tabindex="0">
+					<table>
+						<caption id="fixes-caption" class="visually-hidden">Available automatic fixes</caption>
+						<thead>
+							<tr><th scope="col">Fix</th><th scope="col">What it does</th><th scope="col">WCAG</th></tr>
+						</thead>
+						<tbody>
+							<tr><th scope="row">Language attribute</th><td>Sets <code>lang</code> on <code>&lt;html&gt;</code> when the theme leaves it out</td><td>3.1.1</td></tr>
+							<tr><th scope="row">Skip-to-content link</th><td>Adds a keyboard skip link on classic themes (block themes already have one)</td><td>2.4.1</td></tr>
+							<tr><th scope="row">Visible focus outline</th><td>Shows a clear outline on focused links and controls (keyboard only)</td><td>2.4.7</td></tr>
+							<tr><th scope="row">Underline links</th><td>Underlines links in content, leaving buttons and menus alone</td><td>1.4.1</td></tr>
+							<tr><th scope="row">New-window warnings</th><td>Adds a hidden “(opens in a new window)” to <code>target="_blank"</code> links</td><td>3.2.5</td></tr>
+							<tr><th scope="row">Allow zooming</th><td>Removes <code>user-scalable=no</code> and <code>maximum-scale</code> limits</td><td>1.4.4</td></tr>
+							<tr><th scope="row">Positive tabindex</th><td>Resets <code>tabindex</code> values above 0 to keep a natural focus order</td><td>2.4.3</td></tr>
+							<tr><th scope="row">Search form labels</th><td>Adds an accessible label to the classic search form</td><td>3.3.2</td></tr>
+							<tr><th scope="row">Redundant titles</th><td>Removes <code>title</code> attributes that duplicate another accessible name</td><td>—</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="privacy" aria-labelledby="privacy-title">
+			<div class="container split">
+				<div>
+					<p class="eyebrow eyebrow--section">Privacy</p>
+					<h2 id="privacy-title">Your site, your data</h2>
+					<ul class="checklist">
+						<li>Scans run on your own site and in your own browser. Page content and results are never sent to the plugin author or any third party.</li>
+						<li>Results are stored in your WordPress database and removed when you delete the plugin, on every site of a network.</li>
+						<li>Nothing loads on your front end unless you switch on an automatic fix.</li>
+						<li>No account, no API key, no tracking.</li>
+					</ul>
+				</div>
+				<div class="callout" role="note" aria-labelledby="honest-title">
+					<h3 id="honest-title">An honest note about automated testing</h3>
+					<p>Automated tools, including this one, find a large share of common problems quickly, but not all of them. Some WCAG requirements, such as meaningful alternative text, reading order and captions, can only be checked by a person.</p>
+					<p>Accessibility Guardian helps you find and fix issues faster. It does not certify that a site is accessible or legally compliant with the ADA, the European Accessibility Act, EN&nbsp;301&nbsp;549 or Section&nbsp;508.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="developers" aria-labelledby="developers-title">
+			<div class="container">
+				<p class="eyebrow eyebrow--section">For developers</p>
+				<h2 id="developers-title">Hooks to make it yours</h2>
+				<div class="split split--top">
+					<div class="table-wrap" role="region" aria-labelledby="hooks-caption" tabindex="0">
+						<table>
+							<caption id="hooks-caption" class="visually-hidden">Filters and actions</caption>
+							<thead>
+								<tr><th scope="col">Hook</th><th scope="col">Purpose</th></tr>
+							</thead>
+							<tbody>
+								<tr><th scope="row"><code>accg_scan_urls</code></th><td>Change the full-site URL queue</td></tr>
+								<tr><th scope="row"><code>accg_scan_url_limit</code></th><td>Maximum URLs per full-site scan (default 1,000)</td></tr>
+								<tr><th scope="row"><code>accg_axe_options</code></th><td>Options passed to <code>axe.run()</code></td></tr>
+								<tr><th scope="row"><code>accg_required_capability</code></th><td>Who can scan and see reports (default <code>manage_options</code>)</td></tr>
+								<tr><th scope="row"><code>accg_skip_link_target</code></th><td>Target of the skip-link fix</td></tr>
+								<tr><th scope="row"><code>accg_scan_completed</code></th><td>Action fired when a scan finishes</td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="code">
+						<div class="code__head">
+							<span id="code-label">functions.php</span>
+							<button class="copy-button" type="button" data-copy-target="hooks-example" hidden>Copy code</button>
+						</div>
+						<pre tabindex="0" aria-labelledby="code-label"><code id="hooks-example">// Let editors run scans and see reports.
+add_filter( 'accg_required_capability', fn () =&gt; 'edit_others_posts' );
+
+// Email the site admin when a scan scores below 80.
+add_action( 'accg_scan_completed', function ( int $scan_id, array $totals ) {
+	if ( $totals['score'] &lt; 80 ) {
+		wp_mail(
+			get_option( 'admin_email' ),
+			'Accessibility score dropped',
+			sprintf( 'Scan #%d scored %d/100.', $scan_id, $totals['score'] )
+		);
+	}
+}, 10, 2 );</code></pre>
+						<p class="visually-hidden" role="status" aria-live="polite" id="copy-status"></p>
+					</div>
+				</div>
+				<p class="more"><a href="https://github.com/esmobg/Accessibility-Guardian#developer-hooks">Full developer documentation on GitHub</a></p>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="install" aria-labelledby="install-title">
+			<div class="container split split--top">
+				<div>
+					<p class="eyebrow eyebrow--section">Get started</p>
+					<h2 id="install-title">Install in a minute</h2>
+					<ol class="install">
+						<li>Download <a href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">accessibility-guardian-__VERSION__.zip</a> from the latest release.</li>
+						<li>In WordPress, go to <em>Plugins → Add New Plugin → Upload Plugin</em>, choose the zip, then click <em>Install Now</em> and <em>Activate</em>.</li>
+						<li>Open <em>Accessibility Guardian → Run Scan</em> and click <em>Start full site scan</em>. Keep the tab open until it finishes.</li>
+					</ol>
+					<p class="note">Please use the release zip, not GitHub's green “Download ZIP” button: that archive is the development repository and unpacks to the wrong folder name.</p>
+				</div>
+				<div class="requirements">
+					<h3>Requirements</h3>
+					<dl>
+						<div><dt>WordPress</dt><dd>6.4 or later, tested up to 7.1</dd></div>
+						<div><dt>PHP</dt><dd>8.0 or later, tested on 8.0–8.5</dd></div>
+						<div><dt>Browser</dt><dd>Any current Chrome, Edge, Firefox or Safari</dd></div>
+						<div><dt>Framing</dt><dd>Pages must allow same-origin frames. <code>X-Frame-Options: SAMEORIGIN</code> is fine; <code>DENY</code> blocks scanning.</dd></div>
+						<div><dt>Server</dt><dd>Nothing extra: no Node.js, headless browser or API key</dd></div>
+					</dl>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="faq" aria-labelledby="faq-title">
+			<div class="container container--narrow">
+				<p class="eyebrow eyebrow--section">FAQ</p>
+				<h2 id="faq-title">Frequently asked questions</h2>
+				<div class="faq">
+					<details>
+						<summary>Does this make my site compliant with the ADA or the European Accessibility Act?</summary>
+						<p>No tool can do that on its own. Automated checks catch many common problems quickly, but some WCAG requirements can only be verified by a person. Use the report to fix what is found, then test key pages with a keyboard and a screen reader.</p>
+					</details>
+					<details>
+						<summary>Does scanning need anything installed on the server?</summary>
+						<p>No. The scan runs in the administrator's browser using a hidden frame on your own site, so standard WordPress hosting is all you need.</p>
+					</details>
+					<details>
+						<summary>Why must I keep the tab open during a scan?</summary>
+						<p>The axe-core engine runs in your browser, one page at a time. If you close the tab, the scan stops. You can cancel at any time; a cancelled scan keeps its partial results but does not replace your latest complete report.</p>
+					</details>
+					<details>
+						<summary>A page could not be scanned. Why?</summary>
+						<p>Usually the page cannot be shown in a frame because of <code>X-Frame-Options: DENY</code> or <code>Content-Security-Policy: frame-ancestors 'none'</code>, it took longer than 30 seconds to load, or a very strict Content Security Policy blocked axe-core. The rest of the scan continues normally.</p>
+					</details>
+					<details>
+						<summary>Will the WordPress toolbar show up in my results?</summary>
+						<p>No. Pages are scanned as the logged-in administrator, so the toolbar is present, but it is excluded from every check.</p>
+					</details>
+					<details>
+						<summary>Does it slow down my site for visitors?</summary>
+						<p>No. Nothing loads on the front end unless you enable an automatic fix. Enabled fixes add one small stylesheet and, for some fixes, one small deferred script.</p>
+					</details>
+					<details>
+						<summary>Does it work with page builders, block themes and multisite?</summary>
+						<p>Yes. It checks the final rendered HTML, whatever produced it, and the automatic fixes are aware of block themes. On multisite you can activate it per site or network-wide; each site keeps its own settings and results.</p>
+					</details>
+				</div>
+			</div>
+		</section>
+
+		<section class="section section--alt" id="changelog" aria-labelledby="changelog-title">
+			<div class="container container--narrow">
+				<p class="eyebrow eyebrow--section">What's new</p>
+				<h2 id="changelog-title">Version __VERSION__</h2>
+				<ul class="checklist">
+					<li>Tested with WordPress 6.4–7.1 and PHP 8.0–8.5; Plugin Check reports no errors or warnings.</li>
+					<li>Best-practice checks for headings, landmarks and page structure.</li>
+					<li>“Scan accessibility” toolbar link for one-click single-page scans.</li>
+					<li>Full multisite support and four new developer hooks.</li>
+					<li>The WordPress toolbar is no longer included in results; messages keep element names like <code>&lt;ul&gt;</code>.</li>
+					<li>The plugin's own admin screens pass axe-core WCAG 2.2 AA checks.</li>
+				</ul>
+				<p class="more"><a href="https://github.com/esmobg/Accessibility-Guardian/blob/main/CHANGELOG.md">Full changelog</a></p>
+			</div>
+		</section>
+
+		<section class="final-cta" aria-labelledby="final-title">
+			<div class="container final-cta__inner">
+				<h2 id="final-title">Make your WordPress site easier for everyone to use</h2>
+				<p>Free, open source and private by design.</p>
+				<div class="cta cta--center">
+					<a class="button button--primary" href="https://github.com/esmobg/Accessibility-Guardian/releases/download/v__VERSION__/accessibility-guardian-__VERSION__.zip">Download v__VERSION__ <span class="button__meta">(zip)</span></a>
+					<a class="button button--ghost" href="https://github.com/esmobg/Accessibility-Guardian">Star on GitHub</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container site-footer__inner">
+			<div>
+				<p class="brand brand--footer"><img src="assets/img/icon.svg" alt="" width="28" height="28"> Accessibility Guardian</p>
+				<p>Licensed under the <a href="https://github.com/esmobg/Accessibility-Guardian/blob/main/LICENSE.txt">GPL-2.0-or-later</a>. Bundles <a href="https://github.com/dequelabs/axe-core">axe-core</a> by Deque Systems (MPL-2.0).</p>
+			</div>
+			<nav aria-label="Project">
+				<ul>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian">Source code</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/releases">Releases</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/issues">Report an issue</a></li>
+					<li><a href="https://github.com/esmobg/Accessibility-Guardian/security">Security</a></li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+
+	<dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
+		<figure class="lightbox__figure">
+			<img class="lightbox__image" src="" alt="">
+			<figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
+		</figure>
+		<div class="lightbox__controls">
+			<button type="button" class="lightbox__button" data-action="prev">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				Previous
+			</button>
+			<p class="lightbox__counter" aria-live="polite"></p>
+			<button type="button" class="lightbox__button" data-action="next">
+				Next
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</button>
+			<button type="button" class="lightbox__button lightbox__close" data-action="close">
+				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+				Close
+			</button>
+		</div>
+	</dialog>
+</body>
+</html>
