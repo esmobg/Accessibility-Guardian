@@ -356,7 +356,7 @@ node bin/screenshots/render-brand.js     # icon-128/256 and banner-772/1544 from
 
 ### Website
 
-The project website (https://esmobg.github.io/Accessibility-Guardian/) lives in `site/`: plain HTML, CSS and a little JavaScript, no build tools. `python bin/build-site.py` assembles it into `.site-build/`, copying the icon, banner and screenshots from `wp-org-assets/` and filling in the plugin version. The [Website workflow](.github/workflows/pages.yml) deploys it to GitHub Pages whenever `site/`, `wp-org-assets/` or the plugin version changes, and on every release.
+The project website (https://esmobg.github.io/Accessibility-Guardian/) lives in `site/`: plain HTML, CSS and a little JavaScript, no build tools. `python bin/build-site.py` assembles it into `.site-build/`, copying the icon, banner and screenshots from `wp-org-assets/` and linking the download buttons to the latest published GitHub release that has the zip attached (so a version bump on `main` never produces broken links). The [Website workflow](.github/workflows/pages.yml) deploys it to GitHub Pages whenever `site/` or `wp-org-assets/` changes and after every successful release.
 
 To preview it locally:
 

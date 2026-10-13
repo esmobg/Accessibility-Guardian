@@ -6,9 +6,13 @@ on:
     paths:
       - 'site/**'
       - 'wp-org-assets/**'
-      - 'accessibility-guardian.php'
       - 'bin/build-site.py'
       - '.github/workflows/pages.yml'
+  # A release created by the Release workflow (GITHUB_TOKEN) does not emit a
+  # "release" event to other workflows, so also rebuild when that workflow succeeds.
+  workflow_run:
+    workflows: [ Release ]
+    types: [ completed ]
   release:
     types: [ published ]
   workflow_dispatch:
@@ -24,16 +28,21 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
 
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
-      - name: Assemble the site
-        run: python bin/build-site.py --out _site
+      - name: Assemble the site (links to the latest published release)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python bin/build-site.py --out _site --require-release
 
       - uses: actions/configure-pages@v5
 
